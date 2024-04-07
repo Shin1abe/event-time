@@ -65,10 +65,7 @@ const Home: NextPage = () => {
     <>
       {/* ヒーローセクション */}
       {/* <div id="home" className="container items-center mx-auto  w-full"> */}
-      <div
-        id="home"
-        className="mt-64  mx-auto px-8 md:px-14 lg:px-24 w-full"
-      >
+      <div id="home" className=" px-8 md:px-14 lg:px-32 w-full">
         <Card>
           <CardContent>
             <CardHeader
@@ -92,7 +89,7 @@ const Home: NextPage = () => {
       {/* お問い合わせセクション */}
       <div
         id="contact"
-        className="container mt-52 mb-64 flex justify-between items-center mx-auto px-8 md:px-14 lg:px-24 w-full"
+        className="container mb-64 flex justify-between items-center mx-auto px-8 md:px-14 lg:px-24 w-full"
       >
         <section className="w-full">
           <h2 className="secondary-title">お問い合わせ</h2>
@@ -102,9 +99,7 @@ const Home: NextPage = () => {
           <div className="w-full grid lg:grid-cols-2 gap-8 lg:gap-32 mt-16">
             <div className="space-y-12">
               <div>
-                <label className=" block mb-6 text-xl font-bold">
-                  お名前
-                </label>
+                <label className=" block mb-6 text-xl font-bold">お名前</label>
                 <input
                   type="text"
                   className="w-full border border-inputBorder  px-4 py-4"
