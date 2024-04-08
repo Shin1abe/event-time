@@ -12,8 +12,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <meta name="description" content="Visit www.xxxxxx.xx" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HeaderA />
-      <HeaderB />
+      <div className="fixed-header">
+        {/* <HeaderA /> */}
+        <HeaderB />
+      </div>
       <div>{children}</div>
       <Footer />
     </>

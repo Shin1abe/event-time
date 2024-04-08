@@ -39,12 +39,12 @@ export const CardHeader: NextPage<CardHeaderProps> = ({
         <h1 className="text-base font-medium tracking-wide text-gray-900 mr-2">
           {title}
         </h1>
-        <span className="h-5 w-5 bg-blue-200 text-blue-600 flex items-center justify-center rounded-full text-xs">
+        <span className="h-5 w-5 bg-blue-200 text-blue-600 flex items-center justify-center rounded-full ">
           {listLength}
         </span>
       </div>
       <button
-        className="text-sm font-medium  underline"
+        className=" font-medium  underline text-xl"
         type="button"
         onClick={clearAllFn}
       >
@@ -68,11 +68,11 @@ const ListItemComponent: NextPage<ListItemProps> = ({ item, onUpdate }) => {
     <div className="h-12 border-b flex items-center justify-start px-3">
       <input
         type="checkbox"
-        className="w-4 h-4 border-gray-300 rounded mr-4"
+        className="w-4 h-4 border-gray-300 rounded mr-4 "
         defaultChecked={item.checked as boolean}
         onChange={() => onUpdate?.(item)}
       />
-      <h2 className="tracking-wide text-sm">{item.title}</h2>
+      <h2 className="tracking-wide text-xl ">{item.title}</h2>
     </div>
   );
 };
@@ -94,7 +94,7 @@ export const CardForm: NextPage<CardFormProps> = ({
     <div className=" w-5/6 md:w-4/6 lg:w-3/6 xl:w-2/6 rounded-lg drop-shadow-md mt-4">
       <div className="relative">
         <input
-          className="w-full py-4 pl-3 pr-16 text-sm rounded-lg"
+          className="w-full py-4 pl-3 pr-16  rounded-lg text-xl"
           type="text"
           placeholder="Grocery item name..."
           onChange={onChange}

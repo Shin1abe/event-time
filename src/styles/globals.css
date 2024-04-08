@@ -11,6 +11,20 @@ body {
   scroll-behavior: smooth;
 }
 
+.fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.fixed-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 999;
+}
+
 .secondary-title {
   @apply text-2xl font-bold;
 }
@@ -49,7 +63,7 @@ body {
   position: static;
 }
 
-.hoverable > a:after {
+.hoverable>a:after {
   content: "\25BC";
   font-size: 10px;
   padding-left: 6px;
@@ -64,7 +78,7 @@ body {
 /* #toggle Class Styles
   –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-.toggleable > label:after {
+.toggleable>label:after {
   content: "\25BC";
   font-size: 10px;
   padding-left: 6px;
@@ -75,20 +89,22 @@ body {
 .toggle-input {
   display: none;
 }
-.toggle-input:not(checked) ~ .mega-menu {
+
+.toggle-input:not(checked)~.mega-menu {
   display: none;
 }
 
-.toggle-input:checked ~ .mega-menu {
+.toggle-input:checked~.mega-menu {
   display: block;
 }
 
-.toggle-input:checked + label {
+.toggle-input:checked+label {
   color: white;
-  background: #2c5282; /*@apply bg-blue-800 */
+  background: #2c5282;
+  /*@apply bg-blue-800 */
 }
 
-.toggle-input:checked ~ label:after {
+.toggle-input:checked~label:after {
   content: "\25B2";
   font-size: 10px;
   padding-left: 6px;

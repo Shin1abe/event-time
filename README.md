@@ -39,8 +39,3 @@ npm run dev
 
 ## Todo
 
-### ハンバーメニュー
-
-#### 【TailwindCSS】これが一番簡単だと思います…フッターを固定する
-
-https://qiita.com/DoNotPrayDebug/items/ed27e19d257439236f42

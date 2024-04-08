@@ -8,7 +8,7 @@ import type { ServerRouter } from "@/server/router";
 
 const App: AppType = ({ Component, pageProps }) => {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark">
+    <ThemeProvider attribute="class" defaultTheme="light">
       <RootLayout>
         <Component {...pageProps} />
       </RootLayout>

@@ -65,7 +65,8 @@ const Home: NextPage = () => {
     <>
       {/* ヒーローセクション */}
       {/* <div id="home" className="container items-center mx-auto  w-full"> */}
-      <div id="home" className=" px-8 md:px-14 lg:px-32 w-full">
+      {/* <div id="home" className=" px-16 md:px-14 lg:px-32 w-full "> */}
+      <div id="home" className=" px-16 md:px-14 lg:px-32 w-full ">
         <Card>
           <CardContent>
             <CardHeader
