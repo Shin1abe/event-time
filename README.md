@@ -36,3 +36,11 @@ https://fujitsu.udemy.com/course/tailwindcss-for-beginner/learn/lecture/32435558
 npm i  
 npx prisma migrate dev --name init  
 npm run dev
+
+## Todo
+
+### ハンバーメニュー
+
+#### 【TailwindCSS】これが一番簡単だと思います…フッターを固定する
+
+https://qiita.com/DoNotPrayDebug/items/ed27e19d257439236f42
