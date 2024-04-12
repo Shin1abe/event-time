@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import "@fontsource/poppins";
-import { ThemeProvider } from 'next-themes'
+import { ThemeProvider } from "next-themes";
 import { withTRPC } from "@trpc/next";
 import { AppType } from "next/dist/shared/lib/utils";
 import RootLayout from "@/components/layout";
@@ -12,7 +12,7 @@ const App: AppType = ({ Component, pageProps }) => {
       <RootLayout>
         <Component {...pageProps} />
       </RootLayout>
-    </ThemeProvider >
+    </ThemeProvider>
   );
 };
 

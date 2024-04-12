@@ -39,3 +39,6 @@ npm run dev
 
 ## Todo
 
+### shadcn/ui 適用
+
+https://ui.shadcn.com/docs/installation/next
