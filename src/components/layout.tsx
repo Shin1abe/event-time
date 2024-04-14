@@ -3,7 +3,6 @@ import React from "react";
 import HeaderA from "./HeaderA";
 import HeaderB from "./HeaderB";
 import Footer from "./Footer";
-import Parts from "./Parts";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -18,7 +17,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         {/* <HeaderB /> */}
       </div>
       <div>
-        <Parts />
         {children}
       </div>
       <Footer />

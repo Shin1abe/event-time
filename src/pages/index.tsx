@@ -18,6 +18,7 @@ import {
   ListItem,
 } from "../components/Card";
 import { GroceryList } from "@prisma/client";
+import Parts from "@/components/Parts";
 
 const Home: NextPage = () => {
   const [itemName, setItemName] = useState<string>("");
@@ -60,13 +61,17 @@ const Home: NextPage = () => {
     },
     [updateOneMutation]
   );
+  // h-screen flex flex-col content-start items-center mt-32
 
   return (
     <>
+      <Parts />
       {/* ヒーローセクション */}
       {/* <div id="home" className="container items-center mx-auto  w-full"> */}
       {/* <div id="home" className=" px-16 md:px-14 lg:px-32 w-full "> */}
-      <div id="home" className=" px-16 md:px-14 lg:px-32 w-full ">
+      {/* <div id="home" className=" px-16 md:px-14 lg:px-32 w-full ">
+      {/* Cardセクション */}
+      {/* <div>
         <Card>
           <CardContent>
             <CardHeader
@@ -86,9 +91,9 @@ const Home: NextPage = () => {
             submit={insertOne}
           />
         </Card>
-      </div>
+      </div> */}
       {/* お問い合わせセクション */}
-      <div
+      {/* <div
         id="contact"
         className="container mb-64 flex justify-between items-center mx-auto px-8 md:px-14 lg:px-24 w-full"
       >
@@ -131,7 +136,7 @@ const Home: NextPage = () => {
             <div className="mt-20">
               <p className="text-secondary ">000-000-0000</p>
               <a href="mailto:xxxxx@gmail.com">xxxxx@gmail.com</a>
-              {/* sns */}
+              
               <div className="mt-20 space-x-6">
                 <a href="#">
                   <FontAwesomeIcon
@@ -155,7 +160,7 @@ const Home: NextPage = () => {
             </div>
           </div>
         </section>
-      </div>
+      </div> */}
     </>
   );
 };
