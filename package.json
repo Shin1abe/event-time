@@ -46,6 +46,7 @@
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tailwindcss/forms": "^0.5.2",
+    "@tanstack/react-table": "^8.16.0",
     "@trpc/client": "^9.24.0",
     "@trpc/next": "^9.24.0",
     "@trpc/react": "^9.24.0",

@@ -1,5 +1,5 @@
-import React from "react";
-import { Button } from "./ui/button";
+import React from 'react'
+import { Button } from './ui/button'
 import {
   Table,
   TableBody,
@@ -8,29 +8,57 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
-import { Calendar } from "./ui/calendar";
-import { DayPicker } from "react-day-picker";
-import { Input } from "./ui/input";
-import { CardDescription, CardTitle } from "./ui/card";
-import { Label } from "@radix-ui/react-context-menu";
+} from './ui/table'
+import { Calendar } from './ui/calendar'
+import { DayPicker } from 'react-day-picker'
+import { Input } from './ui/input'
+import { CardDescription, CardTitle } from './ui/card'
+import { Label } from '@radix-ui/react-context-menu'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
-import { Card, CardContent } from "./Card";
+} from '@radix-ui/react-select'
+import { Card, CardContent } from './Card'
+import DataTableDemo from './shadcnUiPart/DataTableDemo'
+import TextareaDemo from './shadcnUiPart/TextareaDemo'
+import SelectDemo from './shadcnUiPart/SelectDemo'
+import NavigationMenuDemo from './shadcnUiPart/NavigationMenuDemo'
+import MenubarDemo from './shadcnUiPart/MenubarDemo'
 
 const Parts = () => {
   return (
-    <div className=" flex-wrap flex-row">
-      <div className="border border-blue-500">
+    <div className=" flex-wrap flex-row bg-zinc-100 gap-3">
+      <div className="border border-blue-500 p-5">
+        <h1>■MenubarDemo</h1>
+        <MenubarDemo />
+      </div>
+      <div className="border border-blue-500 p-5">
+        <h1>■NavigationMenuDemo</h1>
+        <NavigationMenuDemo />
+      </div>
+      <div className="border border-blue-500 p-5">
+        <h1>■SelectDemo</h1>
+        <SelectDemo />
+      </div>
+      <div className="border border-blue-500 p-5">
+        <h1>■TextareaDemo</h1>
+        <TextareaDemo />
+      </div>
+      <div className="border border-blue-500 p-5">
+        <h1>■DataTable</h1>
+        <DataTableDemo />
+      </div>
+
+      <div className="border border-blue-500 p-5">
+        <h1>■Button</h1>
         <Button>shadcn/ui Button</Button>
-        <hr/>
+        <hr />
       </div>
       <div className="border border-blue-500">
+        <h1>□Table</h1>
         <Table>
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
@@ -50,18 +78,20 @@ const Parts = () => {
             </TableRow>
           </TableBody>
         </Table>
-        <hr/>
+        <hr />
       </div>
       <div className="border border-blue-500">
+        <h1>■Calendar</h1>
         <Calendar mode="single" className="rounded-md border" />
-        <hr/>
+        <hr />
       </div>
       <div className="border border-blue-500">
-        <Card >
-            <CardTitle>Create project</CardTitle>
-            <CardDescription>
-              Deploy your new project in one-click.
-            </CardDescription>
+        <h1>■Card</h1>
+        <Card>
+          <CardTitle>Create project</CardTitle>
+          <CardDescription>
+            Deploy your new project in one-click.
+          </CardDescription>
           <CardContent>
             <form>
               <div className="grid w-full items-center gap-4">
@@ -91,10 +121,10 @@ const Parts = () => {
             <Button>Deploy</Button>
           </div>
         </Card>
-        <hr/>
+        <hr />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Parts;
+export default Parts
