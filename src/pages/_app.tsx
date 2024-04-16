@@ -5,13 +5,15 @@ import { withTRPC } from "@trpc/next";
 import { AppType } from "next/dist/shared/lib/utils";
 import RootLayout from "@/components/layout";
 import type { ServerRouter } from "@/server/router";
+import HeaderA from "@/components/HeaderA";
 
 const App: AppType = ({ Component, pageProps }) => {
   return (
     // <ThemeProvider attribute="class" defaultTheme="light">
-      <RootLayout>
-        <Component {...pageProps} />
-      </RootLayout>
+    <RootLayout>
+      <HeaderA />
+      <Component {...pageProps} />
+    </RootLayout>
     // </ThemeProvider>
   );
 };

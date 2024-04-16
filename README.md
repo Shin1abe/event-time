@@ -37,8 +37,11 @@ npm i
 npx prisma migrate dev --name init  
 npm run dev
 
-## Todo
-
-### shadcn/ui 適用
-
+## shadcn/ui 適用
 https://ui.shadcn.com/docs/installation/next
+
+## Todo
+### スクロールするとヘッダ・フッタが透けているため不自然。
+overflow-y: auto;はだめだった
+### baseColorが有効になっていない
+   "baseColor": "slate",

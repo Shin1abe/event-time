@@ -30,7 +30,7 @@ import MenubarDemo from './shadcnUiPart/MenubarDemo'
 
 const Parts = () => {
   return (
-    <div className=" flex-wrap flex-row bg-zinc-100 gap-3">
+    <div className="flex-wrap flex-row bg-zinc-100 gap-3 mt-20">
       <div className="border border-blue-500 p-5">
         <h1>■MenubarDemo</h1>
         <MenubarDemo />
@@ -57,7 +57,7 @@ const Parts = () => {
         <Button>shadcn/ui Button</Button>
         <hr />
       </div>
-      <div className="border border-blue-500">
+      <div className="border border-blue-500 p-5">
         <h1>□Table</h1>
         <Table>
           <TableCaption>A list of your recent invoices.</TableCaption>
@@ -80,12 +80,12 @@ const Parts = () => {
         </Table>
         <hr />
       </div>
-      <div className="border border-blue-500">
+      <div className="border border-blue-500 p-5">
         <h1>■Calendar</h1>
         <Calendar mode="single" className="rounded-md border" />
         <hr />
       </div>
-      <div className="border border-blue-500">
+      <div className="border border-blue-500 p-5">
         <h1>■Card</h1>
         <Card>
           <CardTitle>Create project</CardTitle>
