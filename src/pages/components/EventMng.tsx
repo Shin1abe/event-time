@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from "next/link";
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
 import { Input } from './ui/input'
@@ -96,7 +97,7 @@ const EventMng = () => {
               </div>
             </DialogDescription>
             <DialogFooter>
-              <Button type="submit">イベント作成</Button>
+              <Button type="submit"><Link href={"/components/AttendMng"}>イベント作成</Link></Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

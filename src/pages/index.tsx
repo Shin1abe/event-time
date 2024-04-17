@@ -16,11 +16,11 @@ import {
   CardHeader,
   List,
   ListItem,
-} from "../components/Card";
+} from "@/pages/components/Card";
 import { GroceryList } from "@prisma/client";
-import Parts from "@/components/Parts";
-import EventMng from "@/components/EventMng";
-import AttendMng from "@/components/AttendMng";
+import Parts from "@/pages/components/Parts";
+import EventMng from "@/pages/components/EventMng";
+import AttendMng from "@/pages/components/AttendMng";
 
 const Home: NextPage = () => {
   const [itemName, setItemName] = useState<string>("");
@@ -67,8 +67,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <AttendMng />
-      {/* <EventMng/> */}
+      {/* <AttendMng /> */}
+      <EventMng />
 
       {/* <Parts /> */}
       {/* ヒーローセクション */}

@@ -3,9 +3,9 @@ import "@fontsource/poppins";
 import { ThemeProvider } from "next-themes";
 import { withTRPC } from "@trpc/next";
 import { AppType } from "next/dist/shared/lib/utils";
-import RootLayout from "@/components/layout";
+import RootLayout from "@/pages/components/layout";
 import type { ServerRouter } from "@/server/router";
-import HeaderA from "@/components/HeaderA";
+import HeaderA from "@/pages/components/HeaderA";
 
 const App: AppType = ({ Component, pageProps }) => {
   return (
