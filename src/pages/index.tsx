@@ -20,6 +20,7 @@ import {
 import { GroceryList } from "@prisma/client";
 import Parts from "@/components/Parts";
 import EventMng from "@/components/EventMng";
+import AttendMng from "@/components/AttendMng";
 
 const Home: NextPage = () => {
   const [itemName, setItemName] = useState<string>("");
@@ -66,7 +67,9 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <EventMng/>
+      <AttendMng />
+      {/* <EventMng/> */}
+
       {/* <Parts /> */}
       {/* ヒーローセクション */}
       {/* <div id="home" className="container items-center mx-auto  w-full"> */}
