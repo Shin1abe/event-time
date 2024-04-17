@@ -8,7 +8,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Head>
-        <title>Grocery List</title>
+        <title>EventTime</title>
         <meta name="description" content="Visit www.xxxxxx.xx" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -17,8 +17,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <HeaderA />
           {/* <HeaderB /> */}
         </div>
-        {children}
-        <Footer />
+        <div className="body-content">
+          {children}
+        </div>
+        <div className="fixed-footer">
+          <Footer />
+        </div>
       </div>
     </>
   );

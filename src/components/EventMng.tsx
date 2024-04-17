@@ -10,20 +10,11 @@ import { Label } from './ui/label'
 
 const EventMng = () => {
   return (
-    <div className="flex-wrap flex-row gap-1 mt-20">
+    <div className="flex-wrap flex-row gap-1 m-2">
       <h1 className='m-1 text-2xl font-bold'>ようこそゲストさん</h1>
       <hr />
-      <h1 className='m-1 text-1xl font-bold'>イベント</h1>
+      <h1 className='m-1 text-2xl+'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
-        <Card className='m-3'>
-          <CardHeader>
-            <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-            <CardDescription>メモ</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
-          </CardContent>
-        </Card>
         <Card className='m-3'>
           <CardHeader>
             <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
@@ -73,7 +64,7 @@ const EventMng = () => {
       <div >
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="default">イベント作成</Button>
+            <Button className="fixed-button mb-3" variant="default">イベント作成</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>

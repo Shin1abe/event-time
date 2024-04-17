@@ -38,10 +38,34 @@ npx prisma migrate dev --name init
 npm run dev
 
 ## shadcn/ui 適用
+
 https://ui.shadcn.com/docs/installation/next
 
 ## Todo
+
 ### スクロールするとヘッダ・フッタが透けているため不自然。
-overflow-y: auto;はだめだった
+
+.fixed-header {
+position: fixed;
+top: 0;
+width: 100%;
+background-color: grey; /_ 必要に応じて背景色を設定 _/
+z-index: 10;
+}
+
+.fixed-footer {
+position: fixed;
+bottom: 0;
+width: 100%;
+background-color: grey; /_ 必要に応じて背景色を設定 _/
+z-index: 10;
+}
+
+.body-content {
+position: relative; /_ positionを指定 _/
+z-index: 1;
+}
+
 ### baseColorが有効になっていない
-   "baseColor": "slate",
+
+"baseColor": "slate",

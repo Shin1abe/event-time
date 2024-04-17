@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const HeaderA = () => {
   return (
     <div>
-      <header className="py-6 ">
+      <header className="py-1">
         <div className="container mx-auto flex justify-between items-center px-8 md:px-14 lg:px-24 w-full">
           <div className="text-lg font-bold">ShinCode.com</div>
           <div className="space-x-12 hidden md:flex items-center">
