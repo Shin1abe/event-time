@@ -9,6 +9,7 @@ import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
 
 const EventMng = () => {
+  const [date, setDate] = React.useState<Date | undefined>(new Date())
   return (
     <div className="flex-wrap flex-row gap-1 m-2">
       <h1 className='m-1 text-2xl font-bold'>ようこそゲストさん</h1>
@@ -18,7 +19,6 @@ const EventMng = () => {
         <Card className='m-3'>
           <CardHeader>
             <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-            <CardDescription>メモ</CardDescription>
           </CardHeader>
           <CardContent>
             <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
@@ -27,7 +27,6 @@ const EventMng = () => {
         <Card className='m-3'>
           <CardHeader>
             <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-            <CardDescription>メモ</CardDescription>
           </CardHeader>
           <CardContent>
             <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
@@ -36,7 +35,6 @@ const EventMng = () => {
         <Card className='m-3'>
           <CardHeader>
             <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-            <CardDescription>メモ</CardDescription>
           </CardHeader>
           <CardContent>
             <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
@@ -45,7 +43,6 @@ const EventMng = () => {
         <Card className='m-3'>
           <CardHeader>
             <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-            <CardDescription>メモ</CardDescription>
           </CardHeader>
           <CardContent>
             <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
@@ -54,7 +51,6 @@ const EventMng = () => {
         <Card className='m-3'>
           <CardHeader>
             <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-            <CardDescription>メモ</CardDescription>
           </CardHeader>
           <CardContent>
             <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
@@ -69,26 +65,36 @@ const EventMng = () => {
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle>イベント作成</DialogTitle>
-              <DialogDescription>
-                Make changes to your profile here. Click save when you're done.
-              </DialogDescription>
             </DialogHeader>
-            <div className="flex-auto">
-              <Label htmlFor="eventName" >イベント名</Label>
-              <Badge className='ml-1'>必須</Badge>
-              <Input
-                id="eventName"
-                defaultValue="イベント名を入力してください"
-                className="col-span-3"
-              />
-              <Label htmlFor="username" >日程候補</Label>
-              <Badge className='ml-1'>必須</Badge>
-              <Calendar mode="single" className="rounded-md border-4" />
-              <Textarea className="w-full" placeholder="2024/5/12 19:00～、2024/5/17～" />
-              <Label htmlFor="eventName">メモ</Label>
-              {/* <dl>イベントの概要など参加者に連絡しておきたいことを記述することができます。</dl> */}
-              <Textarea className="w-full" placeholder="例）飲み会の日程を調整しましょう。締め切りは〇／〇です。" />
-            </div>
+            <DialogDescription>
+              <div className="flex-auto">
+                <Label htmlFor="eventName" className=' font-bold' >イベント名</Label>
+                <Badge className='ml-1'>必須</Badge>
+                <Input
+                  id="eventName"
+                  defaultValue="イベント名を入力してください"
+                  className="col-span-3 m-1"
+                />
+                <br />
+                <Label htmlFor="username" className=' font-bold' >日程候補</Label>
+                <Badge className='ml-1'>必須</Badge>
+                <p>①カレンダーで候補日を選択</p>
+                <p>②入力欄に反映された時間を編集</p>
+                <div>
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    className="flex justify-center rounded-md border w-full"
+                  />
+                  <Textarea className="w-full m-1" placeholder="2024/5/12 19:00～,2024/5/17～" />
+                </div>
+                <br />
+                <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
+                <p>イベントの概要など参加者に連絡しておきたいことを記述することができます。</p>
+                <Textarea className="w-full m-1" placeholder="例）飲み会の日程を調整しましょう。締め切りは〇／〇です。" />
+              </div>
+            </DialogDescription>
             <DialogFooter>
               <Button type="submit">イベント作成</Button>
             </DialogFooter>
