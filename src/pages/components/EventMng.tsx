@@ -85,46 +85,35 @@ const EventMng = () => {
               <div className="flex-auto">
                 <Label htmlFor="eventName" className=' font-bold' >イベント名</Label>
                 <Badge className='ml-1'>必須</Badge>
-                {/* <Input
+                <Input
                   id="eventName"
                   defaultValue="イベント名を入力してください"
                   className="m-1"
-                /> */}
+                />
                 <br />
                 <Label htmlFor="username" className=' font-bold' >日程候補</Label>
                 <Badge className='ml-1'>必須</Badge>
                 <p>カレンダーで候補日を選択</p>
                 {/* https://react-day-picker.js.org/ */}
-                <DayPicker
-                  mode="multiple"
-                  min={0}
-                  selected={days}
-                  onSelect={setDays}
-                  footer={footer}
-                />
-                <ul>
-                  {days?.map((day) => <li>{day.toLocaleDateString()}</li>)}
-                </ul>
-                {/* <div className='grid-cols-2 flex'>
-                  <div className='flex-2'>
-                    <DayPicker
-                      mode="multiple"
-                      min={0}
-                      selected={days}
-                      onSelect={setDays}
-                      footer={footer}
-                    />
-                  </div>
-                  <div className='flex-1 mt-20 ml-2'>
-                    <ol>
-                      {days?.map((day) => <li>{day.toLocaleDateString()}</li>)}
-                    </ol>
-                  </div>
-                </div> */}
+                <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center'>
+                  <DayPicker
+                    mode="multiple"
+                    min={0}
+                    selected={days}
+                    onSelect={setDays}
+                    footer={footer}
+                  />
+                </div>
+                <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
+                <div className='flex  w-full ml-14 items-center'>
+                  <ul>
+                    {days?.map((day) => <li>・{day.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}]</li>)}
+                  </ul>
+                </div>
                 <br />
                 <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
                 <p>イベントの概要など参加者に連絡しておきたいことを記述することができます。</p>
-                {/* <Textarea className="w-full m-1" placeholder="例）飲み会の日程を調整しましょう。締め切りは〇／〇です。" /> */}
+                <Textarea className="w-full m-1" placeholder="例）飲み会の日程を調整しましょう。締め切りは〇／〇です。" />
               </div>
             </DialogDescription>
             <DialogFooter>
