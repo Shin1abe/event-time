@@ -43,7 +43,7 @@ https://ui.shadcn.com/docs/installation/next
 
 ## Todo
 
-### スクロールするとヘッダ・フッタが透けているため不自然。
+### （解決）スクロールするとヘッダ・フッタが透けているため不自然。
 
 .fixed-header {
 position: fixed;
@@ -69,3 +69,11 @@ z-index: 1;
 ### baseColorが有効になっていない
 
 "baseColor": "slate",
+
+### baseColorが有効になっていない
+
+▲画面遷移実装
+□カレンダ―大きい、日付の選択
+□ダイアログが1ページに収まらない件
+□不足ボタン・機能の実装
+□ローカルデータでのテスト

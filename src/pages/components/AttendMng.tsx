@@ -25,25 +25,23 @@ import {
     TableRow,
 } from "@/pages/components/ui/table"
 import { ToggleGroup, ToggleGroupItem } from "@/pages/components/ui/toggle-group"
-import { Link } from 'lucide-react'
+import Link from "next/link";
 
 
+const scheduleData = [
+    { date: '4/13(土) 19:00', slot1: '○', slot2: '△', slot3: '×' },
+    { date: '4/20(土) 19:00', slot1: '○', slot2: '△', slot3: '×' },
+    { date: '4/27(土) 19:00', slot1: '○', slot2: '△', slot3: '×' }
+]
 
 const AttendMng = () => {
     const [date, setDate] = React.useState<Date | undefined>(new Date())
-    const scheduleData = [
-        { date: '4/13(土) 19:00', slot1: '○', slot2: '△', slot3: '×' },
-        { date: '4/20(土) 19:00', slot1: '○', slot2: '△', slot3: '×' },
-        { date: '4/27(土) 19:00', slot1: '○', slot2: '△', slot3: '×' }
-    ]
 
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
             <div className=' flex justify-between'>
                 <div >
-                    <h1 className='m-1 text-2xl font-bold'>
-                        <Button type="submit"><Link href={"/components/AttendMng"}>歓送迎会</Link></Button>
-                    </h1>
+                    <Button type="submit"><Link href={"/"}>歓送迎会</Link></Button>
                 </div>
                 <div >
                     <DropdownMenu>
@@ -155,7 +153,7 @@ const AttendMng = () => {
                             </div>
                         </DialogDescription>
                         <DialogFooter>
-                            <Button type="submit"><Link href={"/components/AttendMng"}>決定して送信する</Link></Button>
+                            <Button type="submit"><Link href={"/components/EventMng"}>イベント作成</Link></Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
