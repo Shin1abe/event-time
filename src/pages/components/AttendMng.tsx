@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
 import { Input } from './ui/input'
@@ -28,6 +28,16 @@ import { ToggleGroup, ToggleGroupItem } from "@/pages/components/ui/toggle-group
 import Link from "next/link";
 
 
+interface AttendanceEntry {
+    name: string;
+    dates: string[];
+    comment: string;
+}
+const attendanceData: AttendanceEntry[] = [
+    { name: '安部', dates: ['4/20', '4/27', '5/2', '5/10', '5/17'], comment: '是非参加します。' },
+    { name: '坂井', dates: [], comment: '今回は不参加' }
+];
+
 const scheduleData = [
     { date: '4/13(土) 19:00', slot1: '○', slot2: '△', slot3: '×' },
     { date: '4/20(土) 19:00', slot1: '○', slot2: '△', slot3: '×' },
@@ -36,6 +46,22 @@ const scheduleData = [
 
 const AttendMng = () => {
     const [date, setDate] = React.useState<Date | undefined>(new Date())
+    const handleClick = useCallback(() => {
+        const url = window.location.origin;
+
+        void (async () => {
+            if (navigator.share) {
+                // Web share API
+                await navigator.share({
+                    url,
+                });
+            } else {
+                // Web Share APIが使えないブラウザの処理
+                await navigator.clipboard.writeText(url);
+                alert("URLをコピーしました");
+            }
+        })();
+    }, []);
 
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
@@ -65,7 +91,29 @@ const AttendMng = () => {
                 <p>イベントメモ</p>
                 <div>
                     <Table>
-                        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+                        {/* <TableCaption>A list of attendees and their availability.</TableCaption> */}
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[100px]">参加者</TableHead>
+                                {attendanceData.map((participant, index) => (
+                                    <TableHead key={index} className='text-center'>{participant.dates.join('<br />')}</TableHead>
+                                ))}
+                                <TableHead>コメント</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {attendanceData.map((participant, index) => (
+                                <TableRow key={index}>
+                                    <TableCell className="font-medium">{participant.name}</TableCell>
+                                    {participant.dates.map((date, idx) => (
+                                        <TableCell key={idx} className='text-center'>{participant.comment ? '○' : '×'}</TableCell>
+                                    ))}
+                                    <TableCell>{participant.comment}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    <Table>
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[100px]">参加者</TableHead>
@@ -102,7 +150,7 @@ const AttendMng = () => {
                 </div>
                 <p>各自の出欠状況を変更するには名前を選択してください。</p>
                 <p>項目が多い場合は右にスクロールすると続きが見られます。</p>
-                <Button>イベントをシェア</Button>
+                <Button onClick={handleClick}>イベンＵＲＬをシェア</Button>
             </div>
             <div >
                 <Dialog>
