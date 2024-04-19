@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from "next/link";
 import { Button } from './ui/button'
-import { Calendar } from './ui/calendar'
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { Input } from './ui/input'
@@ -11,67 +10,88 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
 
+interface Event {
+  eventId: Number;
+  eventName: string;
+  url: string;
+  eventDates: Date[],
+  comment: string;
+}
+const EventData: Event[] = [
+  {
+    eventId: 1,
+    eventName: "北海道旅行",
+    url: "https://example.com/summer-festival",
+    eventDates: [
+      new Date('2024-07-20'),
+      new Date('2024-07-21'),
+      new Date('2024-07-22')
+    ],
+    comment: "Annual festival celebrating summer"
+  },
+  {
+    eventId: 2,
+    eventName: "台湾旅行",
+    url: "https://example.com/tech-conference",
+    eventDates: [
+      new Date('2024-09-15'),
+      new Date('2024-09-16')
+    ],
+    comment: "Industry-leading tech conference"
+  }
+];
+
 const EventMng = () => {
-  // const [date, setDate] = React.useState<Date | undefined>(new Date())
+  // 初期画面（幹事）
+  // 日付を "MM/DD(曜日)" の形式で表示する関数
+  function formatDateWithDayOfWeek(date: Date): string {
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    return `${month}/${day}(${dayOfWeek})`;
+  }
+
+  //イベント作成ダイアログ
+  const clearButton = () => setDays(initialDays);
   const initialDays: Date[] = [];
   const [days, setDays] = React.useState<Date[] | undefined>(initialDays);
-  const clearButton = () => setDays(initialDays);
   const footer =
     days && days.length > 0 ? (
       <div className='grid-cols-2 flex'>
-        <div className='flex-3 text-left'>You selected {days.length} day(s).</div>
+        <div className='flex-3 text-left'>選択日数： {days.length} 日.</div>
         <div className='flex-1 text-right'><Button variant="outline" onClick={clearButton}>clear</Button></div></div>
     ) : (
-      <p>Please pick one or more days.</p>
+      <></>
     );
 
+
   return (
+    // 初期画面（幹事）
     <div className="flex-wrap flex-row gap-1 m-2">
       <h1 className='m-1 text-2xl font-bold'>ようこそゲストさん</h1>
       <hr />
       <h1 className='m-1 text-2xl+'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
-        <Card className='m-3'>
-          <CardHeader>
-            <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
-          </CardContent>
-        </Card>
-        <Card className='m-3'>
-          <CardHeader>
-            <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
-          </CardContent>
-        </Card>
-        <Card className='m-3'>
-          <CardHeader>
-            <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
-          </CardContent>
-        </Card>
-        <Card className='m-3'>
-          <CardHeader>
-            <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
-          </CardContent>
-        </Card>
-        <Card className='m-3'>
-          <CardHeader>
-            <CardTitle><Badge>幹事</Badge><p className='m-1'>お別れ会</p></CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>2023/05/12 19:00～,2023/05/19 19:00～</p>
-          </CardContent>
-        </Card>
+        {EventData.map((eventdata, index) => (
+          <Card className='m-3' key={index}>
+            <CardHeader>
+              <CardTitle ><Badge className='mb-2'>幹事</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className='ml-3'>
+                {eventdata.eventDates.map((eventdate, index) => (
+                  <React.Fragment key={index}>
+                    {formatDateWithDayOfWeek(eventdate)}
+                    {index !== eventdata.eventDates.length - 1 && ', '}
+                  </React.Fragment>
+                ))}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
+      {/* イベント作成ダイアログ */}
       <div >
         <Dialog>
           <DialogTrigger asChild>
@@ -95,10 +115,11 @@ const EventMng = () => {
                 <Badge className='ml-1'>必須</Badge>
                 <p>カレンダーで候補日を選択</p>
                 {/* https://react-day-picker.js.org/ */}
-                <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center'>
+                <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center border border-gray-300 rounded-md'>
                   <DayPicker
                     mode="multiple"
                     min={0}
+                    style={{ margin: 0 }} // Add this line
                     selected={days}
                     onSelect={setDays}
                     footer={footer}
@@ -113,7 +134,7 @@ const EventMng = () => {
                 <br />
                 <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
                 <p>イベントの概要など参加者に連絡しておきたいことを記述することができます。</p>
-                <Textarea className="w-full m-1" placeholder="例）飲み会の日程を調整しましょう。締め切りは〇／〇です。" />
+                <Textarea className="w-full m-1" placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。" />
               </div>
             </DialogDescription>
             <DialogFooter>
