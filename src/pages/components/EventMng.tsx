@@ -10,36 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
 
-interface Event {
-  eventId: Number;
-  eventName: string;
-  url: string;
-  eventDates: Date[],
-  comment: string;
-}
-const EventData: Event[] = [
-  {
-    eventId: 1,
-    eventName: "北海道旅行",
-    url: "https://example.com/summer-festival",
-    eventDates: [
-      new Date('2024-07-20'),
-      new Date('2024-07-21'),
-      new Date('2024-07-22')
-    ],
-    comment: "Annual festival celebrating summer"
-  },
-  {
-    eventId: 2,
-    eventName: "台湾旅行",
-    url: "https://example.com/tech-conference",
-    eventDates: [
-      new Date('2024-09-15'),
-      new Date('2024-09-16')
-    ],
-    comment: "Industry-leading tech conference"
-  }
-];
+import { EventData, EventDateData, EventUserData, EventUserSelData } from "../../json/TableData";
 
 const EventMng = () => {
   // 初期画面（幹事）
@@ -52,7 +23,7 @@ const EventMng = () => {
     return `${month}/${day}(${dayOfWeek})`;
   }
 
-  //イベント作成ダイアログ
+  //イベント作成ダイアログ　
   const clearButton = () => setDays(initialDays);
   const initialDays: Date[] = [];
   const [days, setDays] = React.useState<Date[] | undefined>(initialDays);
@@ -60,11 +31,13 @@ const EventMng = () => {
     days && days.length > 0 ? (
       <div className='grid-cols-2 flex'>
         <div className='flex-3 text-left'>選択日数： {days.length} 日.</div>
-        <div className='flex-1 text-right'><Button variant="outline" onClick={clearButton}>clear</Button></div></div>
+        <div className='flex-1 text-right'>
+          <Button variant="outline" onClick={clearButton}>clear</Button>
+        </div>
+      </div>
     ) : (
       <></>
     );
-
 
   return (
     // 初期画面（幹事）
@@ -80,12 +53,13 @@ const EventMng = () => {
             </CardHeader>
             <CardContent>
               <p className='ml-3'>
-                {eventdata.eventDates.map((eventdate, index) => (
-                  <React.Fragment key={index}>
-                    {formatDateWithDayOfWeek(eventdate)}
-                    {index !== eventdata.eventDates.length - 1 && ', '}
-                  </React.Fragment>
-                ))}
+                {EventDateData.filter((edd) => edd.eventId === eventdata.eventId)
+                  .map((edd, index) => (
+                    <React.Fragment key={index}>
+                      {formatDateWithDayOfWeek(edd.eventDate)}
+                      {index !== (EventDateData.filter((edd) => edd.eventId === eventdata.eventId)).length - 1 && ', '}
+                    </React.Fragment>
+                  ))}
               </p>
             </CardContent>
           </Card>

@@ -48,6 +48,12 @@ export const serverRouter = trpc
         },
       });
     },
-  });
+  })
+  //   .query("findAll", {
+  //   resolve: async ({ ctx }) => {
+  //     return await ctx.prisma.ET_Event.findMany();
+  //   },
+  // })
+  ;
 
 export type ServerRouter = typeof serverRouter;

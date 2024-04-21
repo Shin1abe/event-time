@@ -12,3 +12,11 @@ model GroceryList {
   title   String
   checked Boolean? @default(false)
 }
+
+
+model Event {
+  eventId Int  @id @default(autoincrement())
+  eventName String
+  eventUrl String
+  eventMemo String?
+}

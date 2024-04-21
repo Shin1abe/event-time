@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
+import Link from "next/link";
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Badge } from './ui/badge'
@@ -22,40 +23,15 @@ import {
     TableHeader,
     TableRow,
 } from "@/pages/components/ui/table"
-import Link from "next/link";
 
-const attendanceFieldNames = {
-    eventName: "北海道旅行",
-    dates: [new Date('2024-04-20'), new Date('2024-04-27'), new Date('2024-05-02'), new Date('2024-05-10'), new Date('2024-05-17')]
-};
-
-interface AttendanceEntry {
-    name: string;
-    statuses: string[]; // 出席状況
-    comment: string;
-}
-const attendanceData: AttendanceEntry[] = [
-    {
-        name: '晋一',
-        statuses: ['○', '▲', '×', '○', '○'],
-        comment: '是非参加します。'
-    },
-    {
-        name: '敬子',
-        statuses: ['○', '▲', '×', '○', '○'],
-        comment: '是非参加します。'
-    },
-    {
-        name: '絵里子',
-        statuses: ['○', '▲', '×', '○', '○'],
-        comment: '是非参加します。'
-    },
-];
+import { EventData, EventDateData, EventUserData, EventUserSelData } from "../../json/TableData";
 
 const AttendMng = () => {
-    const [date, setDate] = React.useState<Date | undefined>(new Date())
+    const [eventId, setIventId] = useState(1);
+    const [date, setDate] = useState<Date | undefined>(new Date())
     const handleClick = useCallback(() => {
-        const url = window.location.origin;
+        // const url = window.location.origin;
+        const url = ((EventData.filter(ed => ed.eventId === ed.eventId)).map(e => e.eventUrl))[0]
         void (async () => {
             if (navigator.share) {
                 // Web share API
@@ -83,7 +59,7 @@ const AttendMng = () => {
         <div className="flex-wrap flex-row gap-1 m-2">
             <div className=' flex justify-between'>
                 <div >
-                    <Button type="submit" variant="ghost"><Link href={"/"}>{attendanceFieldNames.eventName}</Link></Button>
+                    <Button type="submit" variant="ghost"><Link href={"/"}>{EventData.find(event => event.eventId === 1)?.eventName}</Link></Button>
                 </div>
                 <div >
                     <DropdownMenu>
@@ -99,9 +75,9 @@ const AttendMng = () => {
                 </div>
             </div>
             <hr className='m-3' />
-            <h1 className='text-2xl+ font-bold'>{attendanceFieldNames.eventName}</h1>
+            <h1 className='text-2xl+ font-bold'>{EventData.find(event => event.eventId === 1)?.eventName}</h1>
             <div className="flex flex-col justify-center gap-2">
-                <p className='text-sm ml-3'>回答者{attendanceData.length}名</p>
+                <p className='text-sm ml-3'>回答者{(EventUserData.filter((eud) => eud.eventId === eventId)).length}名</p>
                 <p className='font-bold'>イベントメモ</p>
                 <div>
                     <Table>
@@ -109,22 +85,24 @@ const AttendMng = () => {
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[100px]">参加者</TableHead>
-                                {attendanceFieldNames.dates.map((date, index) => (
+                                {EventDateData.filter(event => event.eventId === eventId).map((date, index) => (
                                     <TableHead key={index} className='text-center'>
-                                        {formatDateWithDayOfWeek(date)}
+                                        {formatDateWithDayOfWeek(date.eventDate)}
                                     </TableHead>
                                 ))}
                                 <TableHead>コメント</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {attendanceData.map((participant, index) => (
+                            {(EventUserData.filter(u => u.eventId === eventId)).map((user, index) => (
                                 <TableRow key={index}>
-                                    <TableCell className="font-medium"><Button variant="secondary">{participant.name}</Button></TableCell>
-                                    {participant.statuses.map((status, idx) => (
-                                        <TableCell key={idx} className='text-center'>{status}</TableCell>
+                                    <TableCell className="font-medium">
+                                        <Button variant="secondary">{user.userName}</Button>
+                                    </TableCell>
+                                    {EventUserSelData.filter((esd) => esd.eventId === eventId && esd.userId === user.userId).map((user, idx) => (
+                                        <TableCell key={idx} className='text-center'>{user.userSel}</TableCell>
                                     ))}
-                                    <TableCell className='w-96'>{participant.comment}</TableCell>
+                                    <TableCell className='w-96'>{user.userMemo}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -158,9 +136,9 @@ const AttendMng = () => {
                                 <div>
                                     <Table>
                                         <TableBody>
-                                            {attendanceFieldNames.dates.map((schedule, index) => (
+                                            {EventDateData.filter(event => event.eventId === eventId).map((data, index) => (
                                                 <TableRow key={index}>
-                                                    <TableCell>{formatDateWithDayOfWeek(schedule)}</TableCell>
+                                                    <TableCell>{formatDateWithDayOfWeek(data.eventDate)}</TableCell>
                                                     <TableCell className='text-center'><Badge>○</Badge></TableCell>
                                                     <TableCell className='text-center'>△</TableCell>
                                                     <TableCell className='text-center'>×</TableCell>

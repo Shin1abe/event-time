@@ -18,6 +18,8 @@ import {
   ListItem,
 } from "@/pages/components/Card";
 import { GroceryList } from "@prisma/client";
+import { Event } from '@prisma/client'
+
 import Parts from "@/pages/components/Parts";
 import EventMng from "@/pages/components/EventMng";
 import AttendMng from "@/pages/components/AttendMng";

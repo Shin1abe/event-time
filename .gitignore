@@ -36,3 +36,6 @@ yarn-error.log*
 
 #prisma
 prisma/dev.db
+prisma/migrations/20240421101355_init/migration.sql
+prisma/migrations/20240421111506_/migration.sql
+prisma/migrations/20240421111615_/migration.sql

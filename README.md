@@ -79,3 +79,6 @@ z-index: 1;
 □不足ボタン・機能の実装
 □ローカルデータでのテスト
 Draw.io Integration
+npx prisma migrate dev
+npx prisma studio
+npx prisma generate dev
