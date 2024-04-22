@@ -23,12 +23,24 @@ import {
     TableHeader,
     TableRow,
 } from "@/pages/components/ui/table"
-
+import { trpc } from "@/utils/trpc";
+import { etEvent } from "@prisma/client";
 import { EventData, EventDateData, EventUserData, EventUserSelData } from "../../json/TableData";
 
 const AttendMng = () => {
     const [eventId, setIventId] = useState(1);
     const [date, setDate] = useState<Date | undefined>(new Date())
+    const { data: etEvent, refetch } = trpc.useQuery(["etEvent_findAll"]);
+
+    // 対象イベントの削除
+    const deleteMutation = trpc.useMutation(["etEvent_delete"]);
+    const eventDelete = async (eventId: number) => {
+        await deleteMutation.mutate({ eventId });
+        // 削除成功後の処理
+    };
+    // <button onClick={() => handleDelete(123)}>削除</button>
+
+
     const handleClick = useCallback(() => {
         // const url = window.location.origin;
         const url = ((EventData.filter(ed => ed.eventId === ed.eventId)).map(e => e.eventUrl))[0]
@@ -44,7 +56,7 @@ const AttendMng = () => {
                 alert("URLをコピーしました");
             }
         })();
-    }, []);
+    }, []); // コロンをここに追加
 
     // 日付を "MM/DD(曜日)" の形式で表示する関数
     function formatDateWithDayOfWeek(date: Date): string {

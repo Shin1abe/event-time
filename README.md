@@ -41,6 +41,13 @@ npm run dev
 
 https://ui.shadcn.com/docs/installation/next
 
+## model into prisma.schema 適用
+
+npx prisma migrate dev
+npx prisma generate
+※npx prisma studio
+\server\router.tsにcrudを定義
+
 ## Todo
 
 ### （解決）スクロールするとヘッダ・フッタが透けているため不自然。
@@ -79,6 +86,3 @@ z-index: 1;
 □不足ボタン・機能の実装
 □ローカルデータでのテスト
 Draw.io Integration
-npx prisma migrate dev
-npx prisma studio
-npx prisma generate dev

@@ -13,8 +13,14 @@ model GroceryList {
   checked Boolean? @default(false)
 }
 
+model etList {
+  id      Int      @id @default(autoincrement())
+  title   String
+  checked Boolean? @default(false)
+}
 
-model Event {
+
+model etEvent {
   eventId Int  @id @default(autoincrement())
   eventName String
   eventUrl String

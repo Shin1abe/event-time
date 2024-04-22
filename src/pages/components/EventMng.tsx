@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from "next/link";
 import { Button } from './ui/button'
 import { DayPicker } from 'react-day-picker';
@@ -12,7 +12,42 @@ import { Label } from './ui/label'
 
 import { EventData, EventDateData, EventUserData, EventUserSelData } from "../../json/TableData";
 
+import { trpc } from "@/utils/trpc";
+import { etEvent } from "@prisma/client";
+import { useRouter } from 'next/router';
+
 const EventMng = () => {
+  const [eventName, setEventName] = useState<string>("");
+  const [eventUrl, setEventUrl] = useState<string>("https://react-day-picker.js.org");;
+  const [eventMemo, setEventMemo] = useState<string>("");;
+
+  // イベント一覧取得
+  const { data: etEvent, refetch } = trpc.useQuery(["etEvent_findAll"]);
+
+  // 対象インベントの追加
+  const createMutation = trpc.useMutation(["etEvent_create"]);
+  const eventCreate = async (newEvent: {
+    eventName: string;
+    eventUrl: string;
+    eventMemo?: string;
+  }) => {
+    await createMutation.mutate(newEvent);
+    // 作成成功後の処理
+  };
+  //例：<button onClick={() => eventCreate({ eventName: "イベント名", eventUrl: "https://example.com" })}>
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+
+  const handleButtonClick = async () => {
+    setIsSubmitting(true);
+    // ここで別メソッドを呼び出す
+    eventCreate({ eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
+    // ローカルにも保存
+    // 別メソッドの実行後に遷移
+    router.push("/components/AttendMng");
+  };
+
+
   // 初期画面（幹事）
   // 日付を "MM/DD(曜日)" の形式で表示する関数
   function formatDateWithDayOfWeek(date: Date): string {
@@ -46,7 +81,7 @@ const EventMng = () => {
       <hr />
       <h1 className='m-1 text-2xl+'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
-        {EventData.map((eventdata, index) => (
+        {etEvent?.map((eventdata, index) => (
           <Card className='m-3' key={index}>
             <CardHeader>
               <CardTitle ><Badge className='mb-2'>幹事</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
@@ -81,6 +116,8 @@ const EventMng = () => {
                 <Badge className='ml-1'>必須</Badge>
                 <Input
                   id="eventName"
+                  value={eventName}
+                  onChange={(e) => setEventName(e.target.value)}
                   defaultValue="イベント名を入力してください"
                   className="m-1"
                 />
@@ -108,11 +145,25 @@ const EventMng = () => {
                 <br />
                 <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
                 <p>イベントの概要など参加者に連絡しておきたいことを記述することができます。</p>
-                <Textarea className="w-full m-1" placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。" />
+                <Textarea
+                  className="w-full m-1"
+                  placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
+                  value={eventMemo}
+                  onChange={(e) => setEventMemo(e.target.value)}
+                />
               </div>
             </DialogDescription>
             <DialogFooter>
-              <Button type="submit"><Link href={"/components/AttendMng"}>イベント作成</Link></Button>
+              <Button
+                type="submit"
+                onClick={handleButtonClick}
+                disabled={isSubmitting}
+              >
+                イベント作成
+              </Button>
+              {/* <Button type="submit">
+                <Link href={"/components/AttendMng"}>イベント作成</Link>
+              </Button> */}
             </DialogFooter>
           </DialogContent>
         </Dialog>

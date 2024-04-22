@@ -49,11 +49,68 @@ export const serverRouter = trpc
       });
     },
   })
-  //   .query("findAll", {
-  //   resolve: async ({ ctx }) => {
-  //     return await ctx.prisma.ET_Event.findMany();
-  //   },
-  // })
-  ;
-
+  // etEvent
+  // eventId: number;
+  // eventName: string;
+  // eventUrl: string;
+  // eventMemo: string | null;
+  .query("etEvent_findAll", {
+    resolve: async ({ ctx }) => {
+      return await ctx.prisma.etEvent.findMany();
+    },
+  })
+  .query("etEvent_getById", {
+    input: z.object({
+      eventId: z.number(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return ctx.prisma.etEvent.findUnique({
+        where: { eventId: input.eventId },
+      });
+    },
+  })
+  .mutation("etEvent_create", {
+    input: z.object({
+      eventName: z.string(),
+      eventUrl: z.string(),
+      eventMemo: z.string().optional(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return ctx.prisma.etEvent.create({
+        data: {
+          eventName: input.eventName,
+          eventUrl: input.eventUrl,
+          eventMemo: input.eventMemo,
+        },
+      });
+    },
+  })
+  .mutation("etEvent_update", {
+    input: z.object({
+      eventId: z.number(),
+      eventName: z.string(),
+      eventUrl: z.string(),
+      eventMemo: z.string().optional(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return ctx.prisma.etEvent.update({
+        where: { eventId: input.eventId },
+        data: {
+          eventName: input.eventName,
+          eventUrl: input.eventUrl,
+          eventMemo: input.eventMemo,
+        },
+      });
+    },
+  })
+  .mutation("etEvent_delete", {
+    input: z.object({
+      eventId: z.number(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return ctx.prisma.etEvent.delete({
+        where: { eventId: input.eventId },
+      });
+    },
+  });
 export type ServerRouter = typeof serverRouter;
