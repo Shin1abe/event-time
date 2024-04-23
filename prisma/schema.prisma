@@ -7,21 +7,39 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model GroceryList {
-  id      Int      @id @default(autoincrement())
-  title   String
-  checked Boolean? @default(false)
-}
-
-model etEvent {
-  eventId Int  @id @default(autoincrement())
+model Event {
+  eventId  String   @id @default(cuid())
   eventName String
   eventUrl String
-  eventMemo String?
+  eventMemo String
+  updatedAt DateTime @updatedAt
+  eventDate EventDate[]
+  EventUser EventUser[]
 }
 
-model etEventDate {
-  eventId Int  @id @default(autoincrement())
-  eventDate: Date;
+model EventDate {
+  id        Int      @id @default(autoincrement())
+  eventId   String
+  eventDate DateTime
+  updatedAt DateTime @updatedAt
+  Event     Event    @relation(fields: [eventId], references: [eventId])
 }
 
+model EventUser {
+  userId   Int      @id @default(autoincrement())
+  userName String
+  userMemo String
+  eventId  String
+  updatedAt DateTime @updatedAt
+  Event    Event    @relation(fields: [eventId], references: [eventId])
+  EventUserSel EventUserSel[]
+}
+
+model EventUserSel {
+  id        Int      @id @default(autoincrement())
+  userId   Int
+  userSel  String
+  updatedAt DateTime @updatedAt
+  EventUser EventUser @relation(fields: [userId], references: [userId])
+}
+ 

@@ -13,7 +13,7 @@ import { Label } from './ui/label'
 import { EventData, EventDateData, EventUserData, EventUserSelData } from "../../json/TableData";
 
 import { trpc } from "@/utils/trpc";
-import { etEvent } from "@prisma/client";
+import { Event } from "@prisma/client";
 import { useRouter } from 'next/router';
 
 const EventMng = () => {
@@ -22,18 +22,19 @@ const EventMng = () => {
   const [eventMemo, setEventMemo] = useState<string>("");;
 
   // イベント一覧取得
-  const { data: etEvent, refetch } = trpc.useQuery(["etEvent_findAll"]);
+  const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
 
   // 対象インベントの追加
-  const createMutation = trpc.useMutation(["etEvent_create"]);
+  const createMutation = trpc.useMutation(["Event_create"]);
   const eventCreate = async (newEvent: {
     eventName: string;
     eventUrl: string;
-    eventMemo?: string;
+    eventMemo: string;
   }) => {
     await createMutation.mutate(newEvent);
     // 作成成功後の処理
   };
+  console.log(eventCreate)
   //例：<button onClick={() => eventCreate({ eventName: "イベント名", eventUrl: "https://example.com" })}>
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -44,7 +45,8 @@ const EventMng = () => {
     eventCreate({ eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
     // ローカルにも保存
     // 別メソッドの実行後に遷移
-    router.push("/components/AttendMng");
+    // TODO:eventIdをパラ目で渡したい
+    router.push("/components/AttendMng/");
   };
 
 

@@ -60,7 +60,7 @@ background-color: grey; /_ 必要に応じて背景色を設定 _/
 z-index: 10;
 }
 
-.fixed-footer {
+.fixed-footer {t
 position: fixed;
 bottom: 0;
 width: 100%;

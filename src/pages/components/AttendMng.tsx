@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from 'react'
+import { useParams } from "react-router-dom";
 import Link from "next/link";
+
+
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Badge } from './ui/badge'
@@ -24,17 +27,17 @@ import {
     TableRow,
 } from "@/pages/components/ui/table"
 import { trpc } from "@/utils/trpc";
-import { etEvent } from "@prisma/client";
+import { Event } from "@prisma/client";
 import { EventData, EventDateData, EventUserData, EventUserSelData } from "../../json/TableData";
 
 const AttendMng = () => {
-    const [eventId, setIventId] = useState(1);
+    const [eventId, setIventId] = useState(useParams());
     const [date, setDate] = useState<Date | undefined>(new Date())
-    const { data: etEvent, refetch } = trpc.useQuery(["etEvent_findAll"]);
+    const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
 
     // 対象イベントの削除
-    const deleteMutation = trpc.useMutation(["etEvent_delete"]);
-    const eventDelete = async (eventId: number) => {
+    const deleteMutation = trpc.useMutation(["Event_delete"]);
+    const eventDelete = async (eventId: string) => {
         await deleteMutation.mutate({ eventId });
         // 削除成功後の処理
     };
@@ -71,7 +74,7 @@ const AttendMng = () => {
         <div className="flex-wrap flex-row gap-1 m-2">
             <div className=' flex justify-between'>
                 <div >
-                    <Button type="submit" variant="ghost"><Link href={"/"}>{EventData.find(event => event.eventId === 1)?.eventName}</Link></Button>
+                    <Button type="submit" variant="ghost"><Link href={"/"}>{EventData.find(event => event.eventId === "1")?.eventName}</Link></Button>
                 </div>
                 <div >
                     <DropdownMenu>
@@ -87,7 +90,7 @@ const AttendMng = () => {
                 </div>
             </div>
             <hr className='m-3' />
-            <h1 className='text-2xl+ font-bold'>{EventData.find(event => event.eventId === 1)?.eventName}</h1>
+            <h1 className='text-2xl+ font-bold'>{EventData.find(event => event.eventId === "1")?.eventName}</h1>
             <div className="flex flex-col justify-center gap-2">
                 <p className='text-sm ml-3'>回答者{(EventUserData.filter((eud) => eud.eventId === eventId)).length}名</p>
                 <p className='font-bold'>イベントメモ</p>
