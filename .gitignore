@@ -46,3 +46,4 @@ prisma/dev.db-journal
 prisma/migrations/20240422115948_/migration.sql
 prisma/migrations/20240423062937_/migration.sql
 prisma/migrations/20240422115948_/migration.sql
+prisma/migrations/20240424050503_init/migration.sql

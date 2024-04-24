@@ -9,11 +9,14 @@ import { Badge } from './ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
+import cuid from 'cuid';
 
 import { EventData, EventDateData, EventUserData, EventUserSelData } from "../../json/TableData";
 
 import { trpc } from "@/utils/trpc";
 import { Event } from "@prisma/client";
+import { EventDate } from "@prisma/client";
+
 import { useRouter } from 'next/router';
 
 const EventMng = () => {
@@ -21,20 +24,36 @@ const EventMng = () => {
   const [eventUrl, setEventUrl] = useState<string>("https://react-day-picker.js.org");;
   const [eventMemo, setEventMemo] = useState<string>("");;
 
+  const initialDays: Date[] = [];
+  const clearButton = () => setEventsDates(initialDays);
+  const [eventDates, setEventsDates] = useState<Date[] | undefined>(initialDays);
+
   // イベント一覧取得
   const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
 
-  // 対象インベントの追加
-  const createMutation = trpc.useMutation(["Event_create"]);
+  // インベントの追加
+  const eventCreateMutation = trpc.useMutation(["Event_create"]);
   const eventCreate = async (newEvent: {
+    eventId: string;
     eventName: string;
     eventUrl: string;
     eventMemo: string;
   }) => {
-    await createMutation.mutate(newEvent);
+    await eventCreateMutation.mutate(newEvent);
     // 作成成功後の処理
   };
-  console.log(eventCreate)
+
+  // 日付の追加
+  const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]);
+  const eventdateCreate = async (newEvent: {
+    eventId: string;
+    eventDate: Date;
+  }) => {
+    await eventdateCreateMutation.mutate(newEvent);
+    // 作成成功後の処理
+  };
+
+
   //例：<button onClick={() => eventCreate({ eventName: "イベント名", eventUrl: "https://example.com" })}>
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -42,10 +61,13 @@ const EventMng = () => {
   const handleButtonClick = async () => {
     setIsSubmitting(true);
     // ここで別メソッドを呼び出す
-    eventCreate({ eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
+    const eventid = cuid();
+    eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
+    eventDates?.map((eventdate) => eventdateCreate({ eventId: eventid, eventDate: eventdate }))
+    console.log(eventDates)
     // ローカルにも保存
     // 別メソッドの実行後に遷移
-    // TODO:eventIdをパラ目で渡したい
+
     router.push("/components/AttendMng/");
   };
 
@@ -61,13 +83,13 @@ const EventMng = () => {
   }
 
   //イベント作成ダイアログ　
-  const clearButton = () => setDays(initialDays);
-  const initialDays: Date[] = [];
-  const [days, setDays] = React.useState<Date[] | undefined>(initialDays);
+  // const clearButton = () => setDays(initialDays);
+  // const initialDays: Date[] = [];
+  // const [days, setDays] = React.useState<Date[] | undefined>(initialDays);
   const footer =
-    days && days.length > 0 ? (
+    eventDates && eventDates.length > 0 ? (
       <div className='grid-cols-2 flex'>
-        <div className='flex-3 text-left'>選択日数： {days.length} 日.</div>
+        <div className='flex-3 text-left'>選択日数： {eventDates.length} 日.</div>
         <div className='flex-1 text-right'>
           <Button variant="outline" onClick={clearButton}>clear</Button>
         </div>
@@ -83,7 +105,7 @@ const EventMng = () => {
       <hr />
       <h1 className='m-1 text-2xl+'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
-        {etEvent?.map((eventdata, index) => (
+        {etEvent?.map((eventdata: Event, index: number) => (
           <Card className='m-3' key={index}>
             <CardHeader>
               <CardTitle ><Badge className='mb-2'>幹事</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
@@ -133,15 +155,15 @@ const EventMng = () => {
                     mode="multiple"
                     min={0}
                     style={{ margin: 0 }} // Add this line
-                    selected={days}
-                    onSelect={setDays}
+                    selected={eventDates}
+                    onSelect={setEventsDates}
                     footer={footer}
                   />
                 </div>
                 <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
                 <div className='flex  w-full ml-14 items-center'>
                   <ul>
-                    {days?.map((day) => <li>・{day.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}]</li>)}
+                    {eventDates?.map((day) => <li>・{day.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}]</li>)}
                   </ul>
                 </div>
                 <br />

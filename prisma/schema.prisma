@@ -8,7 +8,8 @@ datasource db {
 }
 
 model Event {
-  eventId  String   @id @default(cuid())
+  id Int @id @default(autoincrement())
+  eventId String @unique
   eventName String
   eventUrl String
   eventMemo String
@@ -18,28 +19,27 @@ model Event {
 }
 
 model EventDate {
-  id        Int      @id @default(autoincrement())
-  eventId   String
+  id Int @id @default(autoincrement())
+  eventId String
   eventDate DateTime
   updatedAt DateTime @updatedAt
-  Event     Event    @relation(fields: [eventId], references: [eventId])
+  Event Event @relation(fields: [eventId], references: [eventId])
 }
 
 model EventUser {
-  userId   Int      @id @default(autoincrement())
+  userId Int @id @default(autoincrement())
   userName String
   userMemo String
-  eventId  String
+  eventId String
   updatedAt DateTime @updatedAt
-  Event    Event    @relation(fields: [eventId], references: [eventId])
+  Event Event @relation(fields: [eventId], references: [eventId])
   EventUserSel EventUserSel[]
 }
 
 model EventUserSel {
-  id        Int      @id @default(autoincrement())
-  userId   Int
-  userSel  String
+  id Int @id @default(autoincrement())
+  userId Int
+  userSel String
   updatedAt DateTime @updatedAt
   EventUser EventUser @relation(fields: [userId], references: [userId])
 }
- 
