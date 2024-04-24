@@ -214,7 +214,7 @@ export const serverRouter = trpc
       });
     },
   });
-
+export type ServerRouter = typeof serverRouter;
 //   schema.prisma定義
 // -----------
 // datasource db {

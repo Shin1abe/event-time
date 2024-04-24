@@ -31,6 +31,11 @@ const EventMng = () => {
 
   // イベント一覧取得
   const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
+  // イベントで定義された日付一覧取得
+  const queryEventDatesByEventId = (eventid: string) => {
+    const { data, error } = trpc.useQuery(['EventDate_findMany']);
+    return data?.filter((d) => d.eventId === eventid).map(d => d.eventDate);
+  }
 
   // インベントの追加
   const eventCreateMutation = trpc.useMutation(["Event_create"]);
@@ -44,7 +49,7 @@ const EventMng = () => {
     // 作成成功後の処理
   };
 
-  // 日付の追加
+  // 日付の追加★
   const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]);
   // const eventdateCreate = async (newEvent: {
   //   eventId: string;
