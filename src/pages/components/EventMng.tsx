@@ -25,8 +25,9 @@ const EventMng = () => {
   const [eventMemo, setEventMemo] = useState<string>("");;
 
   const initialDays: Date[] = [];
+  const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(initialDays);
   const clearButton = () => setEventsDates(initialDays);
-  const [eventDates, setEventsDates] = useState<Date[] | undefined>(initialDays);
+
 
   // イベント一覧取得
   const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
@@ -45,14 +46,23 @@ const EventMng = () => {
 
   // 日付の追加
   const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]);
+  // const eventdateCreate = async (newEvent: {
+  //   eventId: string;
+  //   eventDate: Date;
+  // }) => {
+  //   await eventdateCreateMutation.mutate(newEvent);
+  //   // 作成成功後の処理
+  // };
   const eventdateCreate = async (newEvent: {
     eventId: string;
-    eventDate: Date;
+    eventDate: string;
   }) => {
-    await eventdateCreateMutation.mutate(newEvent);
+    await eventdateCreateMutation.mutate({
+      eventId: newEvent.eventId,
+      eventDate: newEvent.eventDate, // 日付型のまま渡す
+    });
     // 作成成功後の処理
   };
-
 
   //例：<button onClick={() => eventCreate({ eventName: "イベント名", eventUrl: "https://example.com" })}>
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,8 +73,9 @@ const EventMng = () => {
     // ここで別メソッドを呼び出す
     const eventid = cuid();
     eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
-    eventDates?.map((eventdate) => eventdateCreate({ eventId: eventid, eventDate: eventdate }))
-    console.log(eventDates)
+    eventDates?.map((eventdate) => eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() }))
+    eventDates?.map((eventdate) => console.log(eventdate))
+
     // ローカルにも保存
     // 別メソッドの実行後に遷移
 

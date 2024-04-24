@@ -76,11 +76,16 @@ export const serverRouter = trpc
   .mutation("EventDate_create", {
     input: z.object({
       eventId: z.string(),
-      eventDate: z.date(),
+      eventDate: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
       return await ctx.prisma.eventDate.create({
-        data: input,
+        // data: input,
+        data: {
+          ...input,
+          // eventDateが文字列の形式であるため、Prismaが期待する形式に変換する必要があります。
+          eventDate: new Date(input.eventDate),
+        },
       });
     },
   })
