@@ -24,6 +24,8 @@ model EventDate {
   eventDate DateTime
   updatedAt DateTime @updatedAt
   Event Event @relation(fields: [eventId], references: [eventId])
+
+  @@index([eventId], name: "eventId")
 }
 
 model EventUser {

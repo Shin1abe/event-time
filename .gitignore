@@ -50,3 +50,6 @@ prisma/migrations/20240424050503_init/migration.sql
 prisma/migrations/20240424112826_/migration.sql
 .gitignore
 .gitignore
+prisma/migrations/20240424225731_init/migration.sql
+.gitignore
+prisma/migrations/20240424234939_init/migration.sql

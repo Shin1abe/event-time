@@ -74,18 +74,34 @@ const EventMng = () => {
   const router = useRouter();
 
   const handleButtonClick = async () => {
-    setIsSubmitting(true);
-    // ここで別メソッドを呼び出す
     const eventid = cuid();
-    eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
-    eventDates?.map((eventdate) => eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() }))
-    eventDates?.map((eventdate) => console.log(eventdate))
+    // eventCreateの処理が完了するまで待つ
+    await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
+    // 全てのeventdateCreateが完了するまで待つ
 
-    // ローカルにも保存
-    // 別メソッドの実行後に遷移
+
+    console.log(eventid)
+    console.log(eventDates)
+
+    await Promise.all(eventDates?.map(
+      async (eventdate) => await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() })
+    ) || [])
 
     router.push("/components/AttendMng/");
   };
+  // const handleButtonClick = async () => {
+  //   setIsSubmitting(true);
+  //   // ここで別メソッドを呼び出す
+  //   const eventid = cuid();
+  //   await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
+  //   eventDates?.map((eventdate) => eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() }))
+  //   eventDates?.map((eventdate) => console.log(eventdate))
+
+  //   // ローカルにも保存
+  //   // 別メソッドの実行後に遷移
+
+  //   router.push("/components/AttendMng/");
+  // };
 
 
   // 初期画面（幹事）
