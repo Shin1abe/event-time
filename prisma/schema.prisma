@@ -7,41 +7,52 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+model UserExample {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
 model Event {
-  id Int @id @default(autoincrement())
-  eventId String @unique
-  eventName String
-  eventUrl String
-  eventMemo String
-  updatedAt DateTime @updatedAt
-  eventDate EventDate[]
-  EventUser EventUser[]
+  id         Int         @id @default(autoincrement())
+  eventId    String      @unique
+  eventName  String?
+  eventUrl   String?
+  eventMemo  String?
+  eventDates EventDate[]
+  eventUsers EventUser[]
+  createdAt  DateTime    @default(now())
 }
 
 model EventDate {
-  id Int @id @default(autoincrement())
-  eventId String
-  eventDate DateTime
-  updatedAt DateTime @updatedAt
-  Event Event @relation(fields: [eventId], references: [eventId])
+  id        Int       @id @default(autoincrement())
+  eventId   String
+  eventDate DateTime?
+  createdAt DateTime  @default(now())
+  Event     Event     @relation(fields: [eventId], references: [eventId])
 
-  @@index([eventId], name: "eventId")
+  @@unique([eventId, eventDate])
 }
 
 model EventUser {
-  userId Int @id @default(autoincrement())
-  userName String
-  userMemo String
-  eventId String
-  updatedAt DateTime @updatedAt
-  Event Event @relation(fields: [eventId], references: [eventId])
-  EventUserSel EventUserSel[]
+  eventId       String
+  userId        Int            @id @default(autoincrement())
+  userName      String?
+  userMemo      String?
+  eventUserSels EventUserSel[]
+  createdAt     DateTime       @default(now())
+  Event         Event          @relation(fields: [eventId], references: [eventId])
+
+  @@unique([eventId, userId])
 }
 
 model EventUserSel {
-  id Int @id @default(autoincrement())
-  userId Int
-  userSel String
-  updatedAt DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  eventId   String
+  userId    Int
+  userSel   String
+  createdAt DateTime  @default(now())
   EventUser EventUser @relation(fields: [userId], references: [userId])
+
+  @@unique([eventId, userId])
 }

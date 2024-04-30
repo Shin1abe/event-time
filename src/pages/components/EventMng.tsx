@@ -1,43 +1,43 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/router';
 import Link from "next/link";
-import { Button } from './ui/button'
+import { trpc } from "@/utils/trpc";
+import cuid from 'cuid';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+
+import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { Badge } from './ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
-import cuid from 'cuid';
 
-import { EventData, EventDateData, EventUserData, EventUserSelData } from "../../json/TableData";
-
-import { trpc } from "@/utils/trpc";
-import { Event } from "@prisma/client";
-import { EventDate } from "@prisma/client";
-
-import { useRouter } from 'next/router';
+import {
+  Event,
+  EventDate,
+  EventUser,
+  EventUserSel
+} from "@prisma/client";
 
 const EventMng = () => {
+  //■  initial
+  const router = useRouter();
+  const initialDays: Date[] = [];
+
+  //■  useState
   const [eventName, setEventName] = useState<string>("");
   const [eventUrl, setEventUrl] = useState<string>("https://react-day-picker.js.org");;
   const [eventMemo, setEventMemo] = useState<string>("");;
-
-  const initialDays: Date[] = [];
   const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(initialDays);
-  const clearButton = () => setEventsDates(initialDays);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-
-  // イベント一覧取得
+  //■  trpc
   const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
-  // イベントで定義された日付一覧取得
-  const queryEventDatesByEventId = (eventid: string) => {
-    const { data, error } = trpc.useQuery(['EventDate_findMany']);
-    return data?.filter((d) => d.eventId === eventid).map(d => d.eventDate);
-  }
+  const { data: etEventDate, error } = trpc.useQuery(['EventDate_findMany']);
+  console.log(etEventDate)
 
-  // インベントの追加
   const eventCreateMutation = trpc.useMutation(["Event_create"]);
   const eventCreate = async (newEvent: {
     eventId: string;
@@ -46,18 +46,8 @@ const EventMng = () => {
     eventMemo: string;
   }) => {
     await eventCreateMutation.mutate(newEvent);
-    // 作成成功後の処理
   };
-
-  // 日付の追加★
-  const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]);
-  // const eventdateCreate = async (newEvent: {
-  //   eventId: string;
-  //   eventDate: Date;
-  // }) => {
-  //   await eventdateCreateMutation.mutate(newEvent);
-  //   // 作成成功後の処理
-  // };
+  const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]);//TODO
   const eventdateCreate = async (newEvent: {
     eventId: string;
     eventDate: string;
@@ -66,58 +56,41 @@ const EventMng = () => {
       eventId: newEvent.eventId,
       eventDate: newEvent.eventDate, // 日付型のまま渡す
     });
-    // 作成成功後の処理
   };
 
-  //例：<button onClick={() => eventCreate({ eventName: "イベント名", eventUrl: "https://example.com" })}>
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
+  //■  event
+  const clearButton = () => setEventsDates(initialDays);
 
-  const handleButtonClick = async () => {
+  //イベント作成ボタン押下　
+  const eventCreateButtonClick = async () => {
     const eventid = cuid();
-    // eventCreateの処理が完了するまで待つ
     await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
-    // 全てのeventdateCreateが完了するまで待つ
-
-
     console.log(eventid)
     console.log(eventDates)
-
     await Promise.all(eventDates?.map(
-      async (eventdate) => await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() })
+      async (eventdate) => await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() })//TODO
     ) || [])
-
     router.push("/components/AttendMng/");
   };
-  // const handleButtonClick = async () => {
-  //   setIsSubmitting(true);
-  //   // ここで別メソッドを呼び出す
-  //   const eventid = cuid();
-  //   await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
-  //   eventDates?.map((eventdate) => eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() }))
-  //   eventDates?.map((eventdate) => console.log(eventdate))
 
-  //   // ローカルにも保存
-  //   // 別メソッドの実行後に遷移
-
-  //   router.push("/components/AttendMng/");
-  // };
-
-
-  // 初期画面（幹事）
-  // 日付を "MM/DD(曜日)" の形式で表示する関数
-  function formatDateWithDayOfWeek(date: Date): string {
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
-    const dayOfWeek = daysOfWeek[date.getDay()];
-    return `${month}/${day}(${dayOfWeek})`;
+  //■  util
+  //  初期画面（幹事）日付を "MM/DD(曜日)" の形式で表示する関数
+  function formatDateWithDayOfWeek(date: Date | null): string {
+    console.log(date)
+    // console.log(date instanceof Date)
+    if (date !== null) {
+      const newDate = new Date(date)
+      const month = (newDate.getMonth() + 1).toString();
+      const day = newDate.getDate().toString();
+      const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+      const dayOfWeek = daysOfWeek[newDate.getDay()];
+      return `${month}/${day}(${dayOfWeek})`;
+    } else {
+      return "No date available";
+    }
   }
 
-  //イベント作成ダイアログ　
-  // const clearButton = () => setDays(initialDays);
-  // const initialDays: Date[] = [];
-  // const [days, setDays] = React.useState<Date[] | undefined>(initialDays);
+  //イベント作成ダイアログfooter　
   const footer =
     eventDates && eventDates.length > 0 ? (
       <div className='grid-cols-2 flex'>
@@ -131,7 +104,7 @@ const EventMng = () => {
     );
 
   return (
-    // 初期画面（幹事）
+    // ■■■■■■■■■　幹事画面　■■■■■■■■■
     <div className="flex-wrap flex-row gap-1 m-2">
       <h1 className='m-1 text-2xl font-bold'>ようこそゲストさん</h1>
       <hr />
@@ -144,11 +117,11 @@ const EventMng = () => {
             </CardHeader>
             <CardContent>
               <p className='ml-3'>
-                {EventDateData.filter((edd) => edd.eventId === eventdata.eventId)
-                  .map((edd, index) => (
+                {etEventDate.filter((edd: EventDate) => edd.eventId === eventdata.eventId)
+                  .map((edd: EventDate, index: any) => (
                     <React.Fragment key={index}>
                       {formatDateWithDayOfWeek(edd.eventDate)}
-                      {index !== (EventDateData.filter((edd) => edd.eventId === eventdata.eventId)).length - 1 && ', '}
+                      {index !== (etEventDate.filter((edd: EventDate) => edd.eventId === eventdata.eventId)).length - 1 && ', '}
                     </React.Fragment>
                   ))}
               </p>
@@ -156,7 +129,7 @@ const EventMng = () => {
           </Card>
         ))}
       </div>
-      {/* イベント作成ダイアログ */}
+      {/* ■■■■■■■■■　イベント作成ダイアログ　■■■■■■■■■ */}
       <div >
         <Dialog>
           <DialogTrigger asChild>
@@ -182,7 +155,8 @@ const EventMng = () => {
                 <Badge className='ml-1'>必須</Badge>
                 <p>カレンダーで候補日を選択</p>
                 {/* https://react-day-picker.js.org/ */}
-                <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center border border-gray-300 rounded-md'>
+                <div className='preview flex min-h-[250px] w-full justify-center 
+                     p-1 items-center border border-gray-300 rounded-md'>
                   <DayPicker
                     mode="multiple"
                     min={0}
@@ -195,7 +169,11 @@ const EventMng = () => {
                 <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
                 <div className='flex  w-full ml-14 items-center'>
                   <ul>
-                    {eventDates?.map((day) => <li>・{day.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}]</li>)}
+                    {eventDates?.map((day) => <li>・{
+                      day.toLocaleDateString()}[{
+                        ["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}
+                      ]</li>)
+                    }
                   </ul>
                 </div>
                 <br />
@@ -212,14 +190,11 @@ const EventMng = () => {
             <DialogFooter>
               <Button
                 type="submit"
-                onClick={handleButtonClick}
+                onClick={eventCreateButtonClick}
                 disabled={isSubmitting}
               >
                 イベント作成
               </Button>
-              {/* <Button type="submit">
-                <Link href={"/components/AttendMng"}>イベント作成</Link>
-              </Button> */}
             </DialogFooter>
           </DialogContent>
         </Dialog>
