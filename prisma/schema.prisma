@@ -19,18 +19,15 @@ model Event {
   eventName  String?
   eventUrl   String?
   eventMemo  String?
-  eventDates EventDate[]
-  eventUsers EventUser[]
   createdAt  DateTime    @default(now())
 }
 
 model EventDate {
   id        Int       @id @default(autoincrement())
   eventId   String
-  eventDate DateTime?
+  eventDate DateTime
   createdAt DateTime  @default(now())
-  Event     Event     @relation(fields: [eventId], references: [eventId])
-
+ 
   @@unique([eventId, eventDate])
 }
 
@@ -39,10 +36,8 @@ model EventUser {
   userId        Int            @id @default(autoincrement())
   userName      String?
   userMemo      String?
-  eventUserSels EventUserSel[]
   createdAt     DateTime       @default(now())
-  Event         Event          @relation(fields: [eventId], references: [eventId])
-
+ 
   @@unique([eventId, userId])
 }
 
@@ -52,7 +47,6 @@ model EventUserSel {
   userId    Int
   userSel   String
   createdAt DateTime  @default(now())
-  EventUser EventUser @relation(fields: [userId], references: [userId])
 
   @@unique([eventId, userId])
 }

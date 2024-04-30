@@ -96,12 +96,14 @@ export const serverRouter = trpc
       eventDate: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
-      return await ctx.prisma.eventDate.create({
-        data: {
-          eventId: input.eventId,
-          eventDate: new Date(input.eventDate),
-        },
-      });
+      console.log(input.eventDate)
+      return await ctx.prisma.eventDate.create(
+        {
+          data: {
+            eventId: input.eventId,
+            eventDate: new Date(input.eventDate),
+          },
+        });
     },
   })
   .mutation("EventDate_update", {

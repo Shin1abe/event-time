@@ -36,7 +36,6 @@ const EventMng = () => {
   //■  trpc
   const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
   const { data: etEventDate, error } = trpc.useQuery(['EventDate_findMany']);
-  console.log(etEventDate)
 
   const eventCreateMutation = trpc.useMutation(["Event_create"]);
   const eventCreate = async (newEvent: {
@@ -61,23 +60,32 @@ const EventMng = () => {
   //■  event
   const clearButton = () => setEventsDates(initialDays);
 
-  //イベント作成ボタン押下　
+  // イベント作成ボタン押下
   const eventCreateButtonClick = async () => {
-    const eventid = cuid();
-    await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo })
-    console.log(eventid)
-    console.log(eventDates)
-    await Promise.all(eventDates?.map(
-      async (eventdate) => await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() })//TODO
-    ) || [])
-    router.push("/components/AttendMng/");
+    try {
+      const eventid = cuid();
+      await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo });
+      console.log("eventCreate= " + eventid);
+
+      eventDates?.map(async (eventdate) => {
+        try {
+          await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
+          console.log("eventdateCreate= " + eventid + " eventdateCreate= " + eventdate.toISOString())
+        } catch (err) {
+          console.log(err)
+        }
+      })
+
+      router.push("/components/AttendMng/");
+    } catch (error) {
+      console.error("エラーが発生しました:", error);
+    }
   };
+
 
   //■  util
   //  初期画面（幹事）日付を "MM/DD(曜日)" の形式で表示する関数
-  function formatDateWithDayOfWeek(date: Date | null): string {
-    console.log(date)
-    // console.log(date instanceof Date)
+  function formatDateWithDayOfWeek(date: Date): string {
     if (date !== null) {
       const newDate = new Date(date)
       const month = (newDate.getMonth() + 1).toString();

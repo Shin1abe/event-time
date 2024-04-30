@@ -15,10 +15,14 @@
 
 ## next-tailwind-trpc-prisma
 
-・Simple Grocery List  
+# Simple Grocery List
+https://github.com/FranciscoMendes10866/next-tailwind-trpc-prisma  
+
 https://dev.to/franciscomendes10866/build-a-full-stack-app-with-nextjs-tailwind-trpc-and-prisma-orm-4ail
+
 ・OneNote  
 ・https://onedrive.live.com/view.aspx?resid=237B1A5D9D8EAE9D%213865&id=documents&wd=target%28Prj.one%7C84D67BD3-0EE1-4E47-90A3-B1DBF37DD3DC%2Fnextjs_tailwind_prisma_trpc%7C3C7F1B58-5EFE-4103-BF55-80D21FADD0CC%2F%29
+
 ・onenote:https://d.docs.live.net/237b1a5d9d8eae9d/ドキュメント/開発メモ/Prj.one#nextjs_tailwind_prisma_trpc&section-id={84D67BD3-0EE1-4E47-90A3-B1DBF37DD3DC}&page-id={3C7F1B58-5EFE-4103-BF55-80D21FADD0CC}&end
 
 ## Udemy
@@ -78,6 +82,41 @@ z-index: 1;
 "baseColor": "slate",
 
 ### baseColorが有効になっていない
+
+
+### TRPCClientError: Invalid `prisma.eventDate.create()` invocation:Foreign key constraint failed on the field: `foreign key`
+  →うまくいくときもある。
+ ---------------------
+model Event {
+  id         Int         @id @default(autoincrement())
+  eventId    String      @unique
+  eventName  String?
+  eventUrl   String?
+  eventMemo  String?
+  eventDates EventDate[]
+  eventUsers EventUser[]
+  createdAt  DateTime    @default(now())
+}
+
+model EventDate {
+  id        Int       @id @default(autoincrement())
+  eventId   String
+  eventDate DateTime?
+  createdAt DateTime  @default(now())
+  Event     Event     @relation(fields: [eventId], references: [eventId])
+
+  @@unique([eventId, eventDate])
+}
+→下記を削除して解決
+eventDates EventDate[]
+eventUsers EventUser[]
+Event     Event     @relation(fields: [eventId], references: [eventId])
+
+---------------------
+
+Prismaで日付データを扱う
+  https://wp-kyoto.net/prisma-handle-date-data/
+
 
 ▲画面遷移実装
 □出欠表入力の○▽×のボタン制御について
