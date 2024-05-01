@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { trpc } from "@/utils/trpc";
 import cuid from 'cuid';
+import { Button } from './ui/button'
 import {
     Event,
     EventDate,
     EventUser,
     EventUserSel
 } from "@prisma/client";
+import { Input } from './ui/input';
 
 const ApiTest = () => {
     //■  trpc
@@ -43,7 +45,10 @@ const ApiTest = () => {
     const EventCreateMutation = trpc.useMutation(["Event_create"], {
         onSuccess: () => eventRefetch(),
     });
-    const updateOneMutation = trpc.useMutation(["Event_update"], {
+    const EventUpdateMutation = trpc.useMutation(["Event_update"], {
+        onSuccess: () => eventRefetch(),
+    });
+    const EventDeleteMutation = trpc.useMutation(["Event_delete"], {
         onSuccess: () => eventRefetch(),
     });
 
@@ -55,6 +60,10 @@ const ApiTest = () => {
     const EventDateUpdateMutation = trpc.useMutation(["EventDate_update"], {
         onSuccess: () => eventDateRefetch(),
     });
+    const EventDateDeleteMutation = trpc.useMutation(["EventDate_delete"], {
+        onSuccess: () => eventRefetch(),
+    });
+
 
     //EventUser
     const { data: eventUser, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findMany"]);
@@ -64,6 +73,9 @@ const ApiTest = () => {
     const EventUserUpdateMutation = trpc.useMutation(["EventUser_update"], {
         onSuccess: () => eventUserRefetch(),
     });
+    const EventUserDeleteMutation = trpc.useMutation(["EventUser_delete"], {
+        onSuccess: () => eventRefetch(),
+    });
 
     //EventUserSel
     const { data: eventUserSel, refetch: eventUserSelRefetch } = trpc.useQuery(["EventUserSel_findMany"]);
@@ -72,6 +84,9 @@ const ApiTest = () => {
     });
     const EventUserSelUpdateMutation = trpc.useMutation(["EventUserSel_update"], {
         onSuccess: () => eventUserSelRefetch(),
+    });
+    const EventUserSelDeleteMutation = trpc.useMutation(["EventUserSel_delete"], {
+        onSuccess: () => eventRefetch(),
     });
 
     const createEvent = useCallback(async () => {
@@ -100,12 +115,37 @@ const ApiTest = () => {
             userSel: "〇",
         });
 
-        setEventId("")
+        setEventId(cuid())
     }, [eventId]);
 
+    // const delEvent = useCallback(async () => {
+    //     if (eventId === "") return
+    //     await EventDeleteMutation.mutate({ eventId: eventId })
+    //     await EventDateDeleteMutation.mutate({ id:  })
+    //     await EventUserDeleteMutation.mutate({ userId:  })
+    //     await EventUserSelDeleteMutation.mutate({ id:  })
+    //     setEventId("")
+    // }, [eventId]);
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEventId(e.target.value);
+    };
+
+    const findEventAll = (eventId: string) => {
+        console.log(eventId)
+        const { data: events, refetch: eventRefetch } =
+            trpc.useQuery(["Event_findWhereMany", { eventId: eventId }]);
+        console.log(events)
+    }
+
     return (<>
-        <div>ApiTest</div>
-        <button onClick={() => createEvent()}>クリック</button>
+        <div className='grid'>
+            <div>ApiTest</div>
+            <Button className='m-1' onClick={() => createEvent()}>作成</Button>
+            <Input value={eventId} onChange={onChange} />
+            <Button className='m-1' onClick={() => findEventAll(eventId)}>検索：</Button>
+            {/* <Button className='m-1' onClick={() => delEvent()}>削除：{eventId}</Button> */}
+        </div>
     </>
     )
 }

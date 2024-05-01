@@ -10,6 +10,18 @@ export const serverRouter = trpc
       return await ctx.prisma.event.findMany();
     },
   })
+  .query("Event_findWhereMany", {
+    input: z.object({
+      eventId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.event.findMany({
+        where: {
+          eventId: input.eventId,
+        },
+      });
+    },
+  })
   .query("Event_findUnique", {
     input: z.object({
       eventId: z.string(),
@@ -78,6 +90,18 @@ export const serverRouter = trpc
       return await ctx.prisma.eventDate.findMany();
     },
   })
+  .query("EventDate_findWhereMany", {
+    input: z.object({
+      eventId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventDate.findMany({
+        where: {
+          eventId: input.eventId,
+        },
+      });
+    },
+  })
   .query("EventDate_findUnique", {
     input: z.object({
       id: z.number(),
@@ -136,64 +160,22 @@ export const serverRouter = trpc
       });
     },
   })
-  // EventUserSelモデルの操作
-  .query("EventUserSel_findMany", {
-    resolve: async ({ ctx }) => {
-      return await ctx.prisma.eventUserSel.findMany();
-    },
-  })
-  .query("EventUserSel_findUnique", {
-    input: z.object({
-      id: z.number(),
-    }),
-    resolve: async ({ ctx, input }) => {
-      return await ctx.prisma.eventUserSel.findUnique({
-        where: { id: input.id },
-      });
-    },
-  })
-  .mutation("EventUserSel_create", {
-    input: z.object({
-      eventId: z.string(),
-      userId: z.number(),
-      userSel: z.string(),
-    }),
-    resolve: async ({ ctx, input }) => {
-      return await ctx.prisma.eventUserSel.create({
-        data: {
-          eventId: input.eventId,
-          userId: input.userId,
-          userSel: input.userSel,
-        },
-      });
-    },
-  })
-  .mutation("EventUserSel_update", {
-    input: z.object({
-      id: z.number(),
-      userSel: z.string(),
-    }),
-    resolve: async ({ ctx, input }) => {
-      return await ctx.prisma.eventUserSel.update({
-        where: { id: input.id },
-        data: { userSel: input.userSel },
-      });
-    },
-  })
-  .mutation("EventUserSel_delete", {
-    input: z.object({
-      id: z.number(),
-    }),
-    resolve: async ({ ctx, input }) => {
-      return await ctx.prisma.eventUserSel.delete({
-        where: { id: input.id },
-      });
-    },
-  })
   // EventUserモデルの操作
   .query("EventUser_findMany", {
     resolve: async ({ ctx }) => {
       return await ctx.prisma.eventUser.findMany();
+    },
+  })
+  .query("EventUser_findWhereMany", {
+    input: z.object({
+      eventId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventUser.findMany({
+        where: {
+          eventId: input.eventId,
+        },
+      });
     },
   })
   .query("EventUser_findUnique", {
@@ -247,7 +229,74 @@ export const serverRouter = trpc
         where: { userId: input.userId },
       });
     },
-  });
+  })
+  // EventUserSelモデルの操作
+  .query("EventUserSel_findMany", {
+    resolve: async ({ ctx }) => {
+      return await ctx.prisma.eventUserSel.findMany();
+    },
+  })
+  .query("EventUserSel_findWhereMany", {
+    input: z.object({
+      eventId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventUserSel.findMany({
+        where: {
+          eventId: input.eventId,
+        },
+      });
+    },
+  })
+  .query("EventUserSel_findUnique", {
+    input: z.object({
+      id: z.number(),
+      eventId: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventUserSel.findUnique({
+        where: { id: input.id },
+      });
+    },
+  })
+  .mutation("EventUserSel_create", {
+    input: z.object({
+      eventId: z.string(),
+      userId: z.number(),
+      userSel: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventUserSel.create({
+        data: {
+          eventId: input.eventId,
+          userId: input.userId,
+          userSel: input.userSel,
+        },
+      });
+    },
+  })
+  .mutation("EventUserSel_update", {
+    input: z.object({
+      id: z.number(),
+      userSel: z.string(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventUserSel.update({
+        where: { id: input.id },
+        data: { userSel: input.userSel },
+      });
+    },
+  })
+  .mutation("EventUserSel_delete", {
+    input: z.object({
+      id: z.number(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventUserSel.delete({
+        where: { id: input.id },
+      });
+    },
+  })
+  ;
 
-
-;
+export type ServerRouter = typeof serverRouter;

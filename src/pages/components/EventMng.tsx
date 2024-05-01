@@ -28,7 +28,7 @@ const EventMng = () => {
 
   //■  useState
   const [eventName, setEventName] = useState<string>("");
-  const [eventUrl, setEventUrl] = useState<string>("https://react-day-picker.js.org");;
+  const [eventUrl, setEventUrl] = useState<string>("");;
   const [eventMemo, setEventMemo] = useState<string>("");;
   const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(initialDays);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,10 +62,14 @@ const EventMng = () => {
 
   // イベント作成ボタン押下
   const eventCreateButtonClick = async () => {
+    if (eventName.length === 0) { alert("イベント名が設定されていません"); return }//TODO TOAST
+    if (eventDates?.length === 0) { alert("日程候補が設定されていません"); return }//TODO TOAST
     try {
       const eventid = cuid();
-      await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventUrl, eventMemo: eventMemo });
-      console.log("eventCreate= " + eventid);
+      const urlParts = new URL(window.location.href);
+      const baseURL = `${urlParts.protocol}//${urlParts.host}/`;
+      const eventurl = baseURL + "/" + "/components/AttendMng/" + eventid;
+      await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo });
 
       eventDates?.map(async (eventdate) => {
         try {
@@ -75,13 +79,21 @@ const EventMng = () => {
           console.log(err)
         }
       })
-
-      router.push("/components/AttendMng/");
+      router.push({
+        pathname: '/components/AttendMng',
+        query: { eventid: eventid },
+      });
     } catch (error) {
       console.error("エラーが発生しました:", error);
     }
   };
 
+  const handleCardClick = (eventId: string) => {
+    router.push({
+      pathname: '/components/AttendMng',
+      query: { eventid: eventId },
+    });
+  }
 
   //■  util
   //  初期画面（幹事）日付を "MM/DD(曜日)" の形式で表示する関数
@@ -119,13 +131,13 @@ const EventMng = () => {
       <h1 className='m-1 text-2xl+'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
         {etEvent?.map((eventdata: Event, index: number) => (
-          <Card className='m-3' key={index}>
+          <Card className='m-3' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
             <CardHeader>
               <CardTitle ><Badge className='mb-2'>幹事</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
             </CardHeader>
             <CardContent>
               <p className='ml-3'>
-                {etEventDate.filter((edd: EventDate) => edd.eventId === eventdata.eventId)
+                {etEventDate?.filter((edd: EventDate) => edd.eventId === eventdata.eventId)
                   .map((edd: EventDate, index: any) => (
                     <React.Fragment key={index}>
                       {formatDateWithDayOfWeek(edd.eventDate)}
@@ -177,7 +189,7 @@ const EventMng = () => {
                 <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
                 <div className='flex  w-full ml-14 items-center'>
                   <ul>
-                    {eventDates?.map((day) => <li>・{
+                    {eventDates?.map((day, index) => <li key={index}>・{
                       day.toLocaleDateString()}[{
                         ["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}
                       ]</li>)
