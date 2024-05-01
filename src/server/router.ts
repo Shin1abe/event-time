@@ -263,6 +263,7 @@ export const serverRouter = trpc
     input: z.object({
       eventId: z.string(),
       userId: z.number(),
+      eventDate: z.string(),
       userSel: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
@@ -270,6 +271,7 @@ export const serverRouter = trpc
         data: {
           eventId: input.eventId,
           userId: input.userId,
+          eventDate: new Date(input.eventDate),
           userSel: input.userSel,
         },
       });

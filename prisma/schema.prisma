@@ -14,39 +14,40 @@ model UserExample {
 }
 
 model Event {
-  id         Int         @id @default(autoincrement())
-  eventId    String      @unique
-  eventName  String?
-  eventUrl   String?
-  eventMemo  String?
-  createdAt  DateTime    @default(now())
+  id        Int      @id @default(autoincrement())
+  eventId   String   @unique
+  eventName String?
+  eventUrl  String?
+  eventMemo String?
+  createdAt DateTime @default(now())
 }
 
 model EventDate {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   eventId   String
   eventDate DateTime
-  createdAt DateTime  @default(now())
- 
+  createdAt DateTime @default(now())
+
   @@unique([eventId, eventDate])
 }
 
 model EventUser {
-  eventId       String
-  userId        Int            @id @default(autoincrement())
-  userName      String?
-  userMemo      String?
-  createdAt     DateTime       @default(now())
- 
+  eventId   String
+  userId    Int      @id @default(autoincrement())
+  userName  String?
+  userMemo  String?
+  createdAt DateTime @default(now())
+
   @@unique([eventId, userId])
 }
 
 model EventUserSel {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   eventId   String
+  eventDate DateTime
   userId    Int
   userSel   String
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 
-  @@unique([eventId, userId])
+  @@unique([eventId, eventDate, userId])
 }

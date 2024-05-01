@@ -111,6 +111,7 @@ const ApiTest = () => {
 
         await EventUserSelCreateMutation.mutate({
             eventId: eventId,
+            eventDate: (new Date()).toISOString(),
             userId: 1,
             userSel: "〇",
         });

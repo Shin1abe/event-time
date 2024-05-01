@@ -68,15 +68,15 @@ const EventMng = () => {
       const eventid = cuid();
       const urlParts = new URL(window.location.href);
       const baseURL = `${urlParts.protocol}//${urlParts.host}/`;
-      console.log(baseURL)
+      // console.log(baseURL)
       const eventurl = baseURL + "components/AttendMng?eventid=" + eventid;
-      console.log(eventurl)
+      // console.log(eventurl)
       await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo });
 
       eventDates?.map(async (eventdate) => {
         try {
           await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
-          console.log("eventdateCreate= " + eventid + " eventdateCreate= " + eventdate.toISOString())
+          // console.log("eventdateCreate= " + eventid + " eventdateCreate= " + eventdate.toISOString())
         } catch (err) {
           console.log(err)
         }
@@ -128,12 +128,12 @@ const EventMng = () => {
   return (
     // ■■■■■■■■■　幹事画面　■■■■■■■■■
     <div className="flex-wrap flex-row gap-1 m-2">
-      <h1 className='m-1 text-2xl font-bold'>ようこそゲストさん</h1>
+      <h1 className='m-1 text-2xl font-bold'></h1>
       <hr />
-      <h1 className='m-1 text-2xl+'>イベント</h1>
+      <h1 className='m-1 text-2xl+ font-bold'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
         {etEvent?.map((eventdata: Event, index: number) => (
-          <Card className='m-3' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
+          <Card className='m-3 bg-blue-50' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
             <CardHeader>
               <CardTitle ><Badge className='mb-2'>幹事</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
             </CardHeader>
@@ -162,51 +162,52 @@ const EventMng = () => {
               <DialogTitle>イベント作成</DialogTitle>
             </DialogHeader>
             <DialogDescription>
-              <div className="flex-auto">
-                <Label htmlFor="eventName" className=' font-bold' >イベント名</Label>
-                <Badge className='ml-1'>必須</Badge>
-                <Input
-                  id="eventName"
-                  value={eventName}
-                  onChange={(e) => setEventName(e.target.value)}
-                  defaultValue="イベント名を入力してください"
-                  className="m-1"
-                />
-                <br />
-                <Label htmlFor="username" className=' font-bold' >日程候補</Label>
-                <Badge className='ml-1'>必須</Badge>
-                <p>カレンダーで候補日を選択</p>
-                {/* https://react-day-picker.js.org/ */}
-                <div className='preview flex min-h-[250px] w-full justify-center 
-                     p-1 items-center border border-gray-300 rounded-md'>
-                  <DayPicker
-                    mode="multiple"
-                    min={0}
-                    style={{ margin: 0 }} // Add this line
-                    selected={eventDates}
-                    onSelect={setEventsDates}
-                    footer={footer}
+              <div className="flex-auto w-full">
+                <div className="flex-auto" >
+                  <Label htmlFor="eventName" className=' font-bold' >イベント名</Label>
+                  <Badge className='ml-1'>必須</Badge>
+                  <Input
+                    id="eventName"
+                    value={eventName}
+                    onChange={(e) => setEventName(e.target.value)}
+                    defaultValue="イベント名を入力してください"
+                    className="m-1"
+                  />
+                  <br />
+                  <Label htmlFor="username" className=' font-bold' >日程候補</Label>
+                  <Badge className='ml-1'>必須</Badge>
+                  <p>カレンダーで候補日を選択</p>
+                  {/* https://react-day-picker.js.org/ */}
+                  <div className='preview flex min-h-[250px] w-full justify-center 
+                     p-1 items-center border border-gray-300 rounded-md  overflow-auto'>
+                    <DayPicker
+                      mode="multiple"
+                      min={0}
+                      style={{ margin: 0 }} // Add this line
+                      selected={eventDates}
+                      onSelect={setEventsDates}
+                      footer={footer}
+                    />
+                  </div>
+                  <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
+                  <div className='ml-14 whitespace-nowrap'>
+                    {eventDates?.map((day, index) => (
+                      <p key={index} className="inline-block">
+                        {day.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}]
+                        {index !== (eventDates.length - 1) && ', '}
+                      </p>
+                    ))}
+                  </div>
+                  <br />
+                  <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
+                  <p>イベントの概要など参加者に連絡しておきたいことを記述することができます。</p>
+                  <Textarea
+                    className="w-full m-1"
+                    placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
+                    value={eventMemo}
+                    onChange={(e) => setEventMemo(e.target.value)}
                   />
                 </div>
-                <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
-                <div className='flex  w-full ml-14 items-center'>
-                  <ul>
-                    {eventDates?.map((day, index) => <li key={index}>・{
-                      day.toLocaleDateString()}[{
-                        ["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}
-                      ]</li>)
-                    }
-                  </ul>
-                </div>
-                <br />
-                <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
-                <p>イベントの概要など参加者に連絡しておきたいことを記述することができます。</p>
-                <Textarea
-                  className="w-full m-1"
-                  placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
-                  value={eventMemo}
-                  onChange={(e) => setEventMemo(e.target.value)}
-                />
               </div>
             </DialogDescription>
             <DialogFooter>
