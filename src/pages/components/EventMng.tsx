@@ -68,7 +68,9 @@ const EventMng = () => {
       const eventid = cuid();
       const urlParts = new URL(window.location.href);
       const baseURL = `${urlParts.protocol}//${urlParts.host}/`;
-      const eventurl = baseURL + "/" + "/components/AttendMng/" + eventid;
+      console.log(baseURL)
+      const eventurl = baseURL + "components/AttendMng?eventid=" + eventid;
+      console.log(eventurl)
       await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo });
 
       eventDates?.map(async (eventdate) => {

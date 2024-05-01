@@ -71,7 +71,7 @@ const AttendMng = () => {
     const handleClick = useCallback(() => {
         // const url = window.location.origin;
         // const url = ((EventData.filter(ed => ed.eventId === ed.eventId)).map(e => e.eventUrl))[0]
-        const url: string = event?.[0]?.eventUrl
+        const url: string = event?.[0] ? event?.[0]?.eventUrl : ""
         void (async () => {
             if (navigator.share) {
                 // Web share API
