@@ -113,15 +113,18 @@ eventUsers EventUser[]
 Event     Event     @relation(fields: [eventId], references: [eventId])
 
 ---------------------
+参考
+  Prismaで日付データを扱う
+    https://wp-kyoto.net/prisma-handle-date-data/
+  Draw.io Integration
 
-Prismaで日付データを扱う
-  https://wp-kyoto.net/prisma-handle-date-data/
+## 幹事メニューのイベント編集
+## 幹事メニューのイベント削除
+## 出欠一覧における参加者を押下して対象行情報を更新・削除？
+## イベント一覧のローカルSTORAGE読込
 
 
-▲画面遷移実装
 □出欠表入力の○▽×のボタン制御について
-■カレンダ―大きい、日付の選択
 □ダイアログが1ページに収まらない件
 □不足ボタン・機能の実装
 □ローカルデータでのテスト
-Draw.io Integration
