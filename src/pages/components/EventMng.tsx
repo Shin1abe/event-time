@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import 'react-day-picker/dist/style.css';
@@ -7,10 +7,12 @@ import { Badge } from './ui/badge'
 import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
 import EventCreateDialog from './EventCreateDialog';
 import { formatDateWithDayOfWeek } from '@/utils/utils';
+// import { EventTimeContext } from '../_app';
 
 const EventMng = () => {
   //■  initial
   const router = useRouter();
+  // const [mode, setMode] = useContext(EventTimeContext)
 
   //■  useState
 
