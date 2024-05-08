@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import 'react-day-picker/dist/style.css';
@@ -7,6 +7,7 @@ import { Badge } from './ui/badge'
 import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
 import EventCreateDialog from './EventCreateDialog';
 import { formatDateWithDayOfWeek } from '@/utils/utils';
+import { EtContext } from '../providers/EtProvider';
 // import { EventTimeContext } from '../_app';
 
 const EventMng = () => {
@@ -15,6 +16,11 @@ const EventMng = () => {
   // const [mode, setMode] = useContext(EventTimeContext)
 
   //■  useState
+  const { isCoordinator, setIsCoordinator } = useContext(EtContext)
+  setIsCoordinator(false)
+  // useEffect(() => {
+  console.log("isCoordinator:", isCoordinator);
+  // }, [isCoordinator]);
 
   //■  trpc
   const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);

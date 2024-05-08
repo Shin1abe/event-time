@@ -6,25 +6,20 @@ import { AppType } from "next/dist/shared/lib/utils";
 import RootLayout from "@/pages/components/layout";
 import type { ServerRouter } from "@/server/router";
 import HeaderA from "@/pages/components/HeaderA";
-import { createContext, useState } from "react";
+import EtProvider from "./providers/EtProvider";
 
-// export const EventTimeContext = createContext(null);
-// const ThemeContext = createContext(null);
 
 const App: AppType = ({ Component, pageProps }) => {
-  // const [mode, setMode] = useState<string|null>("");
-  const [theme, setTheme] = useState('light');
+
 
   return (
     // <ThemeProvider attribute="class" defaultTheme="light">
-    // <EventTimeContext.Provider value="aa">
-    // <ThemeContext.Provider value={theme}>
     <RootLayout>
-      <HeaderA />
-      <Component {...pageProps} />
+      <EtProvider>
+        <HeaderA />
+        <Component {...pageProps} />
+      </EtProvider>
     </RootLayout>
-    // </ThemeContext.Provider>
-    // </EventTimeContext.Provider>
     // </ThemeProvider>
   );
 };
