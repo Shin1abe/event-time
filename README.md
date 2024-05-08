@@ -16,7 +16,8 @@
 ## next-tailwind-trpc-prisma
 
 # Simple Grocery List
-https://github.com/FranciscoMendes10866/next-tailwind-trpc-prisma  
+
+https://github.com/FranciscoMendes10866/next-tailwind-trpc-prisma
 
 https://dev.to/franciscomendes10866/build-a-full-stack-app-with-nextjs-tailwind-trpc-and-prisma-orm-4ail
 
@@ -83,48 +84,54 @@ z-index: 1;
 
 ### baseColorが有効になっていない
 
-
 ### TRPCClientError: Invalid `prisma.eventDate.create()` invocation:Foreign key constraint failed on the field: `foreign key`
-  →うまくいくときもある。
- ---------------------
+
+→うまくいくときもある。
+
+---
+
 model Event {
-  id         Int         @id @default(autoincrement())
-  eventId    String      @unique
-  eventName  String?
-  eventUrl   String?
-  eventMemo  String?
-  eventDates EventDate[]
-  eventUsers EventUser[]
-  createdAt  DateTime    @default(now())
+id Int @id @default(autoincrement())
+eventId String @unique
+eventName String?
+eventUrl String?
+eventMemo String?
+eventDates EventDate[]
+eventUsers EventUser[]
+createdAt DateTime @default(now())
 }
 
 model EventDate {
-  id        Int       @id @default(autoincrement())
-  eventId   String
-  eventDate DateTime?
-  createdAt DateTime  @default(now())
-  Event     Event     @relation(fields: [eventId], references: [eventId])
+id Int @id @default(autoincrement())
+eventId String
+eventDate DateTime?
+createdAt DateTime @default(now())
+Event Event @relation(fields: [eventId], references: [eventId])
 
-  @@unique([eventId, eventDate])
+@@unique([eventId, eventDate])
 }
 →下記を削除して解決
 eventDates EventDate[]
 eventUsers EventUser[]
-Event     Event     @relation(fields: [eventId], references: [eventId])
+Event Event @relation(fields: [eventId], references: [eventId])
 
----------------------
+---
+
 参考
-  Prismaで日付データを扱う
-    https://wp-kyoto.net/prisma-handle-date-data/
-  Draw.io Integration
+Prismaで日付データを扱う
+https://wp-kyoto.net/prisma-handle-date-data/
+Draw.io Integration
+
+## EventMng.tsxコンポーネント分割
+
+## AttendMng.tsxコンポーネント分割
 
 ## 幹事メニューのイベント編集
+
 ## 幹事メニューのイベント削除
+
 ## 出欠一覧における参加者を押下して対象行情報を更新・削除？
+
 ## イベント一覧のローカルSTORAGE読込
 
-
-□出欠表入力の○▽×のボタン制御について
-□ダイアログが1ページに収まらない件
-□不足ボタン・機能の実装
-□ローカルデータでのテスト
+## 出欠表入力の○▽×のボタン制御について

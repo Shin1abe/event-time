@@ -20,6 +20,7 @@ import {
   EventUser,
   EventUserSel
 } from "@prisma/client";
+import EventCreateDialog from './EventCreateDialog';
 
 const EventMng = () => {
   //■  initial
@@ -153,74 +154,7 @@ const EventMng = () => {
       </div>
       {/* ■■■■■■■■■　イベント作成ダイアログ　■■■■■■■■■ */}
       <div >
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="fixed-button mb-3" variant="default">イベント作成</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>イベント作成</DialogTitle>
-            </DialogHeader>
-            <DialogDescription>
-              <div className="flex-auto w-full">
-                <div className="flex-auto" >
-                  <Label htmlFor="eventName" className=' font-bold' >イベント名</Label>
-                  <Badge className='ml-1'>必須</Badge>
-                  <Input
-                    id="eventName"
-                    value={eventName}
-                    onChange={(e) => setEventName(e.target.value)}
-                    defaultValue="イベント名を入力してください"
-                    className="m-1"
-                  />
-                  <br />
-                  <Label htmlFor="username" className=' font-bold' >日程候補</Label>
-                  <Badge className='ml-1'>必須</Badge>
-                  <p>カレンダーで候補日を選択</p>
-                  {/* https://react-day-picker.js.org/ */}
-                  <div className='preview flex min-h-[250px] w-full justify-center 
-                     p-1 items-center border border-gray-300 rounded-md  overflow-auto'>
-                    <DayPicker
-                      mode="multiple"
-                      min={0}
-                      style={{ margin: 0 }} // Add this line
-                      selected={eventDates}
-                      onSelect={setEventsDates}
-                      footer={footer}
-                    />
-                  </div>
-                  <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
-                  <div className='ml-14 whitespace-nowrap'>
-                    {eventDates?.map((day, index) => (
-                      <p key={index} className="inline-block">
-                        {day.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}]
-                        {index !== (eventDates.length - 1) && ', '}
-                      </p>
-                    ))}
-                  </div>
-                  <br />
-                  <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
-                  <p>イベントの概要など参加者に連絡しておきたいことを記述することができます。</p>
-                  <Textarea
-                    className="w-full m-1"
-                    placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
-                    value={eventMemo}
-                    onChange={(e) => setEventMemo(e.target.value)}
-                  />
-                </div>
-              </div>
-            </DialogDescription>
-            <DialogFooter>
-              <Button
-                type="submit"
-                onClick={eventCreateButtonClick}
-                disabled={isSubmitting}
-              >
-                イベント作成
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <EventCreateDialog />
       </div>
     </div >
   )
