@@ -1,14 +1,11 @@
 import React, { useState, useCallback } from 'react'
 import { useRouter } from 'next/router';
-import Link from "next/link";
 import { trpc } from "@/utils/trpc";
 import { Button } from './ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger }
-    from "@/pages/components/ui/dropdown-menu"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/pages/components/ui/table"
-import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
 import AttendCreateDialog from './AttendCreateDialog';
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
+import HeaderCoordinator from './HeaderCoordinator';
 
 const AttendMng = () => {
     //■  initial
@@ -22,14 +19,6 @@ const AttendMng = () => {
     const { data: eventDate, refetch: eventDateRefetch } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
     const { data: eventUser, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
     const { data: eventUserSel, refetch: eventUserSelRefetch } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
-    const deleteMutation = trpc.useMutation(["Event_delete"]);
-
-    //■  event
-    // 対象イベントの削除
-    const eventDelete = async (eventId: string) => {
-        await deleteMutation.mutate({ eventId });
-        // 削除成功後の処理
-    };
 
     const onClickEventshare = useCallback(() => {
         const url: string = event?.[0] ? event?.[0]?.eventUrl : ""
@@ -49,26 +38,7 @@ const AttendMng = () => {
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
             {/* ■■■■■■■■■　ヘッド・メニュー　■■■■■■■■■ */}
-            <div className='flex justify-between'>
-                <div >
-                    <Button >
-                        {event?.[0] ? (<Link href="/"><a>戻る</a></Link>) : null}
-                    </Button>
-                </div>
-                <div >
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className='p-1'>幹事メニュー</DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuLabel>幹事メニュー</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem><Button variant="ghost">イベント編集</Button></DropdownMenuItem>
-                            <DropdownMenuItem><Button onClick={onClickEventshare} variant="ghost">イベンＵＲＬをシェア</Button></DropdownMenuItem>
-                            <DropdownMenuItem><Button variant="ghost">イベント削除</Button></DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-                <hr className='m-3' />
-            </div>
+            <HeaderCoordinator />
             {/* ■■■■■■■■■　出席者一覧　■■■■■■■■■ */}
             <div>
                 <h1 className='font-bold'>{event?.[0]?.eventName}</h1>
