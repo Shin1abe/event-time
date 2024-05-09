@@ -6,11 +6,18 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import AttendCreateDialog from './AttendCreateDialog';
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import HeaderCoordinator from './HeaderCoordinator';
+import { useEtContext } from '../providers/EtProvider';
 
 const AttendMng = () => {
     //■  initial
     const router = useRouter();
     const { eventid } = router.query;
+
+    //■  useEtContext
+    const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+    console.log("AttendMng.isCoordinator=" + isCoordinator)
+    console.log("AttendMng.curentEventId=" + curentEventId)
+
 
     //■  trcp
     let eventIdtmp: string = ""
@@ -38,7 +45,7 @@ const AttendMng = () => {
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
             {/* ■■■■■■■■■　ヘッド・メニュー　■■■■■■■■■ */}
-            <HeaderCoordinator />
+            {isCoordinator ? (<HeaderCoordinator />) : null}
             {/* ■■■■■■■■■　出席者一覧　■■■■■■■■■ */}
             <div>
                 <h1 className='font-bold'>{event?.[0]?.eventName}</h1>

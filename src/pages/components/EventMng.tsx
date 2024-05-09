@@ -7,20 +7,17 @@ import { Badge } from './ui/badge'
 import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
 import EventCreateDialog from './EventCreateDialog';
 import { formatDateWithDayOfWeek } from '@/utils/utils';
-import { EtContext } from '../providers/EtProvider';
-// import { EventTimeContext } from '../_app';
+import { useEtContext } from '../providers/EtProvider';
 
 const EventMng = () => {
   //■  initial
   const router = useRouter();
   // const [mode, setMode] = useContext(EventTimeContext)
 
-  //■  useState
-  const { isCoordinator, setIsCoordinator } = useContext(EtContext)
-  setIsCoordinator(false)
-  // useEffect(() => {
-  console.log("isCoordinator:", isCoordinator);
-  // }, [isCoordinator]);
+  //■  useEtContext
+  const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+  setIsCoordinator(true)
+  console.log("EventMng.isCoordinator= " + isCoordinator)
 
   //■  trpc
   const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);

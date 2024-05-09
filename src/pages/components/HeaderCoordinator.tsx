@@ -6,11 +6,17 @@ import { Button } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger }
     from "@/pages/components/ui/dropdown-menu"
 import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
+import { useEtContext } from '../providers/EtProvider';
 
 const HeaderCoordinator = () => {
     //■  initial
     const router = useRouter();
-    const { eventid } = router.query;//TODO
+    // const { eventid } = router.query;//TODO
+
+    //■  useEtContext
+    const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+    const eventid = curentEventId.length > 0 ? curentEventId : router.query.eventid;
+    // console.log("HeaderCoordinator.eventid=" + eventid)
 
     //■  trcp
     let eventIdtmp: string = ""
@@ -44,26 +50,28 @@ const HeaderCoordinator = () => {
     }, []);
 
     return (
-        <div className='flex justify-between'>
-            <div >
-                <Button >
-                    {event?.[0] ? (<Link href="/"><a>戻る</a></Link>) : null}
-                </Button>
+        <>
+            <div className='flex justify-between'>
+                <div >
+                    <Button >
+                        {event?.[0] ? (<Link href="/"><a>戻る</a></Link>) : null}
+                    </Button>
+                </div>
+                <div >
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className='p-1'>幹事メニュー</DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuLabel>幹事メニュー</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem><Button variant="ghost">イベント編集</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button onClick={onClickEventshare} variant="ghost">イベンＵＲＬをシェア</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button variant="ghost">イベント削除</Button></DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
-            <div >
-                <DropdownMenu>
-                    <DropdownMenuTrigger className='p-1'>幹事メニュー</DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>幹事メニュー</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem><Button variant="ghost">イベント編集</Button></DropdownMenuItem>
-                        <DropdownMenuItem><Button onClick={onClickEventshare} variant="ghost">イベンＵＲＬをシェア</Button></DropdownMenuItem>
-                        <DropdownMenuItem><Button variant="ghost">イベント削除</Button></DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-            <hr className='m-3' />
-        </div>
+            <hr className='mt-2 mb-2' />
+        </>
     )
 }
 

@@ -1,38 +1,33 @@
-import React, { createContext, useState } from 'react'
-// export const EtContext = createContext({});
-export const EtContext =
-    createContext<
-        {
-            isCoordinator: boolean;
-            setIsCoordinator: React.Dispatch<React.SetStateAction<boolean>>
-        }
-    >(
-        {
-            isCoordinator: false,
-            setIsCoordinator: () => { } // 初期値として空の関数を指定
-        });
-
+import React, { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from 'react'
 
 interface EtContextType {
     isCoordinator: boolean;
+    setIsCoordinator: Dispatch<SetStateAction<boolean>>;
     curentEventId: string;
-    setIsCoordinator: (isCoordinator: boolean) => void;
-    setCurentEventId: (curentEventId: string) => void;
+    setCurentEventId: Dispatch<SetStateAction<string>>;
 }
-// https://www.dhiwise.com/post/a-beginner-guide-to-using-react-context-with-typescript
-export const EtContext = React.createContext<EtContextType | null>(null);
-
-const EtProvider = (props: any) => {
-    const { children } = props;
-    const [etcontext, setEtcontext] = useState<EtContextType>();
+// https://zenn.dev/nenenemo/articles/1ed50829c27a0f
+const EtContext = React.createContext<EtContextType>({
+    isCoordinator: false,
+    setIsCoordinator: () => { },
+    curentEventId: "",
+    setCurentEventId: () => { },
+});
+interface EtProviderProps {
+    children: ReactNode;
+}
+export const EtProvider = ({ children }: EtProviderProps) => {
+    const [isCoordinator, setIsCoordinator] = useState(false);
+    const [curentEventId, setCurentEventId] = useState("");
 
     return (
         <div>
-            <EtContext.Provider value={{ etcontex }}>
+            <EtContext.Provider value={{ isCoordinator, setIsCoordinator, curentEventId, setCurentEventId }}>
                 {children}
             </EtContext.Provider>
         </div>
     )
 }
 
-export default EtProvider
+// コンテキストを使用するためのカスタムフック
+export const useEtContext = () => useContext(EtContext);

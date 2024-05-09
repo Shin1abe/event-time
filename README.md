@@ -123,14 +123,28 @@ https://wp-kyoto.net/prisma-handle-date-data/
 Draw.io Integration
 
 ## EventMng.tsxコンポーネント分割
+
     済
+
 ## AttendMng.tsxコンポーネント分割
+
     済
+
 ## 幹事メニューのコンポーネント化
+
     済
+
 ## 幹事メニューの表示・非表示 useContext eventId,mode
+
+    useContext：https://zenn.dev/nenenemo/articles/1ed50829c27a0f
+    済
+
 ## 幹事メニューのイベント編集
+
 ## 幹事メニューのイベント削除
+
 ## 出欠一覧における参加者を押下して対象行情報を更新・削除？
+
 ## イベント一覧のローカルSTORAGE読込
+
 ## 出欠表入力の○▽×のボタン制御について

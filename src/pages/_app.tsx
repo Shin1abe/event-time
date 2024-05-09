@@ -6,7 +6,7 @@ import { AppType } from "next/dist/shared/lib/utils";
 import RootLayout from "@/pages/components/layout";
 import type { ServerRouter } from "@/server/router";
 import HeaderA from "@/pages/components/HeaderA";
-import EtProvider from "./providers/EtProvider";
+import { EtProvider, useEtContext } from "./providers/EtProvider";
 
 
 const App: AppType = ({ Component, pageProps }) => {
@@ -16,7 +16,6 @@ const App: AppType = ({ Component, pageProps }) => {
     // <ThemeProvider attribute="class" defaultTheme="light">
     <RootLayout>
       <EtProvider>
-        <HeaderA />
         <Component {...pageProps} />
       </EtProvider>
     </RootLayout>

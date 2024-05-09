@@ -12,11 +12,15 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
 import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
+import { useEtContext } from '../providers/EtProvider';
 
 const EventCreateDialog = () => {
     //■  initial
     const router = useRouter();
     const initialDays: Date[] = [];
+
+    //■  useEtContext
+    const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
 
     //■  useState
     const [eventName, setEventName] = useState<string>("");
@@ -71,6 +75,7 @@ const EventCreateDialog = () => {
                     console.log(err)
                 }
             })
+            setCurentEventId(eventid)
             router.push({
                 pathname: '/components/AttendMng',
                 query: { eventid: eventid },
