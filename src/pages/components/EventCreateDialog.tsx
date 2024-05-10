@@ -139,7 +139,7 @@ const EventCreateDialog = () => {
                                 <div className='ml-14 whitespace-nowrap'>
                                     {eventDates?.map((day, index) => (
                                         <p key={index} className="inline-block">
-                                            {day.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.getDay()]}]
+                                            {day.toLocaleDateString()}({["日", "月", "火", "水", "木", "金", "土"][day.getDay()]})
                                             {index !== (eventDates.length - 1) && ', '}
                                         </p>
                                     ))}

@@ -13,6 +13,7 @@ import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
 import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
 import { useEtContext } from '../providers/EtProvider';
+import { Filter } from 'lucide-react';
 
 
 const EventUpdateDialog = () => {
@@ -28,17 +29,20 @@ const EventUpdateDialog = () => {
     const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
 
     //■  trpc query
-    const { data: etEvents, refetch } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: etEvents } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
     const etEvent = etEvents !== undefined && etEvents.length > 0 ? etEvents[0] : null;
 
-    const { data: etEventDates, error } = trpc.useQuery(['EventDate_findWhereMany', { eventId: eventIdtmp }]);
-    const eteventDates = etEventDates !== undefined && etEventDates.length > 0 ? etEventDates as EventDate[] : null;
-    console.log(etEventDates)
+    const { data: etEventDates } = trpc.useQuery(['EventDate_findWhereMany', { eventId: eventIdtmp }]);
+    const eteventDates = etEventDates !== undefined && etEventDates.length > 0 ? etEventDates as EventDate[] : [];
+    const eventDateArray: Date[] = eteventDates.map(item => new Date(item.eventDate));
+
+    const { data: etEventUserSels } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
+    console.log(etEventUserSels)
 
     //■  useState
     const [eventName, setEventName] = useState<string>(etEvent?.eventName as string);
     const [eventMemo, setEventMemo] = useState<string>(etEvent?.eventMemo as string);
-    const [eventDates, setEventsDates] = React.useState(initialDays);
+    const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(eventDateArray);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     //■  trpc mustaiton
@@ -65,6 +69,8 @@ const EventUpdateDialog = () => {
         });
     };
 
+
+
     //■  event
     const clearButton = () => setEventsDates(initialDays);
 
@@ -73,7 +79,7 @@ const EventUpdateDialog = () => {
         if (eventName?.length === 0) { alert("イベント名が設定されていません"); return }//TODO TOAST
         if (eventDates?.length === 0) { alert("日程候補が設定されていません"); return }//TODO TOAST
         try {
-            const eventid = cuid();
+            const eventid = eventIdtmp;
             const urlParts = new URL(window.location.href);
             const baseURL = `${urlParts.protocol}//${urlParts.host}/`;
             console.log(baseURL)
@@ -81,14 +87,42 @@ const EventUpdateDialog = () => {
             console.log(eventurl)
             await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo });
             //todo:↓  -----------------------------
-            eventDates?.map(async (eventdate) => {
-                try {
-                    await eventdateUpdate({ id: 0, eventId: "", eventDate: eventdate.toISOString() });
+            try {
+                //どうるか
+                // EventDateを更新するのではなくEventDateの同一eventIdを削除して選択日付で改めて登録
+                // この際、EventUserSelからは既に登録されている日付を削除した場合は、同様に削除か
+                // 本当にこんなことするのか。。
+                // 更新
+                //  Event
+                //      eventName、eventMemo
+                await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo })
+                // 削除
+                //  EventDate
+                //      条件：eventId
+                //  EventUserSel
+                //      条件：eventId、かつ、対象外eventDate
+                eteventDates?.map(async (eventdate) => {
+                    await trpc.useMutation(["EventDate_delete"]).mutate({ id: eventdate.id });
+                })
+                etEventUserSels?.filter((usrSel) => usrSel.eventDate)
+                await trpc.useMutation(["EventUserSel_delete"]).mutate({ id: .id });
+                // ２つの配列にあるオブジェクト内で定義した日付（Date型）で同じものだけを抽出したい。fileter,mapなどを使ってできないか
+
+                eventDates?.map(async (eventdate) => {
+                    // 作成
+                    //  EventDate
+                    //      eventDate    
+                    //
+                    //
+                    //
+                    //
+                    // await eventdateUpdate({ id: 0, eventId: "", eventDate: eventdate.toISOString() });
                     // console.log("eventdateCreate= " + eventid + " eventdateCreate= " + eventdate.toISOString())
-                } catch (err) {
-                    console.log(err)
-                }
-            })
+                })
+            } catch (err) {
+                console.log(err)
+            }
+
             //todo:↑ -----------------------------
             setCurentEventId(eventid)
             router.push({
@@ -125,51 +159,6 @@ const EventUpdateDialog = () => {
                         <DialogTitle>イベント更新</DialogTitle>
                     </DialogHeader>
                     <DialogDescription>
-                        {/* <div className="flex-auto w-full">
-                            <div className="flex-auto" >
-                                <Label htmlFor="eventName" className=' font-bold' >イベント名</Label>
-                                <Badge className='ml-1'>必須</Badge>
-                                <Input
-                                    id="eventName"
-                                    value={eventName}
-                                    onChange={(e) => setEventName(e.target.value)}
-                                    defaultValue="イベント名を入力してください"
-                                    className="m-1"
-                                />
-                                <br />
-                                <Label htmlFor="username" className=' font-bold' >日程候補</Label>
-                                <Badge className='ml-1'>必須</Badge>
-                                <div>カレンダーで候補日を選択</div>
-                                <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center border border-gray-300 rounded-md  overflow-auto'>
-                                    <DayPicker
-                                        mode="multiple"
-                                        min={0}
-                                        style={{ margin: 0 }} // Add this line
-                                        selected={eventDates}
-                                        onSelect={setEventsDates}
-                                        footer={footer}
-                                    />
-                                </div>
-                                <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
-                                <div className='ml-14 whitespace-nowrap'>
-                                    {eventDates?.map((day: any, index: number) => (
-                                        <div key={index} className="inline-block">
-                                            {day.eventDate?.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.eventDate?.getDay()]}]
-                                            {index !== (eventDates.length - 1) && ', '}
-                                        </div>
-                                    ))}
-                                </div>
-                                <br />
-                                <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
-                                <div>イベントの概要など参加者に連絡しておきたいことを記述することができます。</div>
-                                <Textarea
-                                    className="w-full m-1"
-                                    placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
-                                    value={eventMemo}
-                                    onChange={(e) => setEventMemo(e.target.value)}
-                                />
-                            </div>
-                        </div> */}
                         <div className="flex-auto w-full">
                             <div className="flex-auto">
                                 <Label htmlFor="eventName" className='font-bold'>イベント名</Label>
@@ -200,11 +189,11 @@ const EventUpdateDialog = () => {
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>候補日</Label>
                                 <div className='ml-14 whitespace-nowrap'>
-                                    {eventDates?.map((day: any, index: number) => (
-                                        <span key={index} className="inline-block">
-                                            {day.eventDate?.toLocaleDateString()}[{["日", "月", "火", "水", "木", "金", "土"][day.eventDate?.getDay()]}]
-                                            {index !== (eventDates.length - 1) && ', '}
-                                        </span>
+                                    {eventDates?.map((day, index) => (
+                                        <p key={index} className="inline-block">
+                                            {day.toLocaleDateString()}({["日", "月", "火", "水", "木", "金", "土"][day.getDay()]})
+                                            {index !== (eventDates.length - 1) && '、'}
+                                        </p>
                                     ))}
                                 </div>
                                 <br />
@@ -226,7 +215,7 @@ const EventUpdateDialog = () => {
                             onClick={eventUpdateButtonClick}
                             disabled={isSubmitting}
                         >
-                            イベント作成
+                            イベント更新
                         </Button>
                     </DialogFooter>
                 </DialogContent>
