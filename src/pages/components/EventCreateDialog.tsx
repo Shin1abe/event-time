@@ -62,15 +62,12 @@ const EventCreateDialog = () => {
             const eventid = cuid();
             const urlParts = new URL(window.location.href);
             const baseURL = `${urlParts.protocol}//${urlParts.host}/`;
-            console.log(baseURL)
             const eventurl = baseURL + "components/AttendMng?eventid=" + eventid;
-            console.log(eventurl)
             await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo });
 
             eventDates?.map(async (eventdate) => {
                 try {
                     await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
-                    // console.log("eventdateCreate= " + eventid + " eventdateCreate= " + eventdate.toISOString())
                 } catch (err) {
                     console.log(err)
                 }
