@@ -120,7 +120,6 @@ export const serverRouter = trpc
       eventDate: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
-      console.log(input.eventDate)
       return await ctx.prisma.eventDate.create(
         {
           data: {
@@ -195,15 +194,17 @@ export const serverRouter = trpc
       userMemo: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
-      return await ctx.prisma.eventUser.create({
+      const createdEventUser = await ctx.prisma.eventUser.create({
         data: {
           eventId: input.eventId,
           userName: input.userName,
           userMemo: input.userMemo,
         },
       });
+      return createdEventUser; // Return the created EventUser
     },
   })
+
   .mutation("EventUser_update", {
     input: z.object({
       userId: z.number(),
