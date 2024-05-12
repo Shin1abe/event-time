@@ -17,7 +17,6 @@ const EventMng = () => {
   //■  useEtContext
   const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
   setIsCoordinator(true)
-  console.log("EventMng.isCoordinator= " + isCoordinator)
 
   //■  trpc
   const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
