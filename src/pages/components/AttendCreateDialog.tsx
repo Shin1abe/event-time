@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { Button } from './ui/button'
@@ -15,59 +15,74 @@ const AttendCreateDialog = () => {
     //■  initial
     const router = useRouter();
     const { eventid } = router.query;
+    const eventIdtmp: string = eventid as string;
 
     //■  useState
-    const [userId, setUserId] = useState<number>();
     const [userName, setUserName] = useState<string>("");
-    const [userMemo, setUserMemo] = useState<string>("")
+    const [userMemo, setUserMemo] = useState<string>("");
+    const [isEeventUserRftch, setIsEeventUserRftch] = useState<boolean>(false);
 
-    //■  trcp
-    const eventIdtmp: string = eventid ?? "";
-    // const { data: event, refetch: eventRefetch } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
+    //■  trcp  
     const { data: eventDate, refetch: eventDateRefetch } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
-    // const { data: eventUser, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
-    const { data: eventUserSel, refetch: eventUserSelRefetch } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
 
-    // const deleteMutation = trpc.useMutation(["Event_delete"]);
-    const EventUserCreateMutation = trpc.useMutation(["EventUser_create"], {
-        onSuccess: (data) => {
-            setUserId(data?.userId)
-        }
-    });
+    const { data: eventUserSel, refetch: eventUserSelRefetch } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
     const EventUserSelCreateMutation = trpc.useMutation(["EventUserSel_create"], {
         onSuccess: () => eventUserSelRefetch(),
+    });
+
+    const { data: eventUsers, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findMany"]);
+    const EventUserCreateMutation = trpc.useMutation(["EventUser_create"], {
+        onSuccess: async () => {
+            await eventUserRefetch();
+            setIsEeventUserRftch(true);
+            // console.log("EventUserCreateMutation.eventUserRefetch")
+        },
     });
 
     //■  event
     const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserName(e.target.value);
+        console.log("onChangeUserName:" + userName)
     };
     const onChangeUserMemo = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setUserMemo(e.target.value);
     };
-    // イベント作成ボタン押下
-    const onClickAtendCreate = async () => {
-        console.log(eventIdtmp)
-        console.log(userName)
-        console.log(userMemo)
 
+    // イベント作成ボタン押下
+    // reactの再レンダリングで相当苦労
+    const onClickAtendCreate = useCallback(async () => {
+        // console.log("onClickAtendCreate.isEeventUserRftch= " + isEeventUserRftch)
+        // console.log("onClickAtendCreate.userName= " + userName)
+        if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
+        if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
         await EventUserCreateMutation.mutate({
             eventId: eventIdtmp,
             userName: userName,
             userMemo: userMemo,
         });
-        eventDate?.map(async (d) => {
-            await EventUserSelCreateMutation.mutate({
-                eventId: eventIdtmp,
-                eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
-                userId: userId ? userId : 0,
-                userSel: "〇",
+    }, [userName, userMemo]);
+
+    // reactの再レンダリングで相当苦労
+    useEffect(() => {
+        // console.log("useEffect.isEeventUserRftch= " + isEeventUserRftch)
+        // console.log("useEffect.eventUsers= " + eventUsers)
+        // console.log("useEffect.eventDate= " + eventDate)
+        if (eventUsers && eventDate && isEeventUserRftch) {
+            eventUsers.forEach(euss => {
+                console.log("userId= " + euss.userId);
+                eventDate.forEach(async (d) => {
+                    console.log("eventDate= " + d.eventDate);
+                    await EventUserSelCreateMutation.mutate({
+                        eventId: eventIdtmp,
+                        eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
+                        userId: euss.userId as number,
+                        userSel: "〇",
+                    });
+                });
             });
-        })
-        // const url: string = event?.[0] ? event?.[0]?.eventUrl : "";
-        // router.push(url)
-        location.reload();
-    }
+            location.reload();
+        }
+    }, [isEeventUserRftch, eventUsers, eventDate]);
 
     return (
         // {/* ■■■■■■■■■　出席入力ダイアログ　■■■■■■■■■ */}
@@ -82,10 +97,10 @@ const AttendCreateDialog = () => {
                     </DialogHeader>
                     <DialogDescription>
                         <div className="flex-auto">
-                            <Label htmlFor="eventName" className='text-base font-bold' >名前</Label>
+                            <Label htmlFor="userName" className='text-base font-bold' >名前</Label>
                             <Badge className='ml-1 p-0.5'>必須</Badge>
                             <Input
-                                id="eventName"
+                                id="userName"
                                 defaultValue="名前を入力してください"
                                 className="col-span-3 m-1"
                                 onChange={onChangeUserName}
