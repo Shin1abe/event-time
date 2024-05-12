@@ -15,9 +15,6 @@ const AttendMng = () => {
 
     //■  useEtContext
     const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
-    console.log("AttendMng.isCoordinator=" + isCoordinator)
-    console.log("AttendMng.curentEventId=" + curentEventId)
-
 
     //■  trcp
     let eventIdtmp: string = ""
