@@ -9,7 +9,6 @@ import HeaderCoordinator from "./HeaderCoordinator";
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   //■  useEtContext
   const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
-  console.log("RootLayout.isCoordinator= " + isCoordinator)
 
   return (
     <>

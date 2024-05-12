@@ -16,7 +16,6 @@ const HeaderCoordinator = () => {
     //■  useEtContext
     const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
     const eventid = curentEventId.length > 0 ? curentEventId : router.query.eventid;
-    // console.log("HeaderCoordinator.eventid=" + eventid)
 
     //■  trcp
     let eventIdtmp: string = ""
