@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { DayPicker } from 'react-day-picker';
@@ -71,7 +71,7 @@ const EventUpdateDialog = () => {
     const clearButton = () => setEventsDates(initialDays);
 
     // イベント更新ボタン押下
-    const eventUpdateButtonClick = async () => {
+    const eventUpdateButtonClick = useCallback(async () => {
         if (eventName?.length === 0) { alert("イベント名が設定されていません"); return }//TODO TOAST
         if (eventDates?.length === 0) { alert("日程候補が設定されていません"); return }//TODO TOAST
         try {
@@ -100,29 +100,35 @@ const EventUpdateDialog = () => {
                     console.log("eventdateCreate=" + eventdate.toISOString())
                 })
 
-                // 日程を変更した場合
-                // EventUserSelsでは、下記必要
-                // ・変更してなくなった日付のレコードは削除
-                // ・変更されなかった（既にある日付で変更がない）場合はそのまま残す
+                // // 日程を変更した場合
+                // // EventUserSelsでは、下記必要
+                // // ・変更してなくなった日付のレコードは削除
+                // // ・変更されなかった（既にある日付で変更がない）場合はそのまま残す
                 etEventUserSels?.map(async (d) => {
                     await EventUserSelDeleteMutation.mutate({ id: d.id });
                     console.log("EventUserSelDeleteMutation=" + d.id)
                 })
 
-                // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
+                // // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
                 const noChgDatesArray = etEventUserSels?.filter(
                     eteus => eteus.eventDate instanceof Date && eventDates?.some(
                         // 日付変更無し
-                        ed => ed.getTime() === eteus.eventDate.getTime()
+                        ed => {
+                            (new Date(ed.getTime() + (ed.getTimezoneOffset() * 60000))).getTime() === eteus.eventDate.getTime()
+                        }
                     )
                 );
-                // 今回追加した配列作成（EventUserSelsに存在するもの除外）
+                debugger
+                console.log("noChgDatesArray.length = " + noChgDatesArray?.length)
+                // // 今回追加した配列作成（EventUserSelsに存在するもの除外）
                 const chgDatesArray = eventDates?.filter(
                     ed => ed instanceof Date && noChgDatesArray?.some(
                         // 日付変更無しは除外
-                        ncda => ncda.eventDate.getTime() !== ed.getTime()
+                        ncda => ncda.eventDate.getTime() !== (new Date(ed.getTime() + (ed.getTimezoneOffset() * 60000))).getTime()
                     )
                 );
+                console.log("chgDatesArray?.length= " + chgDatesArray?.length)
+                //debugger
                 // 今回変更がなかったレコードを作成（EventUserSelsに存在するもの）
                 noChgDatesArray?.forEach(async (d) => {
                     await EventUserSelCreateMutation.mutate({
@@ -142,7 +148,7 @@ const EventUpdateDialog = () => {
         } catch (error) {
             console.error("エラーが発生しました:", error);
         }
-    };
+    }, [eventName, eventDates]);
 
     //イベント作成ダイアログfooter　
     const footer =
