@@ -34,7 +34,8 @@ const EventUpdateDialog = () => {
     const eventDateArray: Date[] = eteventDates.map(item => new Date(item.eventDate));
     //debugger
 
-    const { data: etEventUserSels } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: etEventUserSels, refetch: eventUserSelRefetch }
+        = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
 
     //■  useState
     const [eventName, setEventName] = useState<string>(etEvent?.eventName as string);
@@ -58,6 +59,10 @@ const EventUpdateDialog = () => {
             eventDate: newEvent.eventDate, // 日付型のまま渡す
         });
     };
+
+    const EventUserSelCreateMutation = trpc.useMutation(["EventUserSel_create"], {
+        onSuccess: () => eventUserSelRefetch(),
+    });
 
     const EventDateDeleteMutation = trpc.useMutation(["EventDate_delete"]);
     const EventUserSelDeleteMutation = trpc.useMutation(["EventUserSel_delete"]);
@@ -96,27 +101,37 @@ const EventUpdateDialog = () => {
                 })
 
                 // 日程を変更した場合
-                // EventDateを更新するのではなくEventDateの同一eventIdを削除して選択日付で改めて登録
-                // この際、EventUserSelからは既に登録されている日付を削除した場合は、同様に削除か
-                // ・任意のユーザの同日データは削除
-                // ・任意のユーザについ追加データでnull更新？
-
-                // 削除 EventUserSel    条件：eventId、かつ、対象外eventDate
-                //  同じ日付を持つオブジェクトを抽出する
-                // おかしい
-
-                const resultArray = etEventUserSels?.filter(
-                    eteus => eteus.eventDate && eventDates?.some(
-                        ed => ed.getTime() === eteus.eventDate.getTime()
-                    )
-                );
-                debugger
-                resultArray?.map(async (d) => {
+                // EventUserSelsでは、下記必要
+                // ・変更してなくなった日付のレコードは削除
+                // ・変更されなかった（既にある日付で変更がない）場合はそのまま残す
+                etEventUserSels?.map(async (d) => {
                     await EventUserSelDeleteMutation.mutate({ id: d.id });
                     console.log("EventUserSelDeleteMutation=" + d.id)
                 })
-                debugger
 
+                // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
+                const noChgDatesArray = etEventUserSels?.filter(
+                    eteus => eteus.eventDate instanceof Date && eventDates?.some(
+                        // 日付変更無し
+                        ed => ed.getTime() === eteus.eventDate.getTime()
+                    )
+                );
+                // 今回追加した配列作成（EventUserSelsに存在するもの除外）
+                const chgDatesArray = eventDates?.filter(
+                    ed => ed instanceof Date && noChgDatesArray?.some(
+                        // 日付変更無しは除外
+                        ncda => ncda.eventDate.getTime() !== ed.getTime()
+                    )
+                );
+                // 今回変更がなかったレコードを作成（EventUserSelsに存在するもの）
+                noChgDatesArray?.forEach(async (d) => {
+                    await EventUserSelCreateMutation.mutate({
+                        eventId: d.eventId,
+                        eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
+                        userId: d.userId,
+                        userSel: d.userSel,
+                    });
+                });
             } catch (err) {
                 console.log(err)
             }

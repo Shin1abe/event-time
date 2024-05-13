@@ -30,7 +30,7 @@ const AttendCreateDialog = () => {
         onSuccess: () => eventUserSelRefetch(),
     });
 
-    const { data: eventUsers, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findMany"]);
+    const { data: eventUsers, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
     const EventUserCreateMutation = trpc.useMutation(["EventUser_create"], {
         onSuccess: async () => {
             await eventUserRefetch();
