@@ -19,53 +19,47 @@ const EventUpdateDialog = () => {
     const router = useRouter();
     const { eventid } = router.query;
     let eventIdtmp: string = ""; if (typeof eventid === "string") { eventIdtmp = eventid };
-
     const initialDays: Date[] = [];
 
     //■  useEtContext
     const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
 
     //■  trpc query
+    // [Event_findWhereMany]
     const { data: etEvents } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
     const etEvent = etEvents !== undefined && etEvents.length > 0 ? etEvents[0] : null;
-
-    const { data: etEventDates } = trpc.useQuery(['EventDate_findWhereMany', { eventId: eventIdtmp }]);
+    // [EventDate_findWhereMany]
+    const { data: etEventDates, refetch: eventDateRefetch } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
     const eteventDates = etEventDates !== undefined && etEventDates.length > 0 ? etEventDates as EventDate[] : [];
     const eventDateArray: Date[] = eteventDates.map(item => new Date(item.eventDate));
-    //debugger
+    // [EventUserSel_findWhereMany]
+    const { data: etEventUserSels } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
 
-    const { data: etEventUserSels, refetch: eventUserSelRefetch }
-        = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
+    //■  trpc mustaiton
+    //  [Event_update]
+    const eventUpdateMutation = trpc.useMutation(["Event_update"]);
+    const eventUpdate = async (newEvent: {
+        eventId: string; eventName: string; eventUrl: string; eventMemo: string;
+    }) => { await eventUpdateMutation.mutate(newEvent); };
+    //  [EventDate_create]
+    const eventdateCreateMutation = trpc.useMutation(["EventDate_create"], {
+        onSuccess: () => eventDateRefetch(),
+    });
+    const eventdateCreate = async (newEvent: { eventId: string; eventDate: string; }) => {
+        await eventdateCreateMutation.mutate({ eventId: newEvent.eventId, eventDate: newEvent.eventDate });
+    };
+    // [EventDate_delete]
+    const EventDateDeleteMutation = trpc.useMutation(["EventDate_delete"]);
+    // [EventUserSel_delete]
+    const EventUserSelDeleteMutation = trpc.useMutation(["EventUserSel_delete"]);
+    // [EventUserSel_create]
+    const EventUserSelCreateMutation = trpc.useMutation(["EventUserSel_create"]);
 
     //■  useState
     const [eventName, setEventName] = useState<string>(etEvent?.eventName as string);
     const [eventMemo, setEventMemo] = useState<string>(etEvent?.eventMemo as string);
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(eventDateArray);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    //■  trpc mustaiton
-    const eventUpdateMutation = trpc.useMutation(["Event_update"]);
-    const eventUpdate = async (newEvent: {
-        eventId: string; eventName: string; eventUrl: string; eventMemo: string;
-    }) => { await eventUpdateMutation.mutate(newEvent); };
-
-    const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]);//TODO
-    const eventdateCreate = async (newEvent: {
-        eventId: string;
-        eventDate: string;
-    }) => {
-        await eventdateCreateMutation.mutate({
-            eventId: newEvent.eventId,
-            eventDate: newEvent.eventDate, // 日付型のまま渡す
-        });
-    };
-
-    const EventUserSelCreateMutation = trpc.useMutation(["EventUserSel_create"], {
-        onSuccess: () => eventUserSelRefetch(),
-    });
-
-    const EventDateDeleteMutation = trpc.useMutation(["EventDate_delete"]);
-    const EventUserSelDeleteMutation = trpc.useMutation(["EventUserSel_delete"]);
 
     //■  event
     const clearButton = () => setEventsDates(initialDays);
@@ -85,9 +79,15 @@ const EventUpdateDialog = () => {
                 // 削除:EventeDateは問答無用に全削除→全追加
                 // 追加:EventeDateは問答無用に全削除→全追加
                 // 更新 Event    eventName、eventMemo
+                // ■
+                // ■  Event ■
+                // ■
                 await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo })
                 // debugger
 
+                // ■
+                // ■  EventDate 
+                // ■
                 // 削除 EventDate   条件：eventId
                 eteventDates?.map(async (eventdate) => {
                     await EventDateDeleteMutation.mutate({ id: eventdate.id });
@@ -99,11 +99,26 @@ const EventUpdateDialog = () => {
                     await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
                     console.log("eventdateCreate=" + eventdate.toISOString())
                 })
+                //確認        
+                etEventUserSels?.filter(
+                    eteus => eteus.eventDate instanceof Date && eventDates?.some(
+                        // 日付変更無し
+                        ed => {
+                            ed.getTime() === eteus.eventDate.getTime()
+                            console.log("ed.getTime()             = " + ed.getTime())
+                            console.log("eteus.eventDate.getTime()= " + eteus.eventDate.getTime())
+                        }
+                    )
+                );
+
 
                 // 日程を変更した場合
                 // EventUserSelsでは、下記必要
                 // ・変更してなくなった日付のレコードは削除
                 // ・変更されなかった（既にある日付で変更がない）場合はそのまま残す
+                // ■
+                // ■  EventUserSels 
+                // ■
                 etEventUserSels?.map(async (d) => {
                     await EventUserSelDeleteMutation.mutate({ id: d.id });
                     console.log("EventUserSelDeleteMutation=" + d.id)
@@ -135,10 +150,10 @@ const EventUpdateDialog = () => {
             } catch (err) {
                 console.log(err)
             }
-            router.push({
-                pathname: '/components/AttendMng',
-                query: { eventid: eventid },
-            });
+            // router.push({
+            //     pathname: '/components/AttendMng',
+            //     query: { eventid: eventid },
+            // });
         } catch (error) {
             console.error("エラーが発生しました:", error);
         }
@@ -157,7 +172,6 @@ const EventUpdateDialog = () => {
 
     return (
         <div >
-            {/* https://react-day-picker.js.org/ */}
             <Dialog >
                 <DialogTrigger asChild>
                     <Button className="fixed-button mb-3" variant="default">イベント作成</Button>
@@ -182,7 +196,6 @@ const EventUpdateDialog = () => {
                                 <Label htmlFor="username" className='font-bold'>日程候補</Label>
                                 <Badge className='ml-1'>必須</Badge>
                                 <p>カレンダーで候補日を選択</p>
-                                {/* https://react-day-picker.js.org/ */}
                                 <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center border border-gray-300 rounded-md overflow-auto'>
                                     <div>
                                         <DayPicker
@@ -211,8 +224,7 @@ const EventUpdateDialog = () => {
                                     className="w-full m-1"
                                     placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
                                     value={eventMemo}
-                                    onChange={(e) => setEventMemo(e.target.value)}
-                                />
+                                    onChange={(e) => setEventMemo(e.target.value)} />
                             </div>
                         </div>
                     </DialogDescription>
@@ -220,8 +232,7 @@ const EventUpdateDialog = () => {
                         <Button
                             type="submit"
                             onClick={eventUpdateButtonClick}
-                            disabled={isSubmitting}
-                        >
+                            disabled={isSubmitting}>
                             イベント更新
                         </Button>
                     </DialogFooter>
