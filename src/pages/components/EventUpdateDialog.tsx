@@ -82,6 +82,7 @@ const EventUpdateDialog = () => {
                 // ■
                 // ■  Event ■
                 // ■
+                console.log("1")
                 await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo })
                 // debugger
 
@@ -89,29 +90,30 @@ const EventUpdateDialog = () => {
                 // ■  EventDate 
                 // ■
                 // 削除 EventDate   条件：eventId
-                eteventDates?.map(async (eventdate) => {
-                    await EventDateDeleteMutation.mutate({ id: eventdate.id });
-                })
+                console.log("2")
+                // eteventDates?.map(async (eventdate) => {
+                //     await EventDateDeleteMutation.mutate({ id: eventdate.id });
+                // })
                 // debugger
 
                 // 作成 EventDate   eventDate 
-                eventDates?.map(async (eventdate) => {
-                    await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
-                    console.log("eventdateCreate=" + eventdate.toISOString())
-                })
-                //確認        
-                etEventUserSels?.filter(
-                    eteus => eteus.eventDate instanceof Date && eventDates?.some(
-                        // 日付変更無し
-                        ed => {
-                            ed.getTime() === eteus.eventDate.getTime()
-                            console.log("ed.getTime()             = " + ed.getTime())
-                            console.log("eteus.eventDate.getTime()= " + eteus.eventDate.getTime())
-                        }
-                    )
-                );
+                console.log("3")
+                // eventDates?.map(async (eventdate) => {
+                //     await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
+                //     console.log("eventdateCreate=" + eventdate.toISOString())
+                // })
 
+                //確認
+                console.log(etEventUserSels)
+                console.log(eventDates)
+                const result = etEventUserSels?.filter(item => {
+                    const itemEventDate = new Date(item.eventDate);
+                    return eventDates?.some(eventDate => eventDate.getTime() === itemEventDate.getTime());
+                }) || [];
+                console.log("result")
+                console.log(result)
 
+                0
                 // 日程を変更した場合
                 // EventUserSelsでは、下記必要
                 // ・変更してなくなった日付のレコードは削除
@@ -119,40 +121,41 @@ const EventUpdateDialog = () => {
                 // ■
                 // ■  EventUserSels 
                 // ■
-                etEventUserSels?.map(async (d) => {
-                    await EventUserSelDeleteMutation.mutate({ id: d.id });
-                    console.log("EventUserSelDeleteMutation=" + d.id)
-                })
+                console.log("4")
+                // etEventUserSels?.map(async (d) => {
+                //     await EventUserSelDeleteMutation.mutate({ id: d.id });
+                //     console.log("EventUserSelDeleteMutation=" + d.id)
+                // })
 
                 // // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
-                const noChgDatesArray = etEventUserSels?.filter(
-                    eteus => eteus.eventDate instanceof Date && eventDates?.some(
-                        // 日付変更無し
-                        ed => {
-                            (new Date(ed.getTime() + (ed.getTimezoneOffset() * 60000))).getTime() === eteus.eventDate.getTime()
-                        }
-                    )
-                );
-                debugger
+                const noChgDatesArray = etEventUserSels?.filter(item => {
+                    const itemEventDate = new Date(item.eventDate);
+                    return eventDates?.some(eventDate => eventDate.getTime() === itemEventDate.getTime());
+                }) || [];
+                console.log("noChgDatesArray")
+                console.log(noChgDatesArray)
                 console.log("noChgDatesArray.length = " + noChgDatesArray?.length)
                 // // 今回追加した配列作成（EventUserSelsに存在するもの除外）
                 const chgDatesArray = eventDates?.filter(
-                    ed => ed instanceof Date && noChgDatesArray?.some(
-                        // 日付変更無しは除外
-                        ncda => ncda.eventDate.getTime() !== (new Date(ed.getTime() + (ed.getTimezoneOffset() * 60000))).getTime()
-                    )
-                );
+                    item => {
+                        const itemEventDate = new Date(item);
+                        return noChgDatesArray?.some(eventDate => eventDate.eventDate.getTime() !== itemEventDate.getTime());
+                    }) || [];
+                console.log("chgDatesArray")
+                console.log(chgDatesArray)
+
                 console.log("chgDatesArray?.length= " + chgDatesArray?.length)
                 //debugger
                 // 今回変更がなかったレコードを作成（EventUserSelsに存在するもの）
-                noChgDatesArray?.forEach(async (d) => {
-                    await EventUserSelCreateMutation.mutate({
-                        eventId: d.eventId,
-                        eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
-                        userId: d.userId,
-                        userSel: d.userSel,
-                    });
-                });
+                console.log("5")
+                // noChgDatesArray?.forEach(async (d) => {
+                //     await EventUserSelCreateMutation.mutate({
+                //         eventId: d.eventId,
+                //         eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
+                //         userId: d.userId,
+                //         userSel: d.userSel,
+                //     });
+                // });
             } catch (err) {
                 console.log(err)
             }
