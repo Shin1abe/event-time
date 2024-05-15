@@ -103,17 +103,16 @@ const EventUpdateDialog = () => {
                 //     console.log("eventdateCreate=" + eventdate.toISOString())
                 // })
 
-                //確認
-                console.log(etEventUserSels)
-                console.log(eventDates)
-                const result = etEventUserSels?.filter(item => {
-                    const itemEventDate = new Date(item.eventDate);
-                    return eventDates?.some(eventDate => eventDate.getTime() === itemEventDate.getTime());
-                }) || [];
-                console.log("result")
-                console.log(result)
+                //確認 debug
+                // console.log(etEventUserSels)
+                // console.log(eventDates)
+                // const result = etEventUserSels?.filter(item => {
+                //     const itemEventDate = new Date(item.eventDate);
+                //     return eventDates?.some(eventDate => eventDate.getTime() === itemEventDate.getTime());
+                // }) || [];
+                // console.log("result")
+                // console.log(result)
 
-                0
                 // 日程を変更した場合
                 // EventUserSelsでは、下記必要
                 // ・変更してなくなった日付のレコードは削除
@@ -128,23 +127,29 @@ const EventUpdateDialog = () => {
                 // })
 
                 // // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
-                const noChgDatesArray = etEventUserSels?.filter(item => {
-                    const itemEventDate = new Date(item.eventDate);
-                    return eventDates?.some(eventDate => eventDate.getTime() === itemEventDate.getTime());
+                const noChgDatesArray = etEventUserSels?.filter(etus => {
+                    const etusValue = new Date(etus.eventDate);
+                    return eventDates?.some(eventDate => eventDate.getTime() === etusValue.getTime());
                 }) || [];
-                console.log("noChgDatesArray")
-                console.log(noChgDatesArray)
-                console.log("noChgDatesArray.length = " + noChgDatesArray?.length)
+                // console.log(eventDates)
+                // console.log("noChgDatesArray")
+                // console.log(noChgDatesArray)
+                // console.log("noChgDatesArray.length = " + noChgDatesArray?.length)
                 // // 今回追加した配列作成（EventUserSelsに存在するもの除外）
                 const chgDatesArray = eventDates?.filter(
-                    item => {
-                        const itemEventDate = new Date(item);
-                        return noChgDatesArray?.some(eventDate => eventDate.eventDate.getTime() !== itemEventDate.getTime());
-                    }) || [];
-                console.log("chgDatesArray")
-                console.log(chgDatesArray)
+                    etd => {
+                        return !noChgDatesArray?.some(netus => {
+                            const netusValue = new Date(netus.eventDate);
+                            // console.log("s= " + netusValue.getTime());
+                            // console.log("e= " + etd.getTime());
+                            return netusValue.getTime() === etd.getTime();
+                        });
+                    }
+                ) || [];
+                // console.log("chgDatesArray")
+                // console.log(chgDatesArray)
 
-                console.log("chgDatesArray?.length= " + chgDatesArray?.length)
+                // console.log("chgDatesArray?.length= " + chgDatesArray?.length)
                 //debugger
                 // 今回変更がなかったレコードを作成（EventUserSelsに存在するもの）
                 console.log("5")
