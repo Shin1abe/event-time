@@ -79,6 +79,13 @@ const EventUpdateDialog = () => {
                 // 削除:EventeDateは問答無用に全削除→全追加
                 // 追加:EventeDateは問答無用に全削除→全追加
                 // 更新 Event    eventName、eventMemo
+                // DBデータ!=画面データの配列作成
+                const DbChgDateArray = etEventUserSels?.filter(etus => {
+                    const etusValue = new Date(etus.eventDate);
+                    return eventDates?.some(eventDate => eventDate.getTime() !== etusValue.getTime());
+                }) || [];
+                console.log("DbChgDateArray")
+                console.log(DbChgDateArray)
                 // ■
                 // ■  Event ■
                 // ■
@@ -129,46 +136,49 @@ const EventUpdateDialog = () => {
                 console.log(etEventUserSels)
                 console.log("eventDates")
                 console.log(eventDates)
-                // ★★ここは変更がなかったものを削除？？
-                // etEventUserSels?.map(async (d) => {
-                //     await EventUserSelDeleteMutation.mutate({ id: d.id });
-                // })
 
-                // // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
-                const noChgDatesArray = etEventUserSels?.filter(etus => {
-                    const etusValue = new Date(etus.eventDate);
-                    return eventDates?.some(eventDate => eventDate.getTime() === etusValue.getTime());
-                }) || [];
+                // DBデータ!=画面データをdbから削除
+                DbChgDateArray?.map(async (d) => {
+                    await EventUserSelDeleteMutation.mutate({ id: d.id });
+                })
+
+                // // // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
+                // const noChgDatesArray = etEventUserSels?.filter(etus => {
+                //     const etusValue = new Date(etus.eventDate);
+                //     return eventDates?.some(eventDate => eventDate.getTime() === etusValue.getTime());
+                // }) || [];
                 // console.log(eventDates)
-                console.log("noChgDatesArray")
-                console.log(noChgDatesArray)
+                // console.log("noChgDatesArray")
+                // console.log(noChgDatesArray)
                 // console.log("noChgDatesArray.length = " + noChgDatesArray?.length)
                 // // 今回追加した配列作成（EventUserSelsに存在するもの除外）
-                const chgDatesArray = eventDates?.filter(
-                    etd => {
-                        return !noChgDatesArray?.some(netus => {
-                            const netusValue = new Date(netus.eventDate);
-                            // console.log("s= " + netusValue.getTime());
-                            // console.log("e= " + etd.getTime());
-                            return netusValue.getTime() === etd.getTime();
-                        });
-                    }
-                ) || [];
-                console.log("chgDatesArray")
-                console.log(chgDatesArray)
+
+                // const chgDatesArray = eventDates?.filter(
+                //     etd => {
+                //         return !noChgDatesArray?.some(netus => {
+                //             const netusValue = new Date(netus.eventDate);
+                //             // console.log("s= " + netusValue.getTime());
+                //             // console.log("e= " + etd.getTime());
+                //             return netusValue.getTime() === etd.getTime();
+                //         });
+                //     }
+                // ) || [];
+                // console.log("chgDatesArray")
+                // console.log(chgDatesArray)
 
                 // console.log("chgDatesArray?.length= " + chgDatesArray?.length)
                 //debugger
                 // 今回変更がなかったレコードを作成（EventUserSelsに存在するもの）
                 console.log("5")
-                // noChgDatesArray?.forEach(async (d) => {
-                //     await EventUserSelCreateMutation.mutate({
-                //         eventId: d.eventId,
-                //         eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
-                //         userId: d.userId,
-                //         userSel: d.userSel,
-                //     });
-                // });
+                // DBデータ!=画面データをdbへ追加
+                DbChgDateArray?.forEach(async (d) => {
+                    await EventUserSelCreateMutation.mutate({
+                        eventId: d.eventId,
+                        eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
+                        userId: d.userId,
+                        userSel: d.userSel,
+                    });
+                });
             } catch (err) {
                 console.log(err)
             }
