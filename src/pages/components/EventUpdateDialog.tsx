@@ -42,9 +42,9 @@ const EventUpdateDialog = () => {
         eventId: string; eventName: string; eventUrl: string; eventMemo: string;
     }) => { await eventUpdateMutation.mutate(newEvent); };
     //  [EventDate_create]
-    const eventdateCreateMutation = trpc.useMutation(["EventDate_create"], {
-        onSuccess: () => eventDateRefetch(),
-    });
+    const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]
+        , { onSuccess: () => eventDateRefetch(), }
+    );
     const eventdateCreate = async (newEvent: { eventId: string; eventDate: string; }) => {
         await eventdateCreateMutation.mutate({ eventId: newEvent.eventId, eventDate: newEvent.eventDate });
     };
@@ -90,18 +90,22 @@ const EventUpdateDialog = () => {
                 // ■  EventDate 
                 // ■
                 // 削除 EventDate   条件：eventId
+                //      DB上の既存データを削除
                 console.log("2")
-                // eteventDates?.map(async (eventdate) => {
-                //     await EventDateDeleteMutation.mutate({ id: eventdate.id });
-                // })
+                // console.log(eteventDates)
+                eteventDates?.map(async (eventdate) => {
+                    await EventDateDeleteMutation.mutate({ id: eventdate.id });
+                })
                 // debugger
 
                 // 作成 EventDate   eventDate 
+                //      画面上で選択された日付をすべて登録
                 console.log("3")
-                // eventDates?.map(async (eventdate) => {
-                //     await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
-                //     console.log("eventdateCreate=" + eventdate.toISOString())
-                // })
+                // console.log(eventDates)
+                eventDates?.map(async (eventdate) => {
+                    await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
+                    // console.log("eventdateCreate=" + eventdate.toISOString())
+                })
 
                 //確認 debug
                 // console.log(etEventUserSels)
@@ -121,9 +125,13 @@ const EventUpdateDialog = () => {
                 // ■  EventUserSels 
                 // ■
                 console.log("4")
+                console.log("etEventUserSels")
+                console.log(etEventUserSels)
+                console.log("eventDates")
+                console.log(eventDates)
+                // ★★ここは変更がなかったものを削除？？
                 // etEventUserSels?.map(async (d) => {
                 //     await EventUserSelDeleteMutation.mutate({ id: d.id });
-                //     console.log("EventUserSelDeleteMutation=" + d.id)
                 // })
 
                 // // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
@@ -132,8 +140,8 @@ const EventUpdateDialog = () => {
                     return eventDates?.some(eventDate => eventDate.getTime() === etusValue.getTime());
                 }) || [];
                 // console.log(eventDates)
-                // console.log("noChgDatesArray")
-                // console.log(noChgDatesArray)
+                console.log("noChgDatesArray")
+                console.log(noChgDatesArray)
                 // console.log("noChgDatesArray.length = " + noChgDatesArray?.length)
                 // // 今回追加した配列作成（EventUserSelsに存在するもの除外）
                 const chgDatesArray = eventDates?.filter(
@@ -146,8 +154,8 @@ const EventUpdateDialog = () => {
                         });
                     }
                 ) || [];
-                // console.log("chgDatesArray")
-                // console.log(chgDatesArray)
+                console.log("chgDatesArray")
+                console.log(chgDatesArray)
 
                 // console.log("chgDatesArray?.length= " + chgDatesArray?.length)
                 //debugger
