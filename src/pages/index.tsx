@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import React, { useCallback, useState } from "react";
 
 import EventMng from "@/pages/components/EventMng";
-import ApiTest from "./components/ApiTest";
+import ApiTest from "./components/ApiTest/ApiTest";
 
 const Home: NextPage = () => {
   return (

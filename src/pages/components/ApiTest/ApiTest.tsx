@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { trpc } from "@/utils/trpc";
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 
 const ApiTest = () => {
     const { data: eventUsers, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findMany"]);

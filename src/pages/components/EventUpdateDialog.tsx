@@ -63,7 +63,6 @@ const EventUpdateDialog = () => {
 
     //■  event
     const clearButton = () => setEventsDates(initialDays);
-
     // イベント更新ボタン押下
     const eventUpdateButtonClick = useCallback(async () => {
         if (eventName?.length === 0) { alert("イベント名が設定されていません"); return }//TODO TOAST
@@ -80,10 +79,107 @@ const EventUpdateDialog = () => {
                 // 追加:EventeDateは問答無用に全削除→全追加
                 // 更新 Event    eventName、eventMemo
                 // DBデータ!=画面データの配列作成
-                const DbChgDateArray = etEventUserSels?.filter(etus => {
-                    const etusValue = new Date(etus.eventDate);
-                    return eventDates?.some(eventDate => eventDate.getTime() !== etusValue.getTime());
-                }) || [];
+                //-----------------------------------------------------
+
+                if (!etEventUserSels || !eventDates) {
+                    console.log("etEventUserSelsまたはeventDatesが定義されていません");
+                    return;
+                }
+                const filterEventUserSels = function (XetEventUserSels: EventUserSel[], dateGetTime: number[]): EventUserSel[] {
+                    return XetEventUserSels.filter(eventUserSel => {
+                        // eventUserSel.eventDate が Date オブジェクトであることを確認
+                        if (!(eventUserSel.eventDate instanceof Date)) {
+                            console.error("eventUserSel.eventDate が Date オブジェクトではありません。");
+                            return false;
+                        }
+                        // eventUserSel.eventDate の getTime() メソッドを安全に呼び出す
+                        return dateGetTime.includes(eventUserSel.eventDate.getTime());
+                    });
+                };
+
+                const etusDates = etEventUserSels.map(etus => {
+                    const etusDate = new Date(etus.eventDate);
+                    etusDate.setUTCHours(0, 0, 0, 0); // 時間をUTCの00:00:00にリセット
+                    console.log(`etusDate: ${etusDate.toISOString()}`);
+                    return etusDate.getTime();
+                });
+
+                const eventDatesUTC = eventDates.map(eventDate => {
+                    const eventDateUTC = new Date(eventDate.getTime() - (eventDate.getTimezoneOffset() + 540) * 60000); // JSTからUTCに変換
+                    eventDateUTC.setUTCHours(0, 0, 0, 0); // 時間をUTCの00:00:00にリセット
+                    console.log(`eventDate: ${eventDateUTC.toISOString()}`);
+                    return eventDateUTC.getTime();
+                });
+
+                const allDates = etusDates.concat(eventDatesUTC);
+                const uniqueDates = allDates.filter((date, index) => allDates.indexOf(date) === index); // 重複を除去
+
+                const DbChgDateNum = uniqueDates.filter(date =>
+                    !etusDates.includes(date) || !eventDatesUTC.includes(date)
+                );
+                console.log("フィルタリング結果:", DbChgDateNum);
+                DbChgDateNum.map(d => console.log((new Date(d)).toISOString()))
+
+
+                // console.log("----------------------------------")
+                // DbChgDateArray.forEach(dbChgDate => {
+                //     // etEventUserSelsの各要素について処理を行う
+                //     etEventUserSels.forEach(etEventUserSel => {
+                //         // DbChgDateArrayの値をDateオブジェクトに変換
+                //         const dbChgDateObj = new Date(dbChgDate);
+                //         dbChgDateObj.setUTCHours(0, 0, 0, 0)
+                //         // etEventUserSelsのeventDateをDateオブジェクトに変換
+                //         const eventDateObj = new Date(etEventUserSel.eventDate);
+                //         eventDateObj.setUTCHours(0, 0, 0, 0)
+                //         console.log(">>>>>>")
+                //         console.log("dbChgDateObj", dbChgDateObj.getTime(), dbChgDateObj.toISOString())
+                //         console.log("etEventUserSel", eventDateObj.getTime(), eventDateObj.toISOString())
+                //         // DbChgDateArrayの値とetEventUserSelsのeventDateが一致する場合
+                //         if (dbChgDateObj.getTime() === eventDateObj.getTime()) {
+                //             // その他の項目値とともに出力
+                //             console.log("DbChgDate:", dbChgDate);
+                //             console.log("id:", etEventUserSel.id);
+                //             console.log("eventId:", etEventUserSel.eventId);
+                //             console.log("eventDate:", etEventUserSel.eventDate);
+                //             console.log("userId:", etEventUserSel.userId);
+                //             console.log("userSel:", etEventUserSel.userSel);
+                //             console.log("createdAt:", etEventUserSel.createdAt);
+                //             console.log("---------------");
+                //         }
+                //     });
+                // });
+                // console.log("----------------------------------")
+                // const dateGetTime:number= 
+                // [
+                //     1715385600000,
+                //     1715817600000
+                // ]
+
+                // const XetEventUserSels:EventUserSel=[{
+                //     id: 121,
+                //     eventId: "clw92ughy0000356r4srrgtmd",
+                //     eventDate: new Date("2024-05-11T15:00:00.000Z"),
+                //     userId: 69,
+                //     userSel: "〇",
+                //     createdAt: new Date("2024-05-16T09:57:40.497Z")
+                // },
+                // {
+                //     id: 121,
+                //     eventId: "clw92ughy0000356r4srrgtmd",
+                //     eventDate: new Date("2024-05-11T15:00:00.000Z"),
+                //     userId: 69,
+                //     userSel: "〇",
+                //     createdAt: new Date("2024-05-16T09:57:40.497Z")
+                // }]
+                // XetEventUserSelsのeventDateとdateGetTimeのnew Date(値)が含まれるものだけをEventUserSelとして返却
+
+
+                // DbChgDateArray.map(d => console.log((new Date(d)).toISOString()))
+                //-----------------------------------------------------
+                console.log("etEventUserSels")
+                console.log(etEventUserSels)
+                console.log("eventDates")
+                console.log(eventDates)
                 console.log("DbChgDateArray")
                 console.log(DbChgDateArray)
                 // ■

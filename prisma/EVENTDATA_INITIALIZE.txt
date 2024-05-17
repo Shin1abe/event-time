@@ -1,0 +1,11 @@
+-- database: c:\Fujitsu\MyPrj\nextjs\nextjs_tailwind_prisma_trpc\prisma\dev.db
+
+-- ファイル全体を実行するにはウィンドウ右上の▷を押してください。
+
+DELETE FROM Event;
+DELETE FROM EventDate;
+DELETE FROM EventUser;
+DELETE FROM EventUserSel;
+
+--EventUpdateDialog
+

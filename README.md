@@ -36,6 +36,10 @@ https://fujitsu.udemy.com/course/tailwindcss-for-beginner/learn/lecture/32435558
 
 # メモ
 
+## VSCODE Plugin
+
+SQLLITE3 EDITOR
+
 ## clone 後の作業
 
 npm i  
@@ -148,3 +152,35 @@ Draw.io Integration
 ## イベント一覧のローカルSTORAGE読込
 
 ## 出欠表入力の○▽×のボタン制御について
+
+// if (!etEventUserSels || !eventDates) {
+// console.log("etEventUserSelsまたはeventDatesが定義されていません");
+// return;
+// }
+
+// const etusDates = etEventUserSels.map(etus => {
+// const etusDate = new Date(etus.eventDate);
+// etusDate.setUTCHours(0, 0, 0, 0); // 時間をUTCの00:00:00にリセット
+// console.log(
+// `etusDate: ${etusDate.toISOString()}`
+// );
+// return etusDate.getTime();
+// });
+
+// const eventDatesUTC = eventDates.map(eventDate => {
+// const eventDateUTC = new Date(eventDate.getTime() - (eventDate.getTimezoneOffset() + 540) \* 60000); // JSTからUTCに変換
+// eventDateUTC.setUTCHours(0, 0, 0, 0); // 時間をUTCの00:00:00にリセット
+// console.log(
+// `eventDate: ${eventDateUTC.toISOString()}`
+// );
+// return eventDateUTC.getTime();
+// });
+
+// const allDates = etusDates.concat(eventDatesUTC);
+// const uniqueDates = allDates.filter((date, index) => allDates.indexOf(date) === index); // 重複を除去
+
+// const DbChgDateArray = uniqueDates.filter(date =>
+// !etusDates.includes(date) || !eventDatesUTC.includes(date)
+// );
+// console.log("フィルタリング結果:", DbChgDateArray);
+// DbChgDateArray.map(d => console.log((new Date(d)).toISOString()))
