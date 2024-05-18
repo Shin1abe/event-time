@@ -7,6 +7,8 @@ import AttendCreateDialog from './AttendCreateDialog';
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import HeaderCoordinator from './HeaderCoordinator';
 import { useEtContext } from '../providers/EtProvider';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle, faDiamond, faMinus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const AttendMng = () => {
     //■  initial
@@ -64,18 +66,25 @@ const AttendMng = () => {
                                     <TableHead>コメント</TableHead>
                                 </TableRow>
                             </TableHeader>
-                            <TableBody>
+                            <TableBody >
                                 {eventUser?.map((user, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell className="font-medium p-0">
-                                            <Button className="p-0 ml-5" variant="secondary">{user.userName}</Button>
+                                    <TableRow key={index} >
+                                        <TableCell className=' p-1'>
+                                            <Button variant="secondary">{user.userName}</Button>
                                         </TableCell>
-                                        {eventUserSel?.map((user, idx) => (
-                                            <TableCell key={idx} className='text-center p-0'>
-                                                <div className="p-0" >{user.userSel}</div>
+                                        {eventUserSel?.filter(e => e.userId === user.userId).map((user, idx) => (
+                                            <TableCell key={idx} className='text-center p-1'>
+                                                {user.userSel}
+                                                {/* <FontAwesomeIcon
+                                                    icon={
+                                                        user.userSel === "○" ? faCircle :
+                                                            user.userSel === "◇" ? faDiamond :
+                                                                user.userSel === "×" ? faXmark : faMinus}
+                                                    className={"cursor-pointer text-xs text-slate-600"}
+                                                /> */}
                                             </TableCell>
                                         ))}
-                                        <TableCell className='w-96 p-0'>{user.userMemo}</TableCell>
+                                        <TableCell className='w-96 p-1'>{user.userMemo}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

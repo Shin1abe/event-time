@@ -10,6 +10,13 @@ import { Label } from './ui/label'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/pages/components/ui/table"
 import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle, faDiamond, faXmark } from '@fortawesome/free-solid-svg-icons';
+
+// selections の型定義
+interface Selections {
+    [key: string]: '○' | '◇' | '×';
+}
 
 const AttendCreateDialog = () => {
     //■  initial
@@ -21,6 +28,7 @@ const AttendCreateDialog = () => {
     const [userName, setUserName] = useState<string>("");
     const [userMemo, setUserMemo] = useState<string>("");
     const [isEeventUserRftch, setIsEeventUserRftch] = useState<boolean>(false);
+    const [selections, setSelections] = useState<Selections>({});
 
     //■  trcp  
     const { data: eventDate, refetch: eventDateRefetch } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
@@ -35,7 +43,6 @@ const AttendCreateDialog = () => {
         onSuccess: async () => {
             await eventUserRefetch();
             setIsEeventUserRftch(true);
-            // console.log("EventUserCreateMutation.eventUserRefetch")
         },
     });
 
@@ -48,11 +55,23 @@ const AttendCreateDialog = () => {
         setUserMemo(e.target.value);
     };
 
+    const handleSelection = (date: string, selection: '○' | '◇' | '×') => {
+        setSelections((prev) => ({
+            ...prev,
+            [date]: selection,
+        }));
+        console.log("selections", selections);
+    };
+
+    //■  util
+    const getClassName = (date: string, selection: '○' | '◇' | '×', baseClass: string, selectedClass: string) => {
+        return selections[date] === selection ? selectedClass : baseClass;
+    };
+
+
     // イベント作成ボタン押下
     // reactの再レンダリングで相当苦労
     const onClickAtendCreate = useCallback(async () => {
-        // console.log("onClickAtendCreate.isEeventUserRftch= " + isEeventUserRftch)
-        // console.log("onClickAtendCreate.userName= " + userName)
         if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
         if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
         await EventUserCreateMutation.mutate({
@@ -64,9 +83,6 @@ const AttendCreateDialog = () => {
 
     // reactの再レンダリングで相当苦労
     useEffect(() => {
-        // console.log("useEffect.isEeventUserRftch= " + isEeventUserRftch)
-        // console.log("useEffect.eventUsers= " + eventUsers)
-        // console.log("useEffect.eventDate= " + eventDate)
         if (eventUsers && eventDate && isEeventUserRftch) {
             eventUsers.forEach(euss => {
                 console.log("userId= " + euss.userId);
@@ -76,7 +92,7 @@ const AttendCreateDialog = () => {
                         eventId: eventIdtmp,
                         eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
                         userId: euss.userId as number,
-                        userSel: "〇",
+                        userSel: selections[new Date(d.eventDate).toISOString()],
                     });
                 });
             });
@@ -115,9 +131,30 @@ const AttendCreateDialog = () => {
                                         {eventDate?.map((data, index) => (
                                             <TableRow key={index}>
                                                 <TableCell>{formatDateWithDayOfWeek0sup(data.eventDate)}</TableCell>
-                                                <TableCell className='text-center'><Badge>○</Badge></TableCell>
-                                                <TableCell className='text-center'>△</TableCell>
-                                                <TableCell className='text-center'>×</TableCell>
+                                                <TableCell className='text-center'>
+                                                    <FontAwesomeIcon
+                                                        icon={faCircle}
+                                                        className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
+                                                            'text-slate-200', 'text-slate-600')}`}
+                                                        onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
+                                                    />
+                                                </TableCell>
+                                                <TableCell className='text-center'>
+                                                    <FontAwesomeIcon
+                                                        icon={faDiamond}
+                                                        className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
+                                                            'text-slate-200', 'text-slate-600')}`}
+                                                        onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
+                                                    />
+                                                </TableCell>
+                                                <TableCell className='text-center'>
+                                                    <FontAwesomeIcon
+                                                        icon={faXmark}
+                                                        className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
+                                                            'text-slate-200', 'text-slate-600')}`}
+                                                        onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
+                                                    />
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
