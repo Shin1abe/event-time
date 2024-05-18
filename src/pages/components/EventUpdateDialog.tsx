@@ -61,6 +61,15 @@ const EventUpdateDialog = () => {
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(eventDateArray);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    //■　uttil
+    //画面選択eventDates.日付 === etEventUserSels.eventDateは保持し、それ以外のデータは除く
+    const filterEventUserSels = (etEventUserSels: any, eventDates: Date[]) => {
+        return etEventUserSels.filter(sel => {
+            let selDate = new Date(sel.eventDate).getTime();
+            return eventDates.some(date => new Date(date).getTime() === selDate);
+        });
+    }
+
     //■  event
     const clearButton = () => setEventsDates(initialDays);
     // イベント更新ボタン押下
@@ -72,202 +81,42 @@ const EventUpdateDialog = () => {
             await eventUpdate(
                 { eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo }
             );
-            //todo:↓  -----------------------------
             try {
-                // 日程を変更した場合
-                // 削除:EventeDateは問答無用に全削除→全追加
-                // 追加:EventeDateは問答無用に全削除→全追加
-                // 更新 Event    eventName、eventMemo
-                // DBデータ!=画面データの配列作成
-                //-----------------------------------------------------
-
                 if (!etEventUserSels || !eventDates) {
                     console.log("etEventUserSelsまたはeventDatesが定義されていません");
                     return;
                 }
-                const filterEventUserSels = function (XetEventUserSels: EventUserSel[], dateGetTime: number[]): EventUserSel[] {
-                    return XetEventUserSels.filter(eventUserSel => {
-                        // eventUserSel.eventDate が Date オブジェクトであることを確認
-                        if (!(eventUserSel.eventDate instanceof Date)) {
-                            console.error("eventUserSel.eventDate が Date オブジェクトではありません。");
-                            return false;
-                        }
-                        // eventUserSel.eventDate の getTime() メソッドを安全に呼び出す
-                        return dateGetTime.includes(eventUserSel.eventDate.getTime());
-                    });
-                };
-
-                const etusDates = etEventUserSels.map(etus => {
-                    const etusDate = new Date(etus.eventDate);
-                    etusDate.setUTCHours(0, 0, 0, 0); // 時間をUTCの00:00:00にリセット
-                    console.log(`etusDate: ${etusDate.toISOString()}`);
-                    return etusDate.getTime();
-                });
-
-                const eventDatesUTC = eventDates.map(eventDate => {
-                    const eventDateUTC = new Date(eventDate.getTime() - (eventDate.getTimezoneOffset() + 540) * 60000); // JSTからUTCに変換
-                    eventDateUTC.setUTCHours(0, 0, 0, 0); // 時間をUTCの00:00:00にリセット
-                    console.log(`eventDate: ${eventDateUTC.toISOString()}`);
-                    return eventDateUTC.getTime();
-                });
-
-                const allDates = etusDates.concat(eventDatesUTC);
-                const uniqueDates = allDates.filter((date, index) => allDates.indexOf(date) === index); // 重複を除去
-
-                const DbChgDateNum = uniqueDates.filter(date =>
-                    !etusDates.includes(date) || !eventDatesUTC.includes(date)
-                );
-                console.log("フィルタリング結果:", DbChgDateNum);
-                DbChgDateNum.map(d => console.log((new Date(d)).toISOString()))
-
-
-                // console.log("----------------------------------")
-                // DbChgDateArray.forEach(dbChgDate => {
-                //     // etEventUserSelsの各要素について処理を行う
-                //     etEventUserSels.forEach(etEventUserSel => {
-                //         // DbChgDateArrayの値をDateオブジェクトに変換
-                //         const dbChgDateObj = new Date(dbChgDate);
-                //         dbChgDateObj.setUTCHours(0, 0, 0, 0)
-                //         // etEventUserSelsのeventDateをDateオブジェクトに変換
-                //         const eventDateObj = new Date(etEventUserSel.eventDate);
-                //         eventDateObj.setUTCHours(0, 0, 0, 0)
-                //         console.log(">>>>>>")
-                //         console.log("dbChgDateObj", dbChgDateObj.getTime(), dbChgDateObj.toISOString())
-                //         console.log("etEventUserSel", eventDateObj.getTime(), eventDateObj.toISOString())
-                //         // DbChgDateArrayの値とetEventUserSelsのeventDateが一致する場合
-                //         if (dbChgDateObj.getTime() === eventDateObj.getTime()) {
-                //             // その他の項目値とともに出力
-                //             console.log("DbChgDate:", dbChgDate);
-                //             console.log("id:", etEventUserSel.id);
-                //             console.log("eventId:", etEventUserSel.eventId);
-                //             console.log("eventDate:", etEventUserSel.eventDate);
-                //             console.log("userId:", etEventUserSel.userId);
-                //             console.log("userSel:", etEventUserSel.userSel);
-                //             console.log("createdAt:", etEventUserSel.createdAt);
-                //             console.log("---------------");
-                //         }
-                //     });
-                // });
-                // console.log("----------------------------------")
-                // const dateGetTime:number= 
-                // [
-                //     1715385600000,
-                //     1715817600000
-                // ]
-
-                // const XetEventUserSels:EventUserSel=[{
-                //     id: 121,
-                //     eventId: "clw92ughy0000356r4srrgtmd",
-                //     eventDate: new Date("2024-05-11T15:00:00.000Z"),
-                //     userId: 69,
-                //     userSel: "〇",
-                //     createdAt: new Date("2024-05-16T09:57:40.497Z")
-                // },
-                // {
-                //     id: 121,
-                //     eventId: "clw92ughy0000356r4srrgtmd",
-                //     eventDate: new Date("2024-05-11T15:00:00.000Z"),
-                //     userId: 69,
-                //     userSel: "〇",
-                //     createdAt: new Date("2024-05-16T09:57:40.497Z")
-                // }]
-                // XetEventUserSelsのeventDateとdateGetTimeのnew Date(値)が含まれるものだけをEventUserSelとして返却
-
-
-                // DbChgDateArray.map(d => console.log((new Date(d)).toISOString()))
-                //-----------------------------------------------------
-                console.log("etEventUserSels")
-                console.log(etEventUserSels)
-                console.log("eventDates")
-                console.log(eventDates)
-                console.log("DbChgDateArray")
-                console.log(DbChgDateArray)
                 // ■
-                // ■  Event ■
+                // ■  Event Update
                 // ■
                 console.log("1")
                 await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo })
-                // debugger
-
-                // ■
-                // ■  EventDate 
-                // ■
-                // 削除 EventDate   条件：eventId
-                //      DB上の既存データを削除
+                // ------------------------------------------------------------------------
+                // 日程を変更した場合
+                // ・EventeDate　：全削除→全追加
+                // ・EventUserSel：全削除、追加は画面選択eventDate === EventUserSel
+                //                 TODO:画面選択したがEventUserSelしたものをレコードとして追加すべきか
+                // ------------------------------------------------------------------------
+                // ■  EventDate Delete
                 console.log("2")
-                // console.log(eteventDates)
                 eteventDates?.map(async (eventdate) => {
                     await EventDateDeleteMutation.mutate({ id: eventdate.id });
                 })
-                // debugger
-
-                // 作成 EventDate   eventDate 
-                //      画面上で選択された日付をすべて登録
+                // ■  EventDate Create
                 console.log("3")
-                // console.log(eventDates)
                 eventDates?.map(async (eventdate) => {
                     await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
-                    // console.log("eventdateCreate=" + eventdate.toISOString())
                 })
-
-                //確認 debug
-                // console.log(etEventUserSels)
-                // console.log(eventDates)
-                // const result = etEventUserSels?.filter(item => {
-                //     const itemEventDate = new Date(item.eventDate);
-                //     return eventDates?.some(eventDate => eventDate.getTime() === itemEventDate.getTime());
-                // }) || [];
-                // console.log("result")
-                // console.log(result)
-
-                // 日程を変更した場合
-                // EventUserSelsでは、下記必要
-                // ・変更してなくなった日付のレコードは削除
-                // ・変更されなかった（既にある日付で変更がない）場合はそのまま残す
-                // ■
-                // ■  EventUserSels 
-                // ■
+                // ■  EventUserSels Delete
                 console.log("4")
-                console.log("etEventUserSels")
-                console.log(etEventUserSels)
-                console.log("eventDates")
-                console.log(eventDates)
-
-                // DBデータ!=画面データをdbから削除
-                DbChgDateArray?.map(async (d) => {
+                // console.log("etEventUserSels",etEventUserSels)
+                etEventUserSels?.map(async (d) => {
                     await EventUserSelDeleteMutation.mutate({ id: d.id });
                 })
-
-                // // // 今回変更がなかった配列作成（EventUserSelsに存在するもの）
-                // const noChgDatesArray = etEventUserSels?.filter(etus => {
-                //     const etusValue = new Date(etus.eventDate);
-                //     return eventDates?.some(eventDate => eventDate.getTime() === etusValue.getTime());
-                // }) || [];
-                // console.log(eventDates)
-                // console.log("noChgDatesArray")
-                // console.log(noChgDatesArray)
-                // console.log("noChgDatesArray.length = " + noChgDatesArray?.length)
-                // // 今回追加した配列作成（EventUserSelsに存在するもの除外）
-
-                // const chgDatesArray = eventDates?.filter(
-                //     etd => {
-                //         return !noChgDatesArray?.some(netus => {
-                //             const netusValue = new Date(netus.eventDate);
-                //             // console.log("s= " + netusValue.getTime());
-                //             // console.log("e= " + etd.getTime());
-                //             return netusValue.getTime() === etd.getTime();
-                //         });
-                //     }
-                // ) || [];
-                // console.log("chgDatesArray")
-                // console.log(chgDatesArray)
-
-                // console.log("chgDatesArray?.length= " + chgDatesArray?.length)
-                //debugger
-                // 今回変更がなかったレコードを作成（EventUserSelsに存在するもの）
+                // ■  EventUserSels Create
                 console.log("5")
-                // DBデータ!=画面データをdbへ追加
-                DbChgDateArray?.forEach(async (d) => {
+                const _filterEventUserSels = filterEventUserSels(etEventUserSels, eventDates)
+                _filterEventUserSels?.forEach(async (d: any) => {
                     await EventUserSelCreateMutation.mutate({
                         eventId: d.eventId,
                         eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
@@ -278,10 +127,10 @@ const EventUpdateDialog = () => {
             } catch (err) {
                 console.log(err)
             }
-            // router.push({
-            //     pathname: '/components/AttendMng',
-            //     query: { eventid: eventid },
-            // });
+            router.push({
+                pathname: '/components/AttendMng',
+                query: { eventid: eventid },
+            });
         } catch (error) {
             console.error("エラーが発生しました:", error);
         }

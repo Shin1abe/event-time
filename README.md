@@ -38,7 +38,7 @@ https://fujitsu.udemy.com/course/tailwindcss-for-beginner/learn/lecture/32435558
 
 ## VSCODE Plugin
 
-SQLLITE3 EDITOR
+SQLite3 Editor
 
 ## clone 後の作業
 
