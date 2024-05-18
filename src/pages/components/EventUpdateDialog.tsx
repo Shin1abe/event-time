@@ -149,9 +149,9 @@ const EventUpdateDialog = () => {
 
     return (
         <div >
-            <Dialog >
+            <Dialog defaultOpen={true}>
                 <DialogTrigger asChild>
-                    <Button className="fixed-button mb-3" variant="default">イベント作成</Button>
+                    <Button className="fixed-button mb-3" variant="default">イベント更新</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>

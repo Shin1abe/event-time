@@ -134,53 +134,24 @@ Draw.io Integration
 
     済
 
-## 幹事メニューのコンポーネント化
+## イベント作成者メニューのコンポーネント化
 
     済
 
-## 幹事メニューの表示・非表示 useContext eventId,mode
-
+## イベント作成者メニューの表示・非表示 useContext eventId,mode
     useContext：https://zenn.dev/nenenemo/articles/1ed50829c27a0f
     済
 
-## 幹事メニューのイベント編集
+## イベント作成者メニューのイベント編集
+    済
 
-## 幹事メニューのイベント削除
+## イベント作成者メニューのイベント削除
+    済
 
 ## 出欠一覧における参加者を押下して対象行情報を更新・削除？
+## 出欠表入力の○▽×のボタン制御について
 
 ## イベント一覧のローカルSTORAGE読込
 
-## 出欠表入力の○▽×のボタン制御について
 
-// if (!etEventUserSels || !eventDates) {
-// console.log("etEventUserSelsまたはeventDatesが定義されていません");
-// return;
-// }
 
-// const etusDates = etEventUserSels.map(etus => {
-// const etusDate = new Date(etus.eventDate);
-// etusDate.setUTCHours(0, 0, 0, 0); // 時間をUTCの00:00:00にリセット
-// console.log(
-// `etusDate: ${etusDate.toISOString()}`
-// );
-// return etusDate.getTime();
-// });
-
-// const eventDatesUTC = eventDates.map(eventDate => {
-// const eventDateUTC = new Date(eventDate.getTime() - (eventDate.getTimezoneOffset() + 540) \* 60000); // JSTからUTCに変換
-// eventDateUTC.setUTCHours(0, 0, 0, 0); // 時間をUTCの00:00:00にリセット
-// console.log(
-// `eventDate: ${eventDateUTC.toISOString()}`
-// );
-// return eventDateUTC.getTime();
-// });
-
-// const allDates = etusDates.concat(eventDatesUTC);
-// const uniqueDates = allDates.filter((date, index) => allDates.indexOf(date) === index); // 重複を除去
-
-// const DbChgDateArray = uniqueDates.filter(date =>
-// !etusDates.includes(date) || !eventDatesUTC.includes(date)
-// );
-// console.log("フィルタリング結果:", DbChgDateArray);
-// DbChgDateArray.map(d => console.log((new Date(d)).toISOString()))

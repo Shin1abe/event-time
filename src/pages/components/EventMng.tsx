@@ -31,7 +31,7 @@ const EventMng = () => {
   }
 
   return (
-    // ■■■■■■■■■　幹事画面　■■■■■■■■■
+    // ■■■■■■■■■　イベント作成画面　■■■■■■■■■
     <div className="flex-wrap flex-row gap-1 m-2">
       <h1 className='m-1 text-2xl font-bold'></h1>
       <hr />
@@ -40,7 +40,7 @@ const EventMng = () => {
         {etEvent?.map((eventdata: Event, index: number) => (
           <Card className='m-3 bg-blue-50' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
             <CardHeader>
-              <CardTitle ><Badge className='mb-2'>幹事</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
+              <CardTitle ><Badge className='mb-2'>イベント作成</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
             </CardHeader>
             <CardContent>
               <p className='ml-3'>

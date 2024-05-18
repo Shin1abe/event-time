@@ -21,17 +21,8 @@ const HeaderCoordinator = () => {
     let eventIdtmp: string = ""
     if (typeof eventid === "string") { eventIdtmp = eventid }
     const { data: event, refetch: eventRefetch } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
-    // const { data: eventDate, refetch: eventDateRefetch } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
-    // const { data: eventUser, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
-    // const { data: eventUserSel, refetch: eventUserSelRefetch } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
-    const deleteMutation = trpc.useMutation(["Event_delete"]);
 
     //■  event
-    // 対象イベントの削除
-    const eventDelete = async (eventId: string) => {
-        await deleteMutation.mutate({ eventId });
-        // 削除成功後の処理
-    };
 
     const onClickEventshare = useCallback(() => {
         const url: string = event?.[0] ? event?.[0]?.eventUrl : ""
@@ -48,6 +39,20 @@ const HeaderCoordinator = () => {
         })();
     }, []);
 
+    const onClickEventChange = useCallback(() => {
+        router.push({
+            pathname: '/components/EventUpdateDialog',
+            query: { eventid: eventid },
+        });
+    }, []);
+
+    const onClickEventDelete = useCallback(() => {
+        router.push({
+            pathname: '/components/EventDeleteDialog',
+            query: { eventid: eventid },
+        });
+    }, []);
+
     return (
         <>
             <div className='flex justify-between'>
@@ -58,13 +63,13 @@ const HeaderCoordinator = () => {
                 </div>
                 <div >
                     <DropdownMenu>
-                        <DropdownMenuTrigger className='p-1'>幹事メニュー</DropdownMenuTrigger>
+                        <DropdownMenuTrigger className='p-1'>イベント作成者向けメニュー</DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuLabel>幹事メニュー</DropdownMenuLabel>
+                            <DropdownMenuLabel>イベント管理メニュー</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem><Button variant="ghost">イベント編集</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button onClick={onClickEventChange} variant="ghost">イベント更新</Button></DropdownMenuItem>
                             <DropdownMenuItem><Button onClick={onClickEventshare} variant="ghost">イベンＵＲＬをシェア</Button></DropdownMenuItem>
-                            <DropdownMenuItem><Button variant="ghost">イベント削除</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button onClick={onClickEventDelete} variant="ghost">イベント削除</Button></DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
