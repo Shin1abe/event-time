@@ -181,6 +181,18 @@ export const serverRouter = trpc
       });
     },
   })
+  .query("EventUser_findWhereManyForUserid", {
+    input: z.object({
+      userId: z.number(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventUser.findMany({
+        where: {
+          userId: input.userId,
+        },
+      });
+    },
+  })
   .query("EventUser_findUnique", {
     input: z.object({
       userId: z.number(),
@@ -249,6 +261,18 @@ export const serverRouter = trpc
       return await ctx.prisma.eventUserSel.findMany({
         where: {
           eventId: input.eventId,
+        },
+      });
+    },
+  })
+  .query("EventUserSel_findWhereManyForUserId", {
+    input: z.object({
+      userId: z.number(),
+    }),
+    resolve: async ({ ctx, input }) => {
+      return await ctx.prisma.eventUserSel.findMany({
+        where: {
+          userId: input.userId,
         },
       });
     },

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { Button } from './ui/button'
@@ -17,6 +17,13 @@ const AttendMng = () => {
 
     //■  useEtContext
     const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+
+    // eventidが変わった時にcurentEventIdを更新
+    useEffect(() => {
+        if (typeof eventid === 'string') {
+            setCurentEventId(eventid);
+        }
+    }, [eventid, curentEventId, setCurentEventId]);
 
     //■  trcp
     let eventIdtmp: string = ""
@@ -39,7 +46,14 @@ const AttendMng = () => {
                 alert("URLをコピーしました");
             }
         })();
-    }, []);
+    }, [event]);
+
+    const onClickUserUpdate = useCallback((userId: number) => {
+        router.push({
+            pathname: '/components/AttendUpdateDialog',
+            query: { eventid: eventid, userid: userId },
+        });
+    }, [router, eventid]);
 
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
@@ -70,7 +84,7 @@ const AttendMng = () => {
                                 {eventUser?.map((user, index) => (
                                     <TableRow key={index} >
                                         <TableCell className=' p-1'>
-                                            <Button variant="secondary">{user.userName}</Button>
+                                            <Button variant="secondary" onClick={() => onClickUserUpdate(user.userId)}>{user.userName}</Button>
                                         </TableCell>
                                         {eventUserSel?.filter(e => e.userId === user.userId).map((user, idx) => (
                                             <TableCell key={idx} className='text-center p-1'>
