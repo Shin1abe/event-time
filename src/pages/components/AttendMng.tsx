@@ -104,8 +104,10 @@ const AttendMng = () => {
                             </TableBody>
                         </Table>
                     </div>
-                    <p>各自の出欠状況を変更するには名前を選択してください。</p>
-                    <p>項目が多い場合は右にスクロールすると続きが見られます。</p>
+                    <div>
+                        各自の出欠状況を変更するには名前を選択してください。<br />
+                        項目が多い場合は右にスクロールすると続きが見られます。
+                    </div>
                     <Button onClick={onClickEventshare}>イベンＵＲＬをシェア</Button>
                 </div>
             </div>

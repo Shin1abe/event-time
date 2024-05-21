@@ -115,13 +115,12 @@ const AttendCreateDialog = () => {
                         <div className="flex-auto">
                             <Label htmlFor="userName" className='text-base font-bold' >名前</Label>
                             <Badge className='ml-1 p-0.5'>必須</Badge>
-                            <Input
+                            <input
+                                type='text'
                                 id="userName"
-                                defaultValue="名前を入力してください"
                                 className="col-span-3 m-1"
                                 onChange={onChangeUserName}
-                                value={userName}
-                            />
+                                value={userName} />
                             <br />
                             <Label htmlFor="username" className='text-base font-bold' >日程候補</Label>
                             <Badge className='ml-1 p-0.5'>必須</Badge>
@@ -162,12 +161,13 @@ const AttendCreateDialog = () => {
                             </div>
                             <br />
                             <Label htmlFor="eventName" className=' font-bold'>コメント</Label>
-                            <Textarea
+                            <textarea
+                                cols={50}
                                 className="w-full m-1"
                                 placeholder="是非参加します。"
                                 onChange={onChangeUserMemo}
-                                value={userMemo}
-                            />
+                                rows={3}
+                                value={userMemo} />
                         </div>
                     </DialogDescription>
                     <DialogFooter>

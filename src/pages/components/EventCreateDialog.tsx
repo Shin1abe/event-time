@@ -73,9 +73,12 @@ const EventCreateDialog = () => {
                 }
             })
             setCurentEventId(eventid)
+            setIsCoordinator(true)
             router.push({
                 pathname: '/components/AttendMng',
                 query: { eventid: eventid },
+            }).then(() => {
+                router.reload();
             });
         } catch (error) {
             console.error("エラーが発生しました:", error);
@@ -120,7 +123,7 @@ const EventCreateDialog = () => {
                                 <br />
                                 <Label htmlFor="username" className=' font-bold' >日程候補</Label>
                                 <Badge className='ml-1'>必須</Badge>
-                                <p>カレンダーで候補日を選択</p>
+                                <div>カレンダーで候補日を選択</div>
                                 {/* https://react-day-picker.js.org/ */}
                                 <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center border border-gray-300 rounded-md  overflow-auto'>
                                     <DayPicker
@@ -135,15 +138,15 @@ const EventCreateDialog = () => {
                                 <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
                                 <div className='ml-14 whitespace-nowrap'>
                                     {eventDates?.map((day, index) => (
-                                        <p key={index} className="inline-block">
+                                        <div key={index} className="inline-block">
                                             {day.toLocaleDateString()}({["日", "月", "火", "水", "木", "金", "土"][day.getDay()]})
                                             {index !== (eventDates.length - 1) && ', '}
-                                        </p>
+                                        </div>
                                     ))}
                                 </div>
                                 <br />
                                 <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
-                                <p>イベントの概要など参加者に連絡しておきたいことを記述することができます。</p>
+                                <div>イベントの概要など参加者に連絡しておきたいことを記述することができます。</div>
                                 <Textarea
                                     className="w-full m-1"
                                     placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"

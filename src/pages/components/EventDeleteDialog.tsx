@@ -45,6 +45,8 @@ const EventDeleteDialog = () => {
         router.push({
             pathname: '/components/AttendMng',
             query: { eventid: eventid },
+        }).then(() => {
+            router.reload();
         });
     }, []);
     const onClickDelete = useCallback(async () => {
@@ -64,6 +66,8 @@ const EventDeleteDialog = () => {
         router.push({
             pathname: '/',
             query: { eventid: eventid },
+        }).then(() => {
+            router.reload();
         });
     }, []);
 

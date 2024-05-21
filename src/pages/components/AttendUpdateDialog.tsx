@@ -28,8 +28,10 @@ const AttendUpdateDialog = () => {
     //■  trcp  Query
     const { data: eventUser, refetch: eventUserRefetch } =
         trpc.useQuery(["EventUser_findUnique", { userId: userIdtmp }]);
+    // console.log("EventUser_findUnique.eventUser", eventUser)
     const { data: eventUserSel, refetch: eventUserSelRefetch } =
         trpc.useQuery(["EventUserSel_findWhereManyForUserId", { userId: userIdtmp }]);
+    // console.log("EventUserSel_findWhereManyForUserId.eventUserSel", eventUserSel)
 
     //■  trcp  mutation
     const EventUserSelUpdateMutation = trpc.useMutation(["EventUserSel_update"], {
@@ -43,11 +45,30 @@ const AttendUpdateDialog = () => {
     });
 
     //■  useState
-    const [userName, setUserName] = useState<string>(eventUser?.userName as string);
-    const [userMemo, setUserMemo] = useState<string>(eventUser?.userMemo as string);
+    const [userName, setUserName] = useState<string>(() => eventUser?.userName || '');
+    const [userMemo, setUserMemo] = useState<string>(() => eventUser?.userMemo || '');
     const [isEeventUserRftch, setIsEeventUserRftch] = useState<boolean>(false);
-    const [selections, setSelections] = useState<Selections>({});
-    console.log("useState_userName", userName)
+    const [selections, setSelections] = useState<Selections>(() => {
+        const initialSelections: Selections = {};
+        eventUserSel?.forEach(sel => {
+            initialSelections[new Date(sel.eventDate).toISOString()] = sel.userSel as '○' | '◇' | '×';
+        });
+        return initialSelections;
+    });
+    useEffect(() => {
+        console.log("useEffect.eventUser", eventUser)
+        console.log("useEffect.eventUserSel", eventUserSel)
+        setUserName(eventUser?.userName || '');
+        setUserMemo(eventUser?.userMemo || '');
+        if (eventUser && eventUserSel) {
+            const initialSelections: Selections = {};
+            eventUserSel.forEach(sel => {
+                initialSelections[new Date(sel.eventDate).toISOString()] = sel.userSel as '○' | '◇' | '×';
+            });
+            setSelections(initialSelections);
+            console.log("useEffect.initialSelections", initialSelections)
+        }
+    }, [eventUser, eventUserSel]);
 
     //■  event
     const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,61 +87,14 @@ const AttendUpdateDialog = () => {
     };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //■  util
     const getClassName = (date: string, selection: '○' | '◇' | '×', baseClass: string, selectedClass: string) => {
         return selections[date] === selection ? selectedClass : baseClass;
     };
 
-
     // イベント作成ボタン押下
     // reactの再レンダリングで相当苦労
-    const onClickAtendCreate = useCallback(async () => {
+    const onClickAtendUpdate = useCallback(async () => {
         console.log("onClickAtendCreate_userName", userName)
         if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
         if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
@@ -141,8 +115,13 @@ const AttendUpdateDialog = () => {
                     userSel: selections[new Date(d.eventDate).toISOString()],
                 });
             });
-            // });
-            location.reload();
+            // location.reload();
+            router.push({
+                pathname: '/components/AttendMng',
+                query: { eventid: eventIdtmp },
+            }).then(() => {
+                router.reload();
+            });
         }
     }, [isEeventUserRftch, eventUserSel]);
 
@@ -157,17 +136,17 @@ const AttendUpdateDialog = () => {
                     <DialogHeader>
                         <DialogTitle>出欠表入力</DialogTitle>
                     </DialogHeader>
+
                     <DialogDescription>
                         <div className="flex-auto">
                             <Label htmlFor="userName" className='text-base font-bold' >名前</Label>
                             <Badge className='ml-1 p-0.5'>必須</Badge>
-                            <Input
+                            <input
+                                type='text'
                                 id="userName"
-                                defaultValue="名前を入力してください"
                                 className="col-span-3 m-1"
                                 onChange={onChangeUserName}
-                                value={userName}
-                            >{userName}</Input>
+                                value={userName} />
                             <br />
                             <Label htmlFor="username" className='text-base font-bold' >日程候補</Label>
                             <Badge className='ml-1 p-0.5'>必須</Badge>
@@ -208,16 +187,18 @@ const AttendUpdateDialog = () => {
                             </div>
                             <br />
                             <Label htmlFor="eventName" className=' font-bold'>コメント</Label>
-                            <Textarea
+                            <textarea
+                                cols={50}
                                 className="w-full m-1"
                                 placeholder="是非参加します。"
                                 onChange={onChangeUserMemo}
-                                value={userMemo}
-                            >{userMemo}</Textarea>
+                                rows={3}
+                                value={userMemo} />
                         </div>
                     </DialogDescription>
+
                     <DialogFooter>
-                        <Button onClick={onClickAtendCreate}>出欠を登録する</Button>
+                        <Button onClick={onClickAtendUpdate}>出欠を更新する</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
