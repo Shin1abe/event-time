@@ -21,7 +21,7 @@ const ApiTest = () => {
     }, [EventUserCreateMutation]);
 
     useEffect(() => {
-        console.log(eventUsers?.map(data => data.userId)); // データが更新されたらログに出力
+        // console.log(eventUsers?.map(data => data.userId)); // データが更新されたらログに出力
     }, [eventUsers]);
 
     return (<>
