@@ -11,7 +11,7 @@ const UserSel = () => {
     const eventDates = [new Date("2024-05-14T15:00:00.000Z"), new Date("2024-05-16T15:00:00.000Z")]
 
     //画面選択eventDates.日付 === etEventUserSels.eventDateは保持し、それ以外のデータは除く
-    const filterEventUserSels = (etEventUserSels, eventDates: Date[]) => {
+    const filterEventUserSels = (etEventUserSels: EventUserSel[], eventDates: Date[]) => {
         return etEventUserSels.filter(sel => {
             let selDate = new Date(sel.eventDate).getTime();
             return eventDates.some(date => new Date(date).getTime() === selDate);

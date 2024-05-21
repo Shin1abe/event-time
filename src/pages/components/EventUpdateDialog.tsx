@@ -63,7 +63,7 @@ const EventUpdateDialog = () => {
 
     //■　uttil
     //画面選択eventDates.日付 === etEventUserSels.eventDateは保持し、それ以外のデータは除く
-    const filterEventUserSels = (etEventUserSels: any, eventDates: Date[]) => {
+    const filterEventUserSels = (etEventUserSels: EventUserSel[], eventDates: Date[]) => {
         return etEventUserSels.filter(sel => {
             let selDate = new Date(sel.eventDate).getTime();
             return eventDates.some(date => new Date(date).getTime() === selDate);

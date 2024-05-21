@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = env{"PRISMA_DATASOURCE_PROVIDER"}
+  url      = env{"PRISMA_DATASOURCE_URL"}
+  directUrl = env{"PRISMA_DATASOURCE_DIRECTURL"}
 }
 
 model UserExample {

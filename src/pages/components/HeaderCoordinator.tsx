@@ -24,7 +24,7 @@ const HeaderCoordinator = () => {
     //■  event
 
     const onClickEventshare = useCallback(() => {
-        const url: string = event?.[0] ? event?.[0]?.eventUrl : ""
+        const url: string = event?.[0]?.eventUrl ?? "";
         void (async () => {
             if (navigator.share) {
                 await navigator.share({
