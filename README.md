@@ -139,19 +139,42 @@ Draw.io Integration
     済
 
 ## イベント作成者メニューの表示・非表示 useContext eventId,mode
+
     useContext：https://zenn.dev/nenenemo/articles/1ed50829c27a0f
     済
 
 ## イベント作成者メニューのイベント編集
+
     済
 
 ## イベント作成者メニューのイベント削除
+
     済
 
 ## 出欠一覧における参加者を押下して対象行情報を更新・削除？
+
 ## 出欠表入力の○▽×のボタン制御について
 
 ## イベント一覧のローカルSTORAGE読込
 
+【Next.js】PrismaをつかったアプリをVercelにデプロイしてみる
+https://hisuiblog.com/nextjs-use-prisma-postgresql-deploy-to-vercel/
 
+## prisma
 
+datasource db {
+provider = "postgresql"
+url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+## .env.local
+
+POSTGRES_URL="postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
+POSTGRES_PRISMA_URL="postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15"
+POSTGRES_URL_NO_SSL="postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb"
+POSTGRES_URL_NON_POOLING="postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
+POSTGRES_USER="default"
+POSTGRES_HOST="ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech"
+POSTGRES_PASSWORD="TYRiMa07ynBm"
+POSTGRES_DATABASE="verceldb"

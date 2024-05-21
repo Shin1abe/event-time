@@ -11,7 +11,6 @@ import { useEtContext } from '../providers/EtProvider';
 const HeaderCoordinator = () => {
     //■  initial
     const router = useRouter();
-    // const { eventid } = router.query;//TODO
 
     //■  useEtContext
     const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()

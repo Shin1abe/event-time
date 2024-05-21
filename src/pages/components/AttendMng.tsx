@@ -88,14 +88,14 @@ const AttendMng = () => {
                                         </TableCell>
                                         {eventUserSel?.filter(e => e.userId === user.userId).map((user, idx) => (
                                             <TableCell key={idx} className='text-center p-1'>
-                                                {user.userSel}
-                                                {/* <FontAwesomeIcon
+                                                {/* {user.userSel} */}
+                                                <FontAwesomeIcon
                                                     icon={
                                                         user.userSel === "○" ? faCircle :
                                                             user.userSel === "◇" ? faDiamond :
                                                                 user.userSel === "×" ? faXmark : faMinus}
-                                                    className={"cursor-pointer text-xs text-slate-600"}
-                                                /> */}
+                                                    className={"cursor-pointer  text-slate-600 p-6"}
+                                                />
                                             </TableCell>
                                         ))}
                                         <TableCell className='w-96 p-1'>{user.userMemo}</TableCell>

@@ -40,7 +40,7 @@ const EventCreateDialog = () => {
     }) => {
         await eventCreateMutation.mutate(newEvent);
     };
-    const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]);//TODO
+    const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]);
     const eventdateCreate = async (newEvent: {
         eventId: string;
         eventDate: string;
