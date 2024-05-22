@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import 'react-day-picker/dist/style.css';
@@ -11,14 +11,13 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
-} from "./ui/alert-dialog"
+} from "../../ui/alert-dialog"
 
 const EventDeleteDialog = () => {
     //■  initial
     const router = useRouter();
     const { eventid } = router.query;
-    let eventIdtmp: string = ""; if (typeof eventid === "string") { eventIdtmp = eventid };
+    let eventIdtmp = ""; if (typeof eventid === "string") { eventIdtmp = eventid };
 
     //■  trpc query
     // [Event_findWhereMany]

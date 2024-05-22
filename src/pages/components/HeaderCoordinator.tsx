@@ -1,25 +1,25 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import { trpc } from "@/utils/trpc";
-import { Button } from './ui/button'
+import { Button } from '../../ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger }
-    from "@/pages/components/ui/dropdown-menu"
-import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
-import { useEtContext } from '../providers/EtProvider';
+    from "@/ui/dropdown-menu"
+// import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
+import { useEtContext } from '../../providers/EtProvider';
 
 const HeaderCoordinator = () => {
     //■  initial
     const router = useRouter();
 
     //■  useEtContext
-    const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+    const { curentEventId } = useEtContext()
     const eventid = curentEventId.length > 0 ? curentEventId : router.query.eventid;
 
     //■  trcp
-    let eventIdtmp: string = ""
+    let eventIdtmp = ""
     if (typeof eventid === "string") { eventIdtmp = eventid }
-    const { data: event, refetch: eventRefetch } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: event } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
 
     //■  event
 

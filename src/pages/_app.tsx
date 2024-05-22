@@ -1,3 +1,4 @@
+import React from 'react';
 import "../styles/globals.css";
 import "@fontsource/poppins";
 import { ThemeProvider } from "next-themes";
@@ -5,21 +6,22 @@ import { withTRPC } from "@trpc/next";
 import { AppType } from "next/dist/shared/lib/utils";
 import RootLayout from "@/pages/components/layout";
 import type { ServerRouter } from "@/server/router";
-import HeaderA from "@/pages/components/HeaderA";
-import { EtProvider, useEtContext } from "./providers/EtProvider";
+// import HeaderA from "@/pages/components/HeaderA";
+import { EtProvider } from "../providers/EtProvider";
 
 
+// eslint-disable-next-line react/prop-types
 const App: AppType = ({ Component, pageProps }) => {
-
-
   return (
-    // <ThemeProvider attribute="class" defaultTheme="light">
-    <RootLayout>
-      <EtProvider>
-        <Component {...pageProps} />
-      </EtProvider>
-    </RootLayout>
-    // </ThemeProvider>
+    <div>
+      <ThemeProvider attribute="class" defaultTheme="light">
+        <RootLayout>
+          <EtProvider>
+            <Component {...pageProps} />
+          </EtProvider>
+        </RootLayout>
+      </ThemeProvider>
+    </div>
   );
 };
 

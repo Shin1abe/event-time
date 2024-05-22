@@ -1,14 +1,14 @@
 import Head from "next/head";
 import React from "react";
 import HeaderA from "./HeaderA";
-import HeaderB from "./HeaderB";
+// import HeaderB from "./HeaderB";
 import Footer from "./Footer";
-import { useEtContext } from "../providers/EtProvider";
-import HeaderCoordinator from "./HeaderCoordinator";
+// import { useEtContext } from "../providers/EtProvider";
+// import HeaderCoordinator from "./HeaderCoordinator";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   //■  useEtContext
-  const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+  // const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
 
   return (
     <>

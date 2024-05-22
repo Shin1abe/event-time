@@ -1,13 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import 'react-day-picker/dist/style.css';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
-import { Badge } from './ui/badge'
-import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
+import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
+import { Badge } from '../../ui/badge'
+import { Event, EventDate } from "@prisma/client";
 import EventCreateDialog from './EventCreateDialog';
 import { formatDateWithDayOfWeek } from '@/utils/utils';
-import { useEtContext } from '../providers/EtProvider';
+import { useEtContext } from '../../providers/EtProvider';
 
 const EventMng = () => {
   //■  initial
@@ -15,7 +15,7 @@ const EventMng = () => {
   // const [mode, setMode] = useContext(EventTimeContext)
 
   //■  useEtContext
-  const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+  const { setIsCoordinator } = useEtContext()
   useEffect(() => {
     setIsCoordinator(true)
   }, [])
@@ -34,7 +34,7 @@ const EventMng = () => {
   }
 
   return (
-    // ■■■■■■■■■　イベント作成画面　■■■■■■■■■
+    // ■■■■■■■■■イベント作成画面■■■■■■■■■
     <div className="flex-wrap flex-row gap-1 m-2">
       <h1 className='m-1 text-2xl font-bold'></h1>
       <hr />
@@ -59,7 +59,7 @@ const EventMng = () => {
           </Card>
         ))}
       </div>
-      {/* ■■■■■■■■■　イベント作成ダイアログ　■■■■■■■■■ */}
+      {/* ■■■■■■■■■イベント作成ダイアログ■■■■■■■■■ */}
       <div >
         <EventCreateDialog />
       </div>

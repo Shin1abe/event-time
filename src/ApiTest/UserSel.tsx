@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { trpc } from "@/utils/trpc";
-import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
+import { EventUserSel } from "@prisma/client";
 
 const UserSel = () => {
     const eventIdtmp = "clwbcks420000356r7peciq9n";
@@ -13,7 +13,7 @@ const UserSel = () => {
     //画面選択eventDates.日付 === etEventUserSels.eventDateは保持し、それ以外のデータは除く
     const filterEventUserSels = (etEventUserSels: EventUserSel[], eventDates: Date[]) => {
         return etEventUserSels.filter(sel => {
-            let selDate = new Date(sel.eventDate).getTime();
+            const selDate = new Date(sel.eventDate).getTime();
             return eventDates.some(date => new Date(date).getTime() === selDate);
         });
     }

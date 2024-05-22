@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableRow } from '../ui/table';
+import { Table, TableBody, TableCell, TableRow } from '../../../ui/table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faXmark } from '@fortawesome/free-solid-svg-icons';
 

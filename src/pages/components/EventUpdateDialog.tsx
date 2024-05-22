@@ -4,25 +4,26 @@ import { trpc } from "@/utils/trpc";
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 
-import { Button } from './ui/button'
-import { Input } from './ui/input'
-import { Badge } from './ui/badge'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
-import { Textarea } from './ui/textarea'
-import { Label } from './ui/label'
-import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
-import { useEtContext } from '../providers/EtProvider';
+import { Button } from '../../ui/button'
+import { Input } from '../../ui/input'
+import { Badge } from '../../ui/badge'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
+import { Textarea } from '../../ui/textarea'
+import { Label } from '../../ui/label'
+import { EventDate, EventUserSel } from "@prisma/client";
+// import { useEtContext } from '../providers/EtProvider';
 
 
 const EventUpdateDialog = () => {
     //■  initial
     const router = useRouter();
     const { eventid } = router.query;
-    let eventIdtmp: string = ""; if (typeof eventid === "string") { eventIdtmp = eventid };
+    let eventIdtmp = "";
+    if (typeof eventid === "string") { eventIdtmp = eventid };
     const initialDays: Date[] = [];
 
     //■  useEtContext
-    const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+    // const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
 
     //■  trpc query
     // [Event_findWhereMany]
@@ -55,22 +56,22 @@ const EventUpdateDialog = () => {
     // [EventUserSel_create]
     const EventUserSelCreateMutation = trpc.useMutation(["EventUserSel_create"]);
 
-    //■  useState
+    //■ useState
     const [eventName, setEventName] = useState<string>(etEvent?.eventName as string);
     const [eventMemo, setEventMemo] = useState<string>(etEvent?.eventMemo as string);
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(eventDateArray);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting,] = useState(false);
 
-    //■　uttil
+    //■uttil
     //画面選択eventDates.日付 === etEventUserSels.eventDateは保持し、それ以外のデータは除く
     const filterEventUserSels = (etEventUserSels: EventUserSel[], eventDates: Date[]) => {
         return etEventUserSels.filter(sel => {
-            let selDate = new Date(sel.eventDate).getTime();
+            const selDate = new Date(sel.eventDate).getTime();
             return eventDates.some(date => new Date(date).getTime() === selDate);
         });
     }
 
-    //■  event
+    //■ event
     const clearButton = () => setEventsDates(initialDays);
     // イベント更新ボタン押下
     const eventUpdateButtonClick = useCallback(async () => {
@@ -93,7 +94,7 @@ const EventUpdateDialog = () => {
                 await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo })
                 // ------------------------------------------------------------------------
                 // 日程を変更した場合
-                // ・EventeDate　：全削除→全追加
+                // ・EventeDate：全削除→全追加
                 // ・EventUserSel：全削除、追加は画面選択eventDate === EventUserSel
                 //                 TODO:画面選択したがEventUserSelしたものをレコードとして追加すべきか
                 // ------------------------------------------------------------------------
@@ -138,7 +139,7 @@ const EventUpdateDialog = () => {
         }
     }, [eventName, eventDates]);
 
-    //イベント作成ダイアログfooter　
+    //イベント作成ダイアログfooter
     const footer =
         eventDates && eventDates.length > 0 ? (
             <div className='grid-cols-2 flex'>

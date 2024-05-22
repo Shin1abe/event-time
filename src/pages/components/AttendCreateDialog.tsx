@@ -1,14 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
-import { Button } from './ui/button'
-import { Input } from './ui/input'
-import { Badge } from './ui/badge'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
-import { Textarea } from './ui/textarea'
-import { Label } from './ui/label'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/pages/components/ui/table"
-import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
+import { Button } from '../../ui/button'
+import { Badge } from '../../ui/badge'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
+import { Label } from '../../ui/label'
+import { Table, TableBody, TableCell, TableRow } from "@/ui/table"
+//import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -31,7 +29,7 @@ const AttendCreateDialog = () => {
     const [selections, setSelections] = useState<Selections>({});
 
     //■  trcp  
-    const { data: eventDate, refetch: eventDateRefetch } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: eventDate } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
 
     const { data: eventUserSel, refetch: eventUserSelRefetch } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
     const EventUserSelCreateMutation = trpc.useMutation(["EventUserSel_create"], {
@@ -101,7 +99,7 @@ const AttendCreateDialog = () => {
     }, [isEeventUserRftch, eventUsers, eventDate]);
 
     return (
-        // {/* ■■■■■■■■■　出席入力ダイアログ　■■■■■■■■■ */}
+        // {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
         <div >
             <Dialog>
                 <DialogTrigger asChild>

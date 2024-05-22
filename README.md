@@ -34,7 +34,10 @@ https://fujitsu.udemy.com/course/tailwindcss-for-beginner/learn/lecture/32435558
 ・https://onedrive.live.com/view.aspx?resid=237B1A5D9D8EAE9D%215982&id=documents&wd=target%28Udemy.one%7C63C93F65-2943-4453-B67B-8F9D8C205BF7%2F%E3%80%90Tailwindcss3.0%E3%80%91%E5%88%A9%E7%94%A8%E8%80%85%E6%80%A5%E5%A2%97%E4%B8%AD%EF%BC%81%E4%BD%9C%E3%81%A3%E3%81%A6%E5%AD%A6%E3%81%B6%E7%88%86%E9%80%9F%E3%81%A7%E7%90%86%E8%A7%A3%E3%81%97%E3%81%9F%E3%81%84%E4%BA%BA%E5%90%91%E3%81%91%E3%81%AETailwindcss%E5%AE%8C%E5%85%A8%E5%85%A5%E9%96%80%E3%83%91%E3%83%83%E3%82%AF%7C6006E5D7-249A-43C9-B227-3A031B7149F7%2F%29
 ・onenote:https://d.docs.live.net/237b1a5d9d8eae9d/ドキュメント/OneNote%20ノートブック/技術メモ/Udemy.one#【Tailwindcss3.0】利用者急増中！作って学ぶ爆速で理解したい人向けのTailwindcss完全入門パック&section-id={63C93F65-2943-4453-B67B-8F9D8C205BF7}&page-id={6006E5D7-249A-43C9-B227-3A031B7149F7}&end
 
-# メモ
+# VERCEL DB作成・接続・APPデプロイ
+
+onenote:https://d.docs.live.net/237b1a5d9d8eae9d/ドキュメント/OneNote%20ノートブック/技術メモ/クラウド.one#Vercelガイド%20Next.js、Prisma、Vercel%20Postgres%20を使用してフルスタック%20アプリを構築する方法&section-id={9CA546E3-0D60-4D53-97E7-E6A52F7B4466}&page-id={11AA0600-DEC7-4224-961B-2644CAED2B95}&end
+https://onedrive.live.com/view.aspx?resid=237B1A5D9D8EAE9D%215982&id=documents&wd=target%28%E3%82%AF%E3%83%A9%E3%82%A6%E3%83%89.one%7C9CA546E3-0D60-4D53-97E7-E6A52F7B4466%2FVercel%E3%82%AC%E3%82%A4%E3%83%89%20%3ANext.js%E3%80%81Prisma%E3%80%81Vercel%20Postgres%20%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%A6%E3%83%95%E3%83%AB%E3%82%B9%E3%82%BF%E3%83%83%E3%82%AF%20%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E6%A7%8B%E7%AF%89%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95%7C11AA0600-DEC7-4224-961B-2644CAED2B95%2F%29
 
 ## VSCODE Plugin
 
@@ -126,36 +129,7 @@ Prismaで日付データを扱う
 https://wp-kyoto.net/prisma-handle-date-data/
 Draw.io Integration
 
-## EventMng.tsxコンポーネント分割
-
-    済
-
-## AttendMng.tsxコンポーネント分割
-
-    済
-
-## イベント作成者メニューのコンポーネント化
-
-    済
-
-## イベント作成者メニューの表示・非表示 useContext eventId,mode
-
-    useContext：https://zenn.dev/nenenemo/articles/1ed50829c27a0f
-    済
-
-## イベント作成者メニューのイベント編集
-
-    済
-
-## イベント作成者メニューのイベント削除
-
-    済
-
-## 出欠一覧における参加者を押下して対象行情報を更新・削除？
-
-## 出欠表入力の○▽×のボタン制御について
-
-## イベント一覧のローカルSTORAGE読込
+useContext：https://zenn.dev/nenenemo/articles/1ed50829c27a0f
 
 【Next.js】PrismaをつかったアプリをVercelにデプロイしてみる
 https://hisuiblog.com/nextjs-use-prisma-postgresql-deploy-to-vercel/
@@ -168,7 +142,7 @@ url = env("POSTGRES_PRISMA_URL") // uses connection pooling
 directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-## .env.local
+## .env
 
 POSTGRES_URL="postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require"
 POSTGRES_PRISMA_URL="postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15"
@@ -178,3 +152,12 @@ POSTGRES_USER="default"
 POSTGRES_HOST="ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech"
 POSTGRES_PASSWORD="TYRiMa07ynBm"
 POSTGRES_DATABASE="verceldb"
+
+##
+
+TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
+TODO npm run build: TODO npm run build: found pages without a React Component as default export in pages/components/ui/alert-dialog
+TODO npm run build:たくさんのコンパイルエラー
+TODO VERCELプロジェクト→DEPLOY
+OK VERCEL DBに切り替えてローカルも本番も同じにする
+OK TODO npm run build:error - ESLint: Failed to load plugin '@typescript-eslint' declared in '.eslintrc.json': Cannot find module '@typescript-eslint/eslint-plugin' Require stack: - C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json Referenced from: C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json

@@ -5,14 +5,14 @@ import cuid from 'cuid';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 
-import { Button } from './ui/button'
-import { Input } from './ui/input'
-import { Badge } from './ui/badge'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
-import { Textarea } from './ui/textarea'
-import { Label } from './ui/label'
-import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
-import { useEtContext } from '../providers/EtProvider';
+import { Button } from '../../ui/button'
+import { Input } from '../../ui/input'
+import { Badge } from '../../ui/badge'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
+import { Textarea } from '../../ui/textarea'
+import { Label } from '../../ui/label'
+// import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
+import { useEtContext } from '../../providers/EtProvider';
 
 const EventCreateDialog = () => {
     //■  initial
@@ -20,13 +20,13 @@ const EventCreateDialog = () => {
     const initialDays: Date[] = [];
 
     //■  useEtContext
-    const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+    const { setIsCoordinator, setCurentEventId } = useEtContext()
 
     //■  useState
     const [eventName, setEventName] = useState<string>("");
     const [eventMemo, setEventMemo] = useState<string>("");;
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(initialDays);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting] = useState(false);
 
     //■  trpc
     // const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
@@ -85,7 +85,7 @@ const EventCreateDialog = () => {
         }
     };
 
-    //イベント作成ダイアログfooter　
+    //イベント作成ダイアログfooter
     const footer =
         eventDates && eventDates.length > 0 ? (
             <div className='grid-cols-2 flex'>

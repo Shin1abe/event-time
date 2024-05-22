@@ -303,7 +303,7 @@ const HeaderB = () => {
                     </div>
                     <p className="text-gray-100 text-sm">
                       This proposal is a win-win situation which will cause a
-                      stellar paradigm shift, let's touch base off-line before
+                      stellar paradigm shift, lets touch base off-line before
                       we fire the new ux experience.
                     </p>
                     <div className="flex items-center py-3">

@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
-import { Button } from './ui/button'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/pages/components/ui/table"
+import { Button } from '../../ui/button'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/ui/table"
 import AttendCreateDialog from './AttendCreateDialog';
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import HeaderCoordinator from './HeaderCoordinator';
-import { useEtContext } from '../providers/EtProvider';
+import { useEtContext } from '../../providers/EtProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faMinus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -16,7 +16,7 @@ const AttendMng = () => {
     const { eventid } = router.query;
 
     //■  useEtContext
-    const { isCoordinator, setIsCoordinator, curentEventId, setCurentEventId } = useEtContext()
+    const { isCoordinator, curentEventId, setCurentEventId } = useEtContext()
 
     // eventidが変わった時にcurentEventIdを更新
     useEffect(() => {
@@ -26,12 +26,12 @@ const AttendMng = () => {
     }, [eventid, curentEventId, setCurentEventId]);
 
     //■  trcp
-    let eventIdtmp: string = ""
+    let eventIdtmp = ""
     if (typeof eventid === "string") { eventIdtmp = eventid }
-    const { data: event, refetch: eventRefetch } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
-    const { data: eventDate, refetch: eventDateRefetch } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
-    const { data: eventUser, refetch: eventUserRefetch } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
-    const { data: eventUserSel, refetch: eventUserSelRefetch } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: event } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: eventDate } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: eventUser } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: eventUserSel } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
 
     const onClickEventshare = useCallback(() => {
         const url: string = event?.[0]?.eventUrl ?? "";
@@ -57,9 +57,9 @@ const AttendMng = () => {
 
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
-            {/* ■■■■■■■■■　ヘッド・メニュー　■■■■■■■■■ */}
+            {/* ■■■■■■■■■ヘッド・メニュー■■■■■■■■■ */}
             {isCoordinator ? (<HeaderCoordinator />) : null}
-            {/* ■■■■■■■■■　出席者一覧　■■■■■■■■■ */}
+            {/* ■■■■■■■■■出席者一覧■■■■■■■■■ */}
             <div>
                 <h1 className='font-bold'>{event?.[0]?.eventName}</h1>
                 <div className="flex flex-col justify-center gap-2">
@@ -111,7 +111,7 @@ const AttendMng = () => {
                     <Button onClick={onClickEventshare}>イベンＵＲＬをシェア</Button>
                 </div>
             </div>
-            {/* ■■■■■■■■■　出席入力ダイアログ　■■■■■■■■■ */}
+            {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
             <div >
                 <AttendCreateDialog />
             </div>

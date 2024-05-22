@@ -9,8 +9,10 @@ interface EtContextType {
 // https://zenn.dev/nenenemo/articles/1ed50829c27a0f
 const EtContext = React.createContext<EtContextType>({
     isCoordinator: false,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     setIsCoordinator: () => { },
     curentEventId: "",
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     setCurentEventId: () => { },
 });
 interface EtProviderProps {

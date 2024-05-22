@@ -61,3 +61,5 @@ prisma/migrations/20240501063215_/migration.sql
 .gitignore
 .gitignore
 prisma/migrations/20240501063215_/migration.sql
+
+.vercel

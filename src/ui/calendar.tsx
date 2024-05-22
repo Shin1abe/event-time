@@ -5,13 +5,16 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
 import { DayPicker } from "react-day-picker"
 
 import { cn } from "src/utils"
-import { buttonVariants } from "@/pages/components/ui/button"
+import { buttonVariants } from "@/ui/button"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
 function Calendar({
+  // eslint-disable-next-line react/prop-types
   className,
+  // eslint-disable-next-line react/prop-types
   classNames,
+  // eslint-disable-next-line react/prop-types
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
@@ -38,6 +41,7 @@ function Calendar({
         row: "flex w-full mt-2",
         cell: cn(
           "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md",
+          // eslint-disable-next-line react/prop-types
           props.mode === "range"
             ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
             : "[&:has([aria-selected])]:rounded-md"
