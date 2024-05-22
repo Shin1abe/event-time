@@ -174,3 +174,14 @@ OK npm run build:たくさんのコンパイルエラー
 OK VERCELプロジェクト→DEPLOY
 OK VERCEL DBに切り替えてローカルも本番も同じにする
 OK TODO npm run build:error - ESLint: Failed to load plugin '@typescript-eslint' declared in '.eslintrc.json': Cannot find module '@typescript-eslint/eslint-plugin' Require stack: - C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json Referenced from: C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json
+Vercelでは.production.envに指定した変数はVercel側の環境変数に定義してではないと読み込めないと認識しています。
+下記の実装の場合、Vercel側の環境変数に具体的な値としてどう定義すればよいですか？
+.env.production
+VERCEL_URL="event-time.vercel.app"
+
+プログラムでの参照方法
+process.env.VERCEL_URL
+
+
+VercelでVERCEL_URLで定義したものは、プログラムでprocess.env.NEXT_PUBLIC_VERCEL_URL
+とする必要があるという記事を見ましたが本当でしょうか
