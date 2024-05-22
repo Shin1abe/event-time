@@ -156,6 +156,18 @@ POSTGRES_DATABASE="verceldb"
 ##
 
 TODO 本番でDB参照できない模様
+export default withTRPC<ServerRouter>({
+config({ ctx }) {
+const url = process.env.VERCEL_URL
+? `https://${process.env.VERCEL_URL}/api/trpc`
+: "http://localhost:3000/api/trpc";
+
+    return { url };
+
+},
+ssr: true,
+})(App);
+
 TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
 OK npm run build: TODO npm run build: found pages without a React Component as default export in pages/components/ui/alert-dialog
 OK npm run build:たくさんのコンパイルエラー
