@@ -155,9 +155,10 @@ POSTGRES_DATABASE="verceldb"
 
 ##
 
+TODO 本番でDB参照できない模様
 TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
-TODO npm run build: TODO npm run build: found pages without a React Component as default export in pages/components/ui/alert-dialog
-TODO npm run build:たくさんのコンパイルエラー
-TODO VERCELプロジェクト→DEPLOY
+OK npm run build: TODO npm run build: found pages without a React Component as default export in pages/components/ui/alert-dialog
+OK npm run build:たくさんのコンパイルエラー
+OK VERCELプロジェクト→DEPLOY
 OK VERCEL DBに切り替えてローカルも本番も同じにする
 OK TODO npm run build:error - ESLint: Failed to load plugin '@typescript-eslint' declared in '.eslintrc.json': Cannot find module '@typescript-eslint/eslint-plugin' Require stack: - C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json Referenced from: C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json
