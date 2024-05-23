@@ -60,7 +60,33 @@ npx prisma generate
 ※npx prisma studio
 \server\router.tsにcrudを定義
 
-## Todo
+## dev/production/vercel関係
+
+### npm run dev
+
+schema.prisma :vercel postgre
+url :localhost:3000
+env :.env.local(vercel db)
+→①同じ
+→sqlite用schema.prisma準備
+
+### npm run production
+
+schema.prisma :vercel postgre
+url :localhost:3000
+env :.env.production(無効)
+→①Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 50)
+at Function.from (C:\Fujitsu\MyPrj\nextjs\event-time\node_modules\@trpc\client\dist\TRPCClientError-11a0a976.cjs.prod.js:59:16)
+at Object.transformRPCResponse (C:\Fujitsu\MyPrj\nextjs\event-time\node_modules\@trpc\client\dist\httpRequest-01d5047c.cjs.prod.js:17:44)
+at C:\Fujitsu\MyPrj\nextjs\event-time\node_modules\@trpc\client\links\httpBatchLink\dist\trpc-client-links-httpBatchLink.cjs.prod.js:205:30
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {originalError: undefined,
+
+### vercel env
+
+schema.prisma :vercel postgre
+url :event-time.vercel.app
+env :Environment Variables(NEXT_PUBLIC_API_URL：event-time.vercel.app)
+.env.productionは無効
 
 ### （解決）スクロールするとヘッダ・フッタが透けているため不自然。
 
@@ -168,20 +194,10 @@ const url = process.env.VERCEL_URL
 ssr: true,
 })(App);
 
-TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
 OK npm run build: TODO npm run build: found pages without a React Component as default export in pages/components/ui/alert-dialog
 OK npm run build:たくさんのコンパイルエラー
 OK VERCELプロジェクト→DEPLOY
 OK VERCEL DBに切り替えてローカルも本番も同じにする
 OK TODO npm run build:error - ESLint: Failed to load plugin '@typescript-eslint' declared in '.eslintrc.json': Cannot find module '@typescript-eslint/eslint-plugin' Require stack: - C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json Referenced from: C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json
-Vercelでは.production.envに指定した変数はVercel側の環境変数に定義してではないと読み込めないと認識しています。
-下記の実装の場合、Vercel側の環境変数に具体的な値としてどう定義すればよいですか？
-.env.production
-VERCEL_URL="event-time.vercel.app"
-
-プログラムでの参照方法
-process.env.VERCEL_URL
-
-
-VercelでVERCEL_URLで定義したものは、プログラムでprocess.env.NEXT_PUBLIC_VERCEL_URL
-とする必要があるという記事を見ましたが本当でしょうか
+TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
+TODO VSCODE npm run start：Access to fetch at 'https://event-time.vercel.app/api/trpc/EventDate_findWhereMany,EventUserSel_findWhereMany,EventUser_findWhereMany,Event_findWhereMany?batch=1&input=%7B%220%22%3A%7B%22eventId%22%3A%22clwik2g5k00003r6upc7ycdb8%22%7D%2C%221%22%3A%7B%22eventId%22%3A%22clwik2g5k00003r6upc7ycdb8%22%7D%2C%222%22%3A%7B%22eventId%22%3A%22clwik2g5k00003r6upc7ycdb8%22%7D%2C%223%22%3A%7B%22eventId%22%3A%22clwik2g5k00003r6upc7ycdb8%22%7D%7D' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.

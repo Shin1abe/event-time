@@ -26,7 +26,8 @@ const App: AppType = ({ Component, pageProps }) => {
 };
 
 export default withTRPC<ServerRouter>({
-  config({ ctx }) {
+  // eslint-disable-next-line no-empty-pattern
+  config({ }) {
     const url = process.env.NEXT_PUBLIC_API_URL
       ? `https://${process.env.NEXT_PUBLIC_API_URL}/api/trpc`
       : "http://localhost:3000/api/trpc";

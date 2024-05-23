@@ -63,6 +63,9 @@ const EventCreateDialog = () => {
             const urlParts = new URL(window.location.href);
             const baseURL = `${urlParts.protocol}//${urlParts.host}/`;
             const eventurl = baseURL + "components/AttendMng?eventid=" + eventid;
+            console.log("urlParts", urlParts)
+            console.log("baseURL", baseURL)
+            console.log("process.env.NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL)
             await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo });
 
             eventDates?.map(async (eventdate) => {
@@ -91,7 +94,7 @@ const EventCreateDialog = () => {
             <div className='grid-cols-2 flex'>
                 <div className='flex-3 text-left'>選択日数： {eventDates.length} 日.</div>
                 <div className='flex-1 text-right'>
-                    <Button variant="outline" onClick={clearButton}>clear</Button>
+                    <Button onClick={clearButton}>clear</Button>
                 </div>
             </div>
         ) : (
@@ -102,7 +105,7 @@ const EventCreateDialog = () => {
         <div >
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button className="fixed-button mb-3" variant="default">イベント作成</Button>
+                    <Button className="fixed-button mb-3" >イベント作成</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
