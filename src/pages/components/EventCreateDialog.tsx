@@ -119,9 +119,9 @@ const EventCreateDialog = () => {
                                 <Badge className='ml-1'>必須</Badge>
                                 <Input
                                     id="eventName"
+                                    placeholder='イベント名を入力してください'
                                     value={eventName}
                                     onChange={(e) => setEventName(e.target.value)}
-                                    defaultValue="イベント名を入力してください"
                                     className="m-1"
                                 />
                                 <br />
@@ -141,12 +141,12 @@ const EventCreateDialog = () => {
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>候補日</Label>
                                 <div className='whitespace-nowrap'>
-                                    <Textarea readOnly className="w-full  p-2 border border-gray-300" value={getCandidate()} />
+                                    <Textarea readOnly className="w-full  p-2 border border-gray-300  min-h-12" value={getCandidate()} />
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>メモ</Label>
-                                <div>イベントの概要など参加者に連絡しておきたいことを記述することができます。</div>
+                                <div>参加者に連絡しておきたいことを記述</div>
                                 <Textarea
-                                    className="w-full"
+                                    className="w-full min-h-12"
                                     placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
                                     value={eventMemo}
                                     onChange={(e) => setEventMemo(e.target.value)}
