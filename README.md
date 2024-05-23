@@ -174,7 +174,7 @@ POSTGRES_DATABASE="verceldb"
 
 ##
 
-TODO 本番でDB参照できない模様
+OK 本番でDB参照できない模様→FJWANだったから
 export default withTRPC<ServerRouter>({
 config({ ctx }) {
 const url = process.env.VERCEL_URL
@@ -186,7 +186,6 @@ const url = process.env.VERCEL_URL
 },
 ssr: true,
 })(App);
-
 OK npm run build: TODO npm run build: found pages without a React Component as default export in pages/components/ui/alert-dialog
 OK npm run build:たくさんのコンパイルエラー
 OK VERCELプロジェクト→DEPLOY
