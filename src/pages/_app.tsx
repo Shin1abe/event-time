@@ -31,7 +31,7 @@ export default withTRPC<ServerRouter>({
     const url = process.env.NEXT_PUBLIC_API_URL
       ? `https://${process.env.NEXT_PUBLIC_API_URL}/api/trpc`
       : "http://localhost:3000/api/trpc";
-    console.log(url)
+    // console.log(url)
     return { url };
   },
   ssr: true,

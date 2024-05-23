@@ -64,22 +64,15 @@ npx prisma generate
 
 ### npm run dev
 
-schema.prisma :vercel postgre
+schema.prisma :vercel postgre/FJWAN sqliteに切り替え
 url :localhost:3000
 env :.env.local(vercel db)
-→①同じ
-→sqlite用schema.prisma準備
 
 ### npm run production
 
 schema.prisma :vercel postgre
 url :localhost:3000
 env :.env.production(無効)
-→①Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 50)
-at Function.from (C:\Fujitsu\MyPrj\nextjs\event-time\node_modules\@trpc\client\dist\TRPCClientError-11a0a976.cjs.prod.js:59:16)
-at Object.transformRPCResponse (C:\Fujitsu\MyPrj\nextjs\event-time\node_modules\@trpc\client\dist\httpRequest-01d5047c.cjs.prod.js:17:44)
-at C:\Fujitsu\MyPrj\nextjs\event-time\node_modules\@trpc\client\links\httpBatchLink\dist\trpc-client-links-httpBatchLink.cjs.prod.js:205:30
-at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {originalError: undefined,
 
 ### vercel env
 

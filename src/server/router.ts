@@ -122,7 +122,7 @@ export const serverRouter = trpc
       eventDate: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
-      console.log(" EventDate_create Called:" + input.eventDate);
+      // console.log(" EventDate_create Called:" + input.eventDate);
       return await ctx.prisma.eventDate.create(
         {
           data: {
@@ -325,7 +325,7 @@ export const serverRouter = trpc
       id: z.number(),
     }),
     resolve: async ({ ctx, input }) => {
-      console.log(" EventUserSel_delete Called");
+      // console.log(" EventUserSel_delete Called");
 
       return await ctx.prisma.eventUserSel.delete({
         where: { id: input.id },

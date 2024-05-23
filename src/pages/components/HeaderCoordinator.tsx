@@ -66,9 +66,9 @@ const HeaderCoordinator = () => {
                         <DropdownMenuContent>
                             <DropdownMenuLabel>イベント管理メニュー</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem><Button onClick={onClickEventChange} variant="ghost">イベント更新</Button></DropdownMenuItem>
-                            <DropdownMenuItem><Button onClick={onClickEventshare} variant="ghost">イベンＵＲＬをシェア</Button></DropdownMenuItem>
-                            <DropdownMenuItem><Button onClick={onClickEventDelete} variant="ghost">イベント削除</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button onClick={onClickEventChange} >イベント更新</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button onClick={onClickEventshare} >イベント更新ＵＲＬをシェア</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button onClick={onClickEventDelete} >イベント削除</Button></DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

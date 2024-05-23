@@ -61,11 +61,10 @@ const EventCreateDialog = () => {
         try {
             const eventid = cuid();
             const urlParts = new URL(window.location.href);
-            const baseURL = `${urlParts.protocol}//${urlParts.host}/`;
+            const baseURL = process.env.NEXT_PUBLIC_HOST ?
+                `https://${process.env.NEXT_PUBLIC_HOST}/` :
+                `${urlParts.protocol}//${urlParts.host}/`;
             const eventurl = baseURL + "components/AttendMng?eventid=" + eventid;
-            console.log("urlParts", urlParts)
-            console.log("baseURL", baseURL)
-            console.log("process.env.NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL)
             await eventCreate({ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo });
 
             eventDates?.map(async (eventdate) => {
