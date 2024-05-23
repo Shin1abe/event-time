@@ -95,16 +95,16 @@ const EventCreateDialog = () => {
     //イベント作成ダイアログfooter
     const footer =
         eventDates && eventDates.length > 0 ? (
-            <div className="flex justify-end">
+            <div className="flex justify-end p-1">
                 <Button onClick={clearButton} className=' pxy-0  h-40px'>clear</Button>
             </div>
         ) : (
-            <div className='h-9 px-4 py-2 pxy-0 h-40px'></div>
+            <div className='h-9 px-4 py-2 pxy-0 h-40px p-1'></div>
         );
 
     return (
         <div >
-            <Dialog>
+            <Dialog >
                 <DialogTrigger asChild>
                     <Button className="fixed-button mb-3" >イベント作成</Button>
                 </DialogTrigger>
@@ -124,10 +124,8 @@ const EventCreateDialog = () => {
                                     onChange={(e) => setEventName(e.target.value)}
                                     className="m-1"
                                 />
-                                <br />
                                 <Label htmlFor="username" className=' font-bold' >日程候補</Label>
                                 <Badge className='ml-1'>必須</Badge>
-                                <div>カレンダーで候補日を選択</div>
                                 {/* https://react-day-picker.js.org/ */}
                                 <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center border border-gray-300 rounded-md  overflow-auto'>
                                     <DayPicker
@@ -137,16 +135,17 @@ const EventCreateDialog = () => {
                                         selected={eventDates}
                                         onSelect={setEventsDates}
                                         footer={footer}
+                                        className='min-h-12 m-1'
                                     />
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>候補日</Label>
                                 <div className='whitespace-nowrap'>
-                                    <Textarea readOnly className="w-full  p-2 border border-gray-300  min-h-12" value={getCandidate()} />
+                                    <Textarea readOnly className="w-full  p-1 border border-gray-300  min-h-4" value={getCandidate()} />
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>メモ</Label>
                                 <div>参加者に連絡しておきたいことを記述</div>
                                 <Textarea
-                                    className="w-full min-h-12"
+                                    className="w-full p-1 border border-gray-300  min-h-4"
                                     placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
                                     value={eventMemo}
                                     onChange={(e) => setEventMemo(e.target.value)}
