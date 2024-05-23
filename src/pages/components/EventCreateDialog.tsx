@@ -53,6 +53,11 @@ const EventCreateDialog = () => {
 
     //■  event
     const clearButton = () => setEventsDates(initialDays);
+    const getCandidate = () => {
+        return eventDates?.map((day) => (
+            `${day.getMonth() + 1}/${day.getDate()}(${["日", "月", "火", "水", "木", "金", "土"][day.getDay()]})`
+        )).join(', ')
+    }
 
     // イベント作成ボタン押下
     const eventCreateButtonClick = async () => {
@@ -90,14 +95,11 @@ const EventCreateDialog = () => {
     //イベント作成ダイアログfooter
     const footer =
         eventDates && eventDates.length > 0 ? (
-            <div className='grid-cols-2 flex'>
-                <div className='flex-3 text-left'>選択日数： {eventDates.length} 日.</div>
-                <div className='flex-1 text-right'>
-                    <Button onClick={clearButton}>clear</Button>
-                </div>
+            <div className="flex justify-end">
+                <Button onClick={clearButton} className=' pxy-0  h-40px'>clear</Button>
             </div>
         ) : (
-            <></>
+            <div className='h-9 px-4 py-2 pxy-0 h-40px'></div>
         );
 
     return (
@@ -137,20 +139,14 @@ const EventCreateDialog = () => {
                                         footer={footer}
                                     />
                                 </div>
-                                <Label htmlFor="eventName" className=' font-bold'>候補日</Label>
-                                <div className='ml-14 whitespace-nowrap'>
-                                    {eventDates?.map((day, index) => (
-                                        <div key={index} className="inline-block">
-                                            {day.toLocaleDateString()}({["日", "月", "火", "水", "木", "金", "土"][day.getDay()]})
-                                            {index !== (eventDates.length - 1) && ', '}
-                                        </div>
-                                    ))}
+                                <Label htmlFor="eventName" className='font-bold'>候補日</Label>
+                                <div className='whitespace-nowrap'>
+                                    <Textarea readOnly className="w-full  p-2 border border-gray-300" value={getCandidate()} />
                                 </div>
-                                <br />
-                                <Label htmlFor="eventName" className=' font-bold'>メモ</Label>
+                                <Label htmlFor="eventName" className='font-bold'>メモ</Label>
                                 <div>イベントの概要など参加者に連絡しておきたいことを記述することができます。</div>
                                 <Textarea
-                                    className="w-full m-1"
+                                    className="w-full"
                                     placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
                                     value={eventMemo}
                                     onChange={(e) => setEventMemo(e.target.value)}

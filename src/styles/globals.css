@@ -107,7 +107,7 @@ body {
 
 .fixed-button {
   position: fixed;
-  bottom: 20px;
+  bottom: 50px;
   right: 20px;
   padding: 10px 20px; /* ボタンの内側の余白を設定 */
   cursor: pointer; /* カーソルをポインターに設定 */
