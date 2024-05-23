@@ -25,9 +25,6 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# local env files
-.env*.local
-
 # vercel
 .vercel
 
@@ -48,19 +45,17 @@ prisma/migrations/20240423062937_/migration.sql
 prisma/migrations/20240422115948_/migration.sql
 prisma/migrations/20240424050503_init/migration.sql
 prisma/migrations/20240424112826_/migration.sql
-.gitignore
-.gitignore
+
 prisma/migrations/20240424225731_init/migration.sql
-.gitignore
+
 prisma/migrations/20240424234939_init/migration.sql
 prisma/migrations/20240430205405_/migration.sql
 prisma/migrations/20240429171028_/migration.sql
 prisma/migrations/20240501063215_/migration.sql
 prisma/migrations/20240508001809_init/migration.sql
 prisma/migrations/20240501063215_/migration.sql
-.gitignore
-.gitignore
+
 prisma/migrations/20240501063215_/migration.sql
 
-.vercel
-.env*.local
+
+
