@@ -133,6 +133,7 @@ const AttendCreateDialog = () => {
                                                         icon={faCircle}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
                                                             'text-slate-200', 'text-slate-600')}`}
+                                                        style={{ width: '16px', height: '16px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
                                                     />
                                                 </TableCell>
@@ -141,6 +142,7 @@ const AttendCreateDialog = () => {
                                                         icon={faDiamond}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
                                                             'text-slate-200', 'text-slate-600')}`}
+                                                        style={{ width: '16px', height: '16px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
                                                     />
                                                 </TableCell>
@@ -149,6 +151,7 @@ const AttendCreateDialog = () => {
                                                         icon={faXmark}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
                                                             'text-slate-200', 'text-slate-600')}`}
+                                                        style={{ width: '16px', height: '16px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
                                                     />
                                                 </TableCell>

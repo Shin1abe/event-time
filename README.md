@@ -186,10 +186,15 @@ const url = process.env.VERCEL_URL
 },
 ssr: true,
 })(App);
-OK npm run build: TODO npm run build: found pages without a React Component as default export in pages/components/ui/alert-dialog
+OK npm run build: npm run build: found pages without a React Component as default export in pages/components/ui/alert-dialog
 OK npm run build:たくさんのコンパイルエラー
 OK VERCELプロジェクト→DEPLOY
 OK VERCEL DBに切り替えてローカルも本番も同じにする
-OK TODO npm run build:error - ESLint: Failed to load plugin '@typescript-eslint' declared in '.eslintrc.json': Cannot find module '@typescript-eslint/eslint-plugin' Require stack: - C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json Referenced from: C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json
+OK npm run build:error - ESLint: Failed to load plugin '@typescript-eslint' declared in '.eslintrc.json': Cannot find module '@typescript-eslint/eslint-plugin' Require stack: - C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json Referenced from: C:\Fujitsu\MyPrj\nextjs\event-time\.eslintrc.json
 TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
 TODO VSCODE npm run start：Access to fetch at 'https://event-time.vercel.app/api/trpc/EventDate_findWhereMany,EventUserSel_findWhereMany,EventUser_findWhereMany,Event_findWhereMany?batch=1&input=%7B%220%22%3A%7B%22eventId%22%3A%22clwik2g5k00003r6upc7ycdb8%22%7D%2C%221%22%3A%7B%22eventId%22%3A%22clwik2g5k00003r6upc7ycdb8%22%7D%2C%222%22%3A%7B%22eventId%22%3A%22clwik2g5k00003r6upc7ycdb8%22%7D%2C%223%22%3A%7B%22eventId%22%3A%22clwik2g5k00003r6upc7ycdb8%22%7D%7D' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
+TODO 利用者自身の登録情報削除
+TODO 登録・更新画面での2度実行防ぐ
+TODO 登録・更新でエラー、必須入力チェック
+TODO 背景色
+TODO 管理者情報のローカル保存

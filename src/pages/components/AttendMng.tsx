@@ -94,7 +94,8 @@ const AttendMng = () => {
                                                         user.userSel === "○" ? faCircle :
                                                             user.userSel === "◇" ? faDiamond :
                                                                 user.userSel === "×" ? faXmark : faMinus}
-                                                    className={"cursor-pointer  text-slate-600 p-6"}
+                                                    className={"cursor-pointer  text-slate-600"}
+                                                    style={{ width: '16px', height: '16px' }}
                                                 />
                                             </TableCell>
                                         ))}

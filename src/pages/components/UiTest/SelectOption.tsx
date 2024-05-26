@@ -39,6 +39,7 @@ const SelectOption: React.FC = () => {
                             <FontAwesomeIcon
                                 icon={faCircle}
                                 className={`cursor-pointer ${getClassName(data.eventDate, '○', 'text-blue-200', 'text-blue-600')}`}
+                                style={{ width: '16px', height: '16px' }}
                                 onClick={() => handleSelection(data.eventDate, '○')}
                             />
                         </TableCell>
@@ -46,6 +47,7 @@ const SelectOption: React.FC = () => {
                             <FontAwesomeIcon
                                 icon={faDiamond}
                                 className={`cursor-pointer ${getClassName(data.eventDate, '◇', 'text-yellow-200', 'text-yellow-600')}`}
+                                style={{ width: '16px', height: '16px' }}
                                 onClick={() => handleSelection(data.eventDate, '◇')}
                             />
                         </TableCell>
@@ -53,6 +55,7 @@ const SelectOption: React.FC = () => {
                             <FontAwesomeIcon
                                 icon={faXmark}
                                 className={`cursor-pointer ${getClassName(data.eventDate, '×', 'text-red-200', 'text-red-600')}`}
+                                style={{ width: '16px', height: '16px' }}
                                 onClick={() => handleSelection(data.eventDate, '×')}
                             />
                         </TableCell>
