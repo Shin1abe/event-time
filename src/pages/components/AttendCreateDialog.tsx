@@ -28,6 +28,7 @@ const AttendCreateDialog = () => {
     const [userMemo, setUserMemo] = useState<string>("");
     const [isEeventUserRftch, setIsEeventUserRftch] = useState<boolean>(false);
     const [selections, setSelections] = useState<Selections>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     //■  trcp  
     const { data: eventDate } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
@@ -73,6 +74,7 @@ const AttendCreateDialog = () => {
     const onClickAtendCreate = useCallback(async () => {
         if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
         if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
+        setIsSubmitting(true);
         await EventUserCreateMutation.mutate({
             eventId: eventIdtmp,
             userName: userName,
@@ -97,6 +99,7 @@ const AttendCreateDialog = () => {
             });
             location.reload();
         }
+        setIsSubmitting(false);
     }, [isEeventUserRftch, eventUsers, eventDate]);
 
     return (
@@ -173,7 +176,11 @@ const AttendCreateDialog = () => {
                         </div>
                     </DialogDescription>
                     <DialogFooter>
-                        <Button onClick={onClickAtendCreate}>出欠を登録する</Button>
+                        <Button
+                            onClick={onClickAtendCreate}
+                            disabled={isSubmitting}>
+                            {isSubmitting ? '送信中...' : '出欠を登録する'}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

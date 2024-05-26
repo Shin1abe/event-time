@@ -26,11 +26,9 @@ const EventCreateDialog = () => {
     const [eventName, setEventName] = useState<string>("");
     const [eventMemo, setEventMemo] = useState<string>("");;
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(initialDays);
-    const [isSubmitting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     //■  trpc
-    // const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
-    // const { data: etEventDate, error } = trpc.useQuery(['EventDate_findMany']);
     const eventCreateMutation = trpc.useMutation(["Event_create"]);
     const eventCreate = async (newEvent: {
         eventId: string;
@@ -63,6 +61,7 @@ const EventCreateDialog = () => {
     const eventCreateButtonClick = async () => {
         if (eventName.length === 0) { alert("イベント名が設定されていません"); return }//TODO TOAST
         if (eventDates?.length === 0) { alert("日程候補が設定されていません"); return }//TODO TOAST
+        setIsSubmitting(true);
         try {
             const eventid = cuid();
             const urlParts = new URL(window.location.href);
@@ -89,6 +88,8 @@ const EventCreateDialog = () => {
             });
         } catch (error) {
             console.error("エラーが発生しました:", error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -159,7 +160,7 @@ const EventCreateDialog = () => {
                             onClick={eventCreateButtonClick}
                             disabled={isSubmitting}
                         >
-                            イベント作成
+                            {isSubmitting ? '送信中...' : 'イベント作成'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import 'react-day-picker/dist/style.css';
@@ -18,6 +18,7 @@ const EventDeleteDialog = () => {
     const router = useRouter();
     const { eventid } = router.query;
     let eventIdtmp = ""; if (typeof eventid === "string") { eventIdtmp = eventid };
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     //■  trpc query
     // [Event_findWhereMany]
@@ -49,6 +50,7 @@ const EventDeleteDialog = () => {
         });
     }, []);
     const onClickDelete = useCallback(async () => {
+        setIsSubmitting(true);
         etEventUserSels?.map(async (d) => {
             await EventUserSelDeleteMutation.mutate({ id: d.id });
         })
@@ -61,13 +63,14 @@ const EventDeleteDialog = () => {
         etEvents?.map(async (d) => {
             await EventDeleteMutation.mutate({ eventId: eventIdtmp });
         })
-
+        setIsSubmitting(false);
         router.push({
             pathname: '/',
             query: { eventid: eventid },
         }).then(() => {
             router.reload();
         });
+
     }, []);
 
     return (
@@ -82,8 +85,16 @@ const EventDeleteDialog = () => {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={onClickCancell}>キャンセル</AlertDialogCancel>
-                        <AlertDialogAction onClick={onClickDelete}>削除</AlertDialogAction>
+                        <AlertDialogCancel
+                            onClick={onClickCancell}
+                            disabled={isSubmitting} >
+                            キャンセル
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={onClickDelete}
+                            disabled={isSubmitting} >
+                            {isSubmitting ? '送信中...' : '削除'}
+                        </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

@@ -54,6 +54,8 @@ const AttendUpdateDialog = () => {
         });
         return initialSelections;
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     useEffect(() => {
         console.log("useEffect.eventUser", eventUser)
         console.log("useEffect.eventUserSel", eventUserSel)
@@ -97,6 +99,7 @@ const AttendUpdateDialog = () => {
         console.log("onClickAtendCreate_userName", userName)
         if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
         if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
+        setIsSubmitting(true);
         await EventUserUpdateMutation.mutate({
             userId: userIdtmp,
             userName: userName,
@@ -122,6 +125,7 @@ const AttendUpdateDialog = () => {
                 router.reload();
             });
         }
+        setIsSubmitting(false);
     }, [isEeventUserRftch, eventUserSel]);
 
     return (
@@ -200,7 +204,11 @@ const AttendUpdateDialog = () => {
                     </DialogDescription>
 
                     <DialogFooter>
-                        <Button onClick={onClickAtendUpdate}>出欠を更新する</Button>
+                        <Button
+                            onClick={onClickAtendUpdate}
+                            disabled={isSubmitting}>
+                            {isSubmitting ? '送信中...' : '出欠を更新する'}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

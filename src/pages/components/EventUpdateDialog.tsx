@@ -60,7 +60,7 @@ const EventUpdateDialog = () => {
     const [eventName, setEventName] = useState<string>(etEvent?.eventName as string);
     const [eventMemo, setEventMemo] = useState<string>(etEvent?.eventMemo as string);
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(eventDateArray);
-    const [isSubmitting,] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     //■uttil
     //画面選択eventDates.日付 === etEventUserSels.eventDateは保持し、それ以外のデータは除く
@@ -81,6 +81,7 @@ const EventUpdateDialog = () => {
 
     // イベント更新ボタン押下
     const eventUpdateButtonClick = useCallback(async () => {
+        setIsSubmitting(true);
         if (eventName?.length === 0) { alert("イベント名が設定されていません"); return }//TODO TOAST
         if (eventDates?.length === 0) { alert("日程候補が設定されていません"); return }//TODO TOAST
         try {
@@ -142,6 +143,8 @@ const EventUpdateDialog = () => {
             });
         } catch (error) {
             console.error("エラーが発生しました:", error);
+        } finally {
+            setIsSubmitting(false);
         }
     }, [eventName, eventDates]);
 
@@ -213,7 +216,7 @@ const EventUpdateDialog = () => {
                             type="submit"
                             onClick={eventUpdateButtonClick}
                             disabled={isSubmitting}>
-                            イベント更新
+                            {isSubmitting ? '送信中...' : 'イベント更新'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
