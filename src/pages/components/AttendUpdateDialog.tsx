@@ -87,6 +87,13 @@ const AttendUpdateDialog = () => {
         console.log("selections", selections);
     };
 
+    const onClickAtendDelete = useCallback(() => {
+        router.push({
+            pathname: '/components/AttendDeleteDialog',
+            query: { eventid: eventIdtmp, userid: userIdtmp },
+        })
+    }, []);
+
 
     //■  util
     const getClassName = (date: string, selection: '○' | '◇' | '×', baseClass: string, selectedClass: string) => {
@@ -205,11 +212,19 @@ const AttendUpdateDialog = () => {
                     </DialogDescription>
 
                     <DialogFooter>
-                        <Button
-                            onClick={onClickAtendUpdate}
-                            disabled={isSubmitting}>
-                            {isSubmitting ? '送信中...' : '出欠を更新する'}
-                        </Button>
+                        <div className="flex flex-col space-y-2">
+                            <Button
+                                onClick={onClickAtendUpdate}
+                                disabled={isSubmitting}>
+                                {isSubmitting ? '送信中...' : '出欠を更新する'}
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={onClickAtendDelete}
+                                disabled={isSubmitting}>
+                                {isSubmitting ? '送信中...' : '出欠を削除する'}
+                            </Button>
+                        </div>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
