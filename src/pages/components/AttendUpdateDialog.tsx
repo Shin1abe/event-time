@@ -10,6 +10,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/ui/table"
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Input } from '@/ui/input';
 
 // selections の型定義
 interface Selections {
@@ -139,7 +140,7 @@ const AttendUpdateDialog = () => {
                         <div className="flex-auto">
                             <Label htmlFor="userName" className='text-base font-bold' >名前</Label>
                             <Badge className='ml-1 p-0.5'>必須</Badge>
-                            <input
+                            <Input
                                 type='text'
                                 id="userName"
                                 className="col-span-3 m-1"
