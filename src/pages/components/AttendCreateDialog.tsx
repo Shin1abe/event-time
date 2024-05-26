@@ -60,7 +60,6 @@ const AttendCreateDialog = () => {
             ...prev,
             [date]: selection,
         }));
-        console.log("selections", selections);
     };
 
     //■  util
@@ -68,19 +67,22 @@ const AttendCreateDialog = () => {
         return selections[date] === selection ? selectedClass : baseClass;
     };
 
-
     // イベント作成ボタン押下
     // reactの再レンダリングで相当苦労
     const onClickAtendCreate = useCallback(async () => {
+        console.log("selections", selections);
+        console.log("Object.keys(selections).length", Object.keys(selections).length)
         if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
         if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
+        if (Object.keys(selections).length < 3) { alert("日程候補が設定されていません"); return }//TODO TOAST
+
         setIsSubmitting(true);
         await EventUserCreateMutation.mutate({
             eventId: eventIdtmp,
             userName: userName,
             userMemo: userMemo,
         });
-    }, [userName, userMemo]);
+    }, [userName, userMemo, selections]);
 
     // reactの再レンダリングで相当苦労
     useEffect(() => {

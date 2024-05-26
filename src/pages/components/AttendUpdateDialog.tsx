@@ -99,6 +99,7 @@ const AttendUpdateDialog = () => {
         console.log("onClickAtendCreate_userName", userName)
         if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
         if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
+        if (Object.keys(selections).length < 3) { alert("日程候補が設定されていません"); return }//TODO TOAST
         setIsSubmitting(true);
         await EventUserUpdateMutation.mutate({
             userId: userIdtmp,
