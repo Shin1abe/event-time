@@ -59,6 +59,7 @@
     "dayjs": "^1.11.11",
     "embla-carousel-react": "^8.0.2",
     "input-otp": "^1.2.4",
+    "localforage": "^1.10.0",
     "lucide-react": "^0.368.0",
     "next": "12.1.6",
     "next-themes": "^0.3.0",

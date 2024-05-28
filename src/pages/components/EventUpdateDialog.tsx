@@ -11,6 +11,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Textarea } from '../../ui/textarea'
 import { Label } from '../../ui/label'
 import { EventDate, EventUserSel } from "@prisma/client";
+import { lEventDate } from '@/type/EventType';
+import { lStrageCrud } from '@/utils/LStrageCRUD';
 // import { useEtContext } from '../providers/EtProvider';
 
 
@@ -132,6 +134,19 @@ const EventUpdateDialog = () => {
                         userSel: d.userSel,
                     });
                 });
+                //TODO ★ローカルファイルに対象イベント更新
+                let eventdates: lEventDate[] = [];
+                if (eventDates) {
+                    eventdates = eventDates?.map((eventdate) => {
+                        return { eventId: eventid, eventDate: new Date(eventdate) }
+                    });
+                }
+                const data = lStrageCrud(
+                    'UPD',
+                    eventIdtmp,
+                    { eventId: eventIdtmp, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo },
+                    eventdates
+                )
             } catch (err) {
                 console.log(err)
             }

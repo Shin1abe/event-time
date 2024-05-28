@@ -6,11 +6,10 @@ import { Badge } from '../../ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
 import { Label } from '../../ui/label'
 import { Table, TableBody, TableCell, TableRow } from "@/ui/table"
-// import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
+import { Input } from '@/ui/input';
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { Input } from '@/ui/input';
 
 // selections の型定義
 interface Selections {
@@ -27,10 +26,8 @@ const AttendUpdateDialog = () => {
     //■  trcp  Query
     const { data: eventUser, refetch: eventUserRefetch } =
         trpc.useQuery(["EventUser_findUnique", { userId: userIdtmp }]);
-    // console.log("EventUser_findUnique.eventUser", eventUser)
     const { data: eventUserSel, refetch: eventUserSelRefetch } =
         trpc.useQuery(["EventUserSel_findWhereManyForUserId", { userId: userIdtmp }]);
-    // console.log("EventUserSel_findWhereManyForUserId.eventUserSel", eventUserSel)
 
     //■  trcp  mutation
     const EventUserSelUpdateMutation = trpc.useMutation(["EventUserSel_update"], {
@@ -84,7 +81,6 @@ const AttendUpdateDialog = () => {
             ...prev,
             [date]: selection,
         }));
-        console.log("selections", selections);
     };
 
     const onClickAtendDelete = useCallback(() => {
@@ -103,10 +99,8 @@ const AttendUpdateDialog = () => {
     // イベント作成ボタン押下
     // reactの再レンダリングで相当苦労
     const onClickAtendUpdate = useCallback(async () => {
-        console.log("onClickAtendCreate_userName", userName)
         if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
         if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
-        if (Object.keys(selections).length < 3) { alert("日程候補が設定されていません"); return }//TODO TOAST
         setIsSubmitting(true);
         await EventUserUpdateMutation.mutate({
             userId: userIdtmp,
@@ -125,7 +119,7 @@ const AttendUpdateDialog = () => {
                     userSel: selections[new Date(d.eventDate).toISOString()],
                 });
             });
-            // location.reload();
+
             router.push({
                 pathname: '/components/AttendMng',
                 query: { eventid: eventIdtmp },

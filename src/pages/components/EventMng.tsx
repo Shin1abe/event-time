@@ -1,18 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import 'react-day-picker/dist/style.css';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
 import { Badge } from '../../ui/badge'
 import { Event, EventDate } from "@prisma/client";
+import { lEvent, lEventDate } from '@/type/EventType';
 import EventCreateDialog from './EventCreateDialog';
 import { formatDateWithDayOfWeek } from '@/utils/utils';
+import * as localforage from 'localforage';
 import { useEtContext } from '../../providers/EtProvider';
+import { lStrageCrud } from '@/utils/LStrageCRUD';
+// import { lStrageCrud } from '@/utils/LStrageCRUD';
 
 const EventMng = () => {
   //■  initial
   const router = useRouter();
   // const [mode, setMode] = useContext(EventTimeContext)
+  // const etLf = localforage.createInstance(
+  //   { driver: localforage.LOCALSTORAGE, name: 'EventTime', storeName: 'et', version: 1 });
+
 
   //■  useEtContext
   const { setIsCoordinator } = useEtContext()
@@ -22,8 +29,27 @@ const EventMng = () => {
 
 
   //■  trpc
-  const { data: etEvent, refetch } = trpc.useQuery(["Event_findMany"]);
-  const { data: etEventDate, error } = trpc.useQuery(['EventDate_findMany']);
+  //TODO ★ローカルファイル読み込みに変更
+  const [lEvent, setlEvent] = useState<lEvent[] | null>(null);
+  const [lEventDate, setlEventDate] = useState<lEventDate[] | null>(null);
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const data = await lStrageCrud("RED")
+        if (data) {
+          setlEvent(data.levents);
+          setlEventDate(data.leventDates);
+        } else {
+          console.log('イベントが見つかりませんでした');
+        }
+      } catch (err) {
+        console.error('データの取得中にエラーが発生しました:', err);
+      }
+    };
+    fetchEvent();
+  }, []);
+  // const { data: lEvent, refetch } = trpc.useQuery(["Event_findMany"]);
+  // const { data: lEventDate, error } = trpc.useQuery(['EventDate_findMany']);
 
   //■  event
   const handleCardClick = (eventId: string) => {
@@ -40,18 +66,18 @@ const EventMng = () => {
       <hr />
       <h1 className='m-1 text-2xl+ font-bold'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
-        {etEvent?.map((eventdata: Event, index: number) => (
+        {lEvent?.map((eventdata: lEvent, index: number) => (
           <Card className='m-3 bg-blue-50' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
             <CardHeader>
               <CardTitle ><Badge className='mb-2'>イベント作成</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
             </CardHeader>
             <CardContent>
               <p className='ml-3'>
-                {etEventDate?.filter((edd: EventDate) => edd.eventId === eventdata.eventId)
-                  .map((edd: EventDate, index: any) => (
+                {lEventDate?.filter((edd: lEventDate) => edd.eventId === eventdata.eventId)
+                  .map((edd: lEventDate, index: any) => (
                     <React.Fragment key={index}>
                       {formatDateWithDayOfWeek(edd.eventDate)}
-                      {index !== (etEventDate.filter((edd: EventDate) => edd.eventId === eventdata.eventId)).length - 1 && ', '}
+                      {index !== (lEventDate.filter((edd: lEventDate) => edd.eventId === eventdata.eventId)).length - 1 && ', '}
                     </React.Fragment>
                   ))}
               </p>
@@ -66,5 +92,4 @@ const EventMng = () => {
     </div >
   )
 }
-
 export default EventMng

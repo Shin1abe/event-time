@@ -12,6 +12,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "../../ui/alert-dialog"
+import { lStrageCrud } from '@/utils/LStrageCRUD';
 
 const EventDeleteDialog = () => {
     //■  initial
@@ -49,6 +50,7 @@ const EventDeleteDialog = () => {
             router.reload();
         });
     }, []);
+
     const onClickDelete = useCallback(async () => {
         setIsSubmitting(true);
         etEventUserSels?.map(async (d) => {
@@ -63,6 +65,9 @@ const EventDeleteDialog = () => {
         etEvents?.map(async (d) => {
             await EventDeleteMutation.mutate({ eventId: eventIdtmp });
         })
+        //ローカルファイルに対象イベント削除
+        const data = lStrageCrud('DEL', eventIdtmp)
+
         setIsSubmitting(false);
         router.push({
             pathname: '/',

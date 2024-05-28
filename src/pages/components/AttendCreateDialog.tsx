@@ -6,7 +6,6 @@ import { Badge } from '../../ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
 import { Label } from '../../ui/label'
 import { Table, TableBody, TableCell, TableRow } from "@/ui/table"
-//import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -49,7 +48,6 @@ const AttendCreateDialog = () => {
     //■  event
     const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserName(e.target.value);
-        console.log("onChangeUserName:" + userName)
     };
     const onChangeUserMemo = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setUserMemo(e.target.value);
@@ -70,11 +68,11 @@ const AttendCreateDialog = () => {
     // イベント作成ボタン押下
     // reactの再レンダリングで相当苦労
     const onClickAtendCreate = useCallback(async () => {
-        console.log("selections", selections);
-        console.log("Object.keys(selections).length", Object.keys(selections).length)
         if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
         if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
-        if (Object.keys(selections).length < 3) { alert("日程候補が設定されていません"); return }//TODO TOAST
+        if (eventDate) {
+            if (Object.keys(selections).length < eventDate.length) { alert("日程候補が設定されていません"); return }//TODO TOAST
+        }
 
         setIsSubmitting(true);
         await EventUserCreateMutation.mutate({
@@ -88,9 +86,7 @@ const AttendCreateDialog = () => {
     useEffect(() => {
         if (eventUsers && eventDate && isEeventUserRftch) {
             eventUsers.forEach(euss => {
-                console.log("userId= " + euss.userId);
                 eventDate.forEach(async (d) => {
-                    console.log("eventDate= " + d.eventDate);
                     await EventUserSelCreateMutation.mutate({
                         eventId: eventIdtmp,
                         eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
@@ -102,7 +98,7 @@ const AttendCreateDialog = () => {
             location.reload();
         }
         setIsSubmitting(false);
-    }, [isEeventUserRftch, eventUsers, eventDate]);
+    }, [isEeventUserRftch, eventUsers, eventDate, selections, eventIdtmp]);
 
     return (
         // {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
@@ -171,7 +167,7 @@ const AttendCreateDialog = () => {
                             <textarea
                                 cols={50}
                                 className="w-full m-1"
-                                placeholder="是非参加します。"
+                                // placeholder="コメントを記入してください。"
                                 onChange={onChangeUserMemo}
                                 rows={3}
                                 value={userMemo} />
