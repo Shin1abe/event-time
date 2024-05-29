@@ -101,6 +101,9 @@ export const serverRouter = trpc
         where: {
           eventId: input.eventId,
         },
+        orderBy: {
+          eventDate: "asc"
+        }
       });
     },
   })
@@ -262,6 +265,9 @@ export const serverRouter = trpc
         where: {
           eventId: input.eventId,
         },
+        orderBy: {
+          eventDate: "asc"
+        }
       });
     },
   })
@@ -274,6 +280,9 @@ export const serverRouter = trpc
         where: {
           userId: input.userId,
         },
+        orderBy: {
+          eventDate: "asc"
+        }
       });
     },
   })

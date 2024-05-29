@@ -202,9 +202,11 @@ ok 登録・更新画面での2度実行防ぐ
 ok 登録・更新でエラー、必須入力チェック
 OK ＤＢコネクション数
 OK 利用者自身の登録情報削除
+ok 管理者情報のローカル保存
+ok ALERT→TOAST?
+ok 利用者一覧の日付が昇順になっていない。
 TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
 TODO VSCODE npm run start：Access to fetch at 'https://event-time.vercel.app/api/trpc/EventDate_findWhereMany,EventUserSel_findWhereMany,EventUser_findWhereMany,
 TODO 背景色
-ok 管理者情報のローカル保存
-ok ALERT→TOAST?
-TODO 利用者一覧の日付が昇順になっていない。
+TODO ダイアログで×ボタン無効
+TODO イベント更新でDB更新不具合

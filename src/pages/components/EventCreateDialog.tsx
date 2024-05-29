@@ -4,16 +4,12 @@ import { trpc } from "@/utils/trpc";
 import cuid from 'cuid';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-
 import { Button } from '../../ui/button'
 import { Input } from '../../ui/input'
 import { Badge } from '../../ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
 import { Textarea } from '../../ui/textarea'
 import { Label } from '../../ui/label'
-import * as localforage from 'localforage';
-// import { Event, EventDate, EventUser, EventUserSel } from "@prisma/client";
-
 import { useEtContext } from '../../providers/EtProvider';
 import { lStrageCrud } from '@/utils/LStrageCRUD';
 import { lEventDate } from '@/type/EventType';
@@ -22,7 +18,6 @@ const EventCreateDialog = () => {
     //■  initial
     const router = useRouter();
     const initialDays: Date[] = [];
-    // const etLf = localforage.createInstance({ driver: localforage.LOCALSTORAGE, name: 'EventTime', storeName: 'et', version: 1 });
 
     //■  useEtContext
     const { setIsCoordinator, setCurentEventId } = useEtContext()
@@ -87,23 +82,18 @@ const EventCreateDialog = () => {
             })
             setCurentEventId(eventid)
             setIsCoordinator(true)
-            //TODO ★ローカルファイルに対象イベント追記追記になっていない
-            // etLf.setItem("event", [{ eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo }])
             let eventdates: lEventDate[] = [];
             if (eventDates) {
                 eventdates = eventDates?.map((eventdate) => {
                     return { eventId: eventid, eventDate: new Date(eventdate) }
                 });
             }
-            // etLf.setItem("eventDates", eventdates)
             const data = lStrageCrud(
                 'CRT',
                 eventid,
                 { eventId: eventid, eventName: eventName, eventUrl: eventurl, eventMemo: eventMemo },
                 eventdates
             )
-
-
             router.push({
                 pathname: '/components/AttendMng',
                 query: { eventid: eventid },

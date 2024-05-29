@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-
 import { Button } from '../../ui/button'
 import { Input } from '../../ui/input'
 import { Badge } from '../../ui/badge'
@@ -13,7 +12,6 @@ import { Label } from '../../ui/label'
 import { EventDate, EventUserSel } from "@prisma/client";
 import { lEventDate } from '@/type/EventType';
 import { lStrageCrud } from '@/utils/LStrageCRUD';
-// import { useEtContext } from '../providers/EtProvider';
 
 
 const EventUpdateDialog = () => {
@@ -135,7 +133,7 @@ const EventUpdateDialog = () => {
                         userSel: d.userSel,
                     });
                 });
-                //TODO ★ローカルファイルに対象イベント更新
+                //ローカルファイルに対象イベント更新
                 let eventdates: lEventDate[] = [];
                 if (eventDates) {
                     eventdates = eventDates?.map((eventdate) => {

@@ -4,22 +4,7 @@ import * as localforage from 'localforage';
 // ローカルストレージに管理者として起票したエベント情報をCRUD
 //IN    :mode,eventId,現在のeventidに対するデータ（lEvent,lEventDate[]）
 //OUT   :data={levents:lEvent[],leventDates:lEventDate[]}
-// export const LStrageCRUD = () => {
-//インスタンス生成
-// const etLf = localforage.createInstance({ driver: localforage.LOCALSTORAGE, name: 'EventTime', storeName: 'et', version: 1 });
-//全格納データ（lEvent[],lEventDate[]）読み込み（共通）
-//REDの場合
-// 処理後のデータを返却へ
-//CRT場合
-// 現在のeventidに対するデータを読み込んだ格納データに追加
-//UPDの場合（現在のeventidに対するデータを格納データに対して更新）
-// 現在のeventidに対するデータを読み込んだ格納データをeventidをキーにして更新
-//DELの場合（現在のeventidに対するデータを格納データから削除）
-// 現在のeventidをキーにして読み込んだ格納データから削除
-//処理後のデータを返却
-// data={levents:lEvent[],leventDates:lEventDate[]}
 
-// }
 export const lStrageCrud = async (
     mode: 'CRT' | 'RED' | 'UPD' | 'DEL',
     eventId?: string,
@@ -52,6 +37,7 @@ export const lStrageCrud = async (
                     // 現在のeventIdに対するデータを読み込んだ格納データに追加
                     console.log('新しいイベントを作成中');
                     updatedEvents.push(eventData);
+                    eventDateData.sort((a, b) => a.eventDate.getTime() - b.eventDate.getTime());
                     updatedEventDates.push(...eventDateData);
                 }
                 break;
@@ -65,6 +51,7 @@ export const lStrageCrud = async (
                     // 現在のeventIdに対するデータを格納データに対して更新
                     console.log('イベントを更新中');
                     updatedEvents = updatedEvents.map(ev => ev.eventId === eventId ? eventData : ev);
+                    eventDateData.sort((a, b) => a.eventDate.getTime() - b.eventDate.getTime());
                     updatedEventDates = updatedEventDates.filter(ed => ed.eventId !== eventId).concat(eventDateData);
                 }
                 break;
