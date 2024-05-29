@@ -206,4 +206,5 @@ TODO npm run build: Warning: You have opted-out of Automatic Static Optimization
 TODO VSCODE npm run start：Access to fetch at 'https://event-time.vercel.app/api/trpc/EventDate_findWhereMany,EventUserSel_findWhereMany,EventUser_findWhereMany,
 TODO 背景色
 ok 管理者情報のローカル保存
-TODO ALERT→TOAST?
+ok ALERT→TOAST?
+TODO 利用者一覧の日付が昇順になっていない。

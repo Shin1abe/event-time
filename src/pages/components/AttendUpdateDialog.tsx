@@ -52,6 +52,8 @@ const AttendUpdateDialog = () => {
         return initialSelections;
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
 
     useEffect(() => {
         console.log("useEffect.eventUser", eventUser)
@@ -99,8 +101,7 @@ const AttendUpdateDialog = () => {
     // イベント作成ボタン押下
     // reactの再レンダリングで相当苦労
     const onClickAtendUpdate = useCallback(async () => {
-        if (userName.length === 0) { alert("名前が設定されていません"); return }//TODO TOAST
-        if (eventIdtmp.length === 0) { alert("eventIdが設定されていません"); return }//TODO TOAST
+        if (userName.length === 0) { setError("名前を設定してください"); return }
         setIsSubmitting(true);
         await EventUserUpdateMutation.mutate({
             userId: userIdtmp,
@@ -141,8 +142,8 @@ const AttendUpdateDialog = () => {
                     <DialogHeader>
                         <DialogTitle>出欠表入力</DialogTitle>
                     </DialogHeader>
-
                     <DialogDescription>
+                        {error && <div className="text-red-600">{error}</div>}
                         <div className="flex-auto">
                             <Label htmlFor="userName" className='text-base font-bold' >名前</Label>
                             <Badge className='ml-1 p-0.5'>必須</Badge>

@@ -32,6 +32,7 @@ const EventCreateDialog = () => {
     const [eventMemo, setEventMemo] = useState<string>("");;
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(initialDays);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     //■  trpc
     const eventCreateMutation = trpc.useMutation(["Event_create"]);
@@ -64,8 +65,8 @@ const EventCreateDialog = () => {
 
     // イベント作成ボタン押下
     const eventCreateButtonClick = async () => {
-        if (eventName.length === 0) { alert("イベント名が設定されていません"); return }//TODO TOAST
-        if (eventDates?.length === 0) { alert("日程候補が設定されていません"); return }//TODO TOAST
+        if (eventName.length === 0) { setError("イベント名を設定してください。"); return }
+        if (eventDates?.length === 0) { setError("日程候補日を設定してください。"); return }
         setIsSubmitting(true);
         try {
             const eventid = cuid();
@@ -136,6 +137,7 @@ const EventCreateDialog = () => {
                         <DialogTitle>イベント作成</DialogTitle>
                     </DialogHeader>
                     <DialogDescription>
+                        {error && <div className="text-red-600">{error}</div>}
                         <div className="flex-auto w-full">
                             <div className="flex-auto" >
                                 <Label htmlFor="eventName" className=' font-bold' >イベント名</Label>

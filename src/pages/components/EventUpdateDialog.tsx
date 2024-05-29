@@ -63,6 +63,7 @@ const EventUpdateDialog = () => {
     const [eventMemo, setEventMemo] = useState<string>(etEvent?.eventMemo as string);
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(eventDateArray);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     //■uttil
     //画面選択eventDates.日付 === etEventUserSels.eventDateは保持し、それ以外のデータは除く
@@ -83,9 +84,9 @@ const EventUpdateDialog = () => {
 
     // イベント更新ボタン押下
     const eventUpdateButtonClick = useCallback(async () => {
+        if (eventName.length === 0) { setError("イベント名を設定してください。"); return }
+        if (eventDates?.length === 0) { setError("日程候補日を設定してください。"); return }
         setIsSubmitting(true);
-        if (eventName?.length === 0) { alert("イベント名が設定されていません"); return }//TODO TOAST
-        if (eventDates?.length === 0) { alert("日程候補が設定されていません"); return }//TODO TOAST
         try {
             const eventid = eventIdtmp;
             await eventUpdate(
@@ -184,6 +185,7 @@ const EventUpdateDialog = () => {
                         <DialogTitle>イベント更新</DialogTitle>
                     </DialogHeader>
                     <DialogDescription>
+                        {error && <div className="text-red-600">{error}</div>}
                         <div className="flex-auto w-full">
                             <div className="flex-auto">
                                 <Label htmlFor="eventName" className='font-bold'>イベント名</Label>
