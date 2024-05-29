@@ -73,6 +73,7 @@ const AttendUpdateDialog = () => {
     //■  event
     const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserName(e.target.value);
+        setError(null);
     };
     const onChangeUserMemo = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setUserMemo(e.target.value);
@@ -83,6 +84,7 @@ const AttendUpdateDialog = () => {
             ...prev,
             [date]: selection,
         }));
+        setError(null);
     };
 
     const onClickAtendDelete = useCallback(() => {

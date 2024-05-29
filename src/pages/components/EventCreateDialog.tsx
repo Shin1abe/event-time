@@ -58,6 +58,7 @@ const EventCreateDialog = () => {
     //■  event
     const clearButton = () => setEventsDates(initialDays);
     const getCandidate = () => {
+        // setError(null);
         return eventDates?.map((day) => (
             `${day.getMonth() + 1}/${day.getDate()}(${["日", "月", "火", "水", "木", "金", "土"][day.getDay()]})`
         )).join(', ')
@@ -146,7 +147,8 @@ const EventCreateDialog = () => {
                                     id="eventName"
                                     placeholder='イベント名を入力してください'
                                     value={eventName}
-                                    onChange={(e) => setEventName(e.target.value)}
+                                    onChange={(e) => { setEventName(e.target.value); setError(null) }
+                                    }
                                     className="m-1"
                                 />
                                 <Label htmlFor="username" className=' font-bold' >日程候補</Label>
@@ -159,6 +161,7 @@ const EventCreateDialog = () => {
                                         style={{ margin: 0 }} // Add this line
                                         selected={eventDates}
                                         onSelect={setEventsDates}
+                                        onDayClick={() => setError(null)}
                                         footer={footer}
                                         className='min-h-12 m-1'
                                     />

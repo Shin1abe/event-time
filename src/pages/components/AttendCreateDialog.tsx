@@ -49,6 +49,7 @@ const AttendCreateDialog = () => {
     //■  event
     const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserName(e.target.value);
+        setError(null);
     };
     const onChangeUserMemo = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setUserMemo(e.target.value);
@@ -59,6 +60,7 @@ const AttendCreateDialog = () => {
             ...prev,
             [date]: selection,
         }));
+        setError(null);
     };
 
     //■  util

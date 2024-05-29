@@ -193,7 +193,7 @@ const EventUpdateDialog = () => {
                                 <Input
                                     id="eventName"
                                     value={eventName}
-                                    onChange={(e) => setEventName(e.target.value)}
+                                    onChange={(e) => { setEventName(e.target.value); setError(null) }}
                                     defaultValue="イベント名を入力してください"
                                     className="m-1"
                                 />
@@ -209,6 +209,7 @@ const EventUpdateDialog = () => {
                                             style={{ margin: 0 }} // Add this line
                                             selected={eventDates}
                                             onSelect={setEventsDates}
+                                            onDayClick={() => setError(null)}
                                             footer={footer}
                                             className='min-h-12 m-1'
                                         />
