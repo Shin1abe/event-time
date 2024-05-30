@@ -46,9 +46,6 @@ const EventUpdateDialog = () => {
     const eventdateCreateMutation = trpc.useMutation(["EventDate_create"]
         , { onSuccess: () => eventDateRefetch(), }
     );
-    const eventdateCreate = async (newEvent: { eventId: string; eventDate: string; }) => {
-        await eventdateCreateMutation.mutate({ eventId: newEvent.eventId, eventDate: newEvent.eventDate });
-    };
     // [EventDate_delete]
     const EventDateDeleteMutation = trpc.useMutation(["EventDate_delete"]);
     // [EventUserSel_delete]
@@ -87,68 +84,76 @@ const EventUpdateDialog = () => {
         setIsSubmitting(true);
         try {
             const eventid = eventIdtmp;
-            await eventUpdate(
-                { eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo }
-            );
-            try {
-                if (!etEventUserSels || !eventDates) {
-                    console.log("etEventUserSelsまたはeventDatesが定義されていません");
-                    return;
-                }
-                // ■
-                // ■  Event Update
-                // ■
-                console.log("1")
-                await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo })
-                // ------------------------------------------------------------------------
-                // 日程を変更した場合
-                // ・EventeDate：全削除→全追加
-                // ・EventUserSel：全削除、追加は画面選択eventDate === EventUserSel
-                //                 TODO:画面選択したがEventUserSelしたものをレコードとして追加すべきか
-                // ------------------------------------------------------------------------
-                // ■  EventDate Delete
-                console.log("2")
-                eteventDates?.map(async (eventdate) => {
-                    await EventDateDeleteMutation.mutate({ id: eventdate.id });
-                })
-                // ■  EventDate Create
-                console.log("3")
-                eventDates?.map(async (eventdate) => {
-                    await eventdateCreate({ eventId: eventid, eventDate: eventdate.toISOString() });
-                })
-                // ■  EventUserSels Delete
-                console.log("4")
-                // console.log("etEventUserSels",etEventUserSels)
-                etEventUserSels?.map(async (d) => {
-                    await EventUserSelDeleteMutation.mutate({ id: d.id });
-                })
-                // ■  EventUserSels Create
-                console.log("5")
-                const _filterEventUserSels = filterEventUserSels(etEventUserSels, eventDates)
-                _filterEventUserSels?.forEach(async (d: any) => {
-                    await EventUserSelCreateMutation.mutate({
-                        eventId: d.eventId,
-                        eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
-                        userId: d.userId,
-                        userSel: d.userSel,
-                    });
-                });
-                //ローカルファイルに対象イベント更新
-                let eventdates: lEventDate[] = [];
-                if (eventDates) {
-                    eventdates = eventDates?.map((eventdate) => {
-                        return { eventId: eventid, eventDate: new Date(eventdate) }
-                    });
-                }
-                const data = lStrageCrud(
-                    'UPD',
-                    eventIdtmp,
-                    { eventId: eventIdtmp, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo },
-                    eventdates
-                )
-            } catch (err) {
-                console.log(err)
+            if (!etEventUserSels || !eventDates) {
+                console.log("etEventUserSelsまたはeventDatesが定義されていません");
+                return;
             }
+            // ■
+            // ■  Event Update
+            // ■
+            //console.log("1")
+            await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo })
+            // ------------------------------------------------------------------------
+            // 日程を変更した場合
+            // ・EventeDate：全削除→全追加
+            // ・EventUserSel：全削除、追加は画面選択eventDate === EventUserSel
+            //                 TODO:画面選択したがEventUserSelしたものをレコードとして追加すべきか
+            // ------------------------------------------------------------------------
+            // ■  EventDate Delete
+            //console.log("2")
+            if (eteventDates) {
+                await Promise.all(
+                    eteventDates?.map(eventdate => EventDateDeleteMutation.mutate({ id: eventdate.id }))
+                )
+            }
+            // ■  EventDate Create
+            //console.log("3")
+            //console.log('eventDates', eventDates)
+            if (eventDates) {
+                await Promise.all(
+                    eventDates.map(eventdate => eventdateCreateMutation.mutate({ eventId: eventid, eventDate: eventdate.toISOString() }))
+                );
+            }
+            // ■  EventUserSels Delete
+            //console.log("4")
+            // console.log("etEventUserSels",etEventUserSels)
+            if (etEventUserSels) {
+                await Promise.all(etEventUserSels?.map(async (d) => {
+                    EventUserSelDeleteMutation.mutate({ id: d.id });
+                }))
+            }
+            // ■  EventUserSels Create
+            //console.log("5")
+            const _filterEventUserSels = filterEventUserSels(etEventUserSels, eventDates)
+            //console.log('_filterEventUserSels', _filterEventUserSels)
+            if (_filterEventUserSels) {
+                await Promise.all(
+                    _filterEventUserSels.map(async (d: any) => {
+                        return EventUserSelCreateMutation.mutate({
+                            eventId: d.eventId,
+                            eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
+                            userId: d.userId,
+                            userSel: d.userSel
+                        });
+                    })
+                );
+            }
+
+            //ローカルファイルに対象イベント更新
+            let eventdates: lEventDate[] = [];
+            if (eventDates) {
+                eventdates = eventDates?.map((eventdate) => {
+                    return { eventId: eventid, eventDate: new Date(eventdate) }
+                });
+            }
+            console.log("6")
+            const data = lStrageCrud(
+                'UPD',
+                eventIdtmp,
+                { eventId: eventIdtmp, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo },
+                eventdates
+            )
+
             router.push({
                 pathname: '/components/AttendMng',
                 query: { eventid: eventid },

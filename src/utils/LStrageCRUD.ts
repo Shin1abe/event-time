@@ -13,7 +13,7 @@ export const lStrageCrud = async (
 ) => {
     try {
         // インスタンス生成
-        console.log('localforageのインスタンスを初期化中');
+        // console.log('localforageのインスタンスを初期化中');
         const etLf = localforage.createInstance({
             driver: localforage.LOCALSTORAGE,
             name: 'EventTime',
@@ -22,11 +22,11 @@ export const lStrageCrud = async (
         });
 
         // 全格納データ（lEvent[], lEventDate[]）読み込み（共通）
-        console.log('格納データを読み込み中');
+        // console.log('格納データを読み込み中');
         const storedEvents = (await etLf.getItem<lEvent[]>('events')) || [];
         const storedEventDates = (await etLf.getItem<lEventDate[]>('eventDates')) || [];
-        console.log('読み込んだイベント:', storedEvents);
-        console.log('読み込んだイベント日付:', storedEventDates);
+        // console.log('読み込んだイベント:', storedEvents);
+        // console.log('読み込んだイベント日付:', storedEventDates);
 
         let updatedEvents = [...storedEvents];
         let updatedEventDates = [...storedEventDates];
@@ -43,13 +43,13 @@ export const lStrageCrud = async (
                 break;
             case 'RED':
                 // 処理後のデータを返却
-                console.log('RED処理');
+                // console.log('RED処理');
                 // return { levents: storedEvents, leventDates: storedEventDates };
                 break;
             case 'UPD':
                 if (eventData && eventDateData) {
                     // 現在のeventIdに対するデータを格納データに対して更新
-                    console.log('イベントを更新中');
+                    // console.log('イベントを更新中');
                     updatedEvents = updatedEvents.map(ev => ev.eventId === eventId ? eventData : ev);
                     eventDateData.sort((a, b) => a.eventDate.getTime() - b.eventDate.getTime());
                     updatedEventDates = updatedEventDates.filter(ed => ed.eventId !== eventId).concat(eventDateData);
@@ -57,7 +57,7 @@ export const lStrageCrud = async (
                 break;
             case 'DEL':
                 // 現在のeventIdをキーにして読み込んだ格納データから削除
-                console.log('イベントを削除中');
+                // console.log('イベントを削除中');
                 updatedEvents = updatedEvents.filter(ev => ev.eventId !== eventId);
                 updatedEventDates = updatedEventDates.filter(ed => ed.eventId !== eventId);
                 break;
@@ -66,12 +66,12 @@ export const lStrageCrud = async (
         }
 
         // 処理後のデータを保存
-        console.log('更新されたデータを保存中');
+        // console.log('更新されたデータを保存中');
         await etLf.setItem('events', updatedEvents);
         await etLf.setItem('eventDates', updatedEventDates);
 
         // 処理後のデータを返却
-        console.log('更新されたデータを返却中');
+        // console.log('更新されたデータを返却中');
         return { levents: updatedEvents, leventDates: updatedEventDates };
     } catch (error) {
         console.error('lStrageCrudでエラーが発生しました:', error);
