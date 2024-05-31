@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from 'next/router';
 
 const HeaderA = () => {
+  const router = useRouter();
+  const onClickRoot = useCallback(() => {
+    router.push({
+      pathname: '/',
+    });
+  }, []);
   return (
     <div>
-      <header className="py-1" >
+      <header className="py-1" onClick={onClickRoot}>
         <div className="container mx-auto flex justify-between items-center px-8 md:px-14 lg:px-24 w-full">
           <div className="text-lg font-bold">EventTime</div>
           <div className="space-x-12 hidden md:flex items-center">
