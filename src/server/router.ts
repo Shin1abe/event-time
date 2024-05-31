@@ -305,8 +305,7 @@ export const serverRouter = trpc
       userSel: z.string(),
     }),
     resolve: async ({ ctx, input }) => {
-      console.log(" EventUserSel_create Called ");
-
+      console.log(" EventUserSel_create Called:" + input.eventDate + " " + input.userId + " " + input.eventId);
       return await ctx.prisma.eventUserSel.create({
         data: {
           eventId: input.eventId,

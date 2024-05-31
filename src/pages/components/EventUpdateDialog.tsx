@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { DayPicker } from 'react-day-picker';
@@ -34,7 +34,7 @@ const EventUpdateDialog = () => {
     const eteventDates = etEventDates !== undefined && etEventDates.length > 0 ? etEventDates as EventDate[] : [];
     const eventDateArray: Date[] = eteventDates.map(item => new Date(item.eventDate));
     // [EventUserSel_findWhereMany]
-    const { data: etEventUserSels } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: etEventUserSels, refetch: eventUserSelRefetch } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
 
     //■  trpc mustaiton
     //  [Event_update]
@@ -51,23 +51,57 @@ const EventUpdateDialog = () => {
     // [EventUserSel_delete]
     const EventUserSelDeleteMutation = trpc.useMutation(["EventUserSel_delete"]);
     // [EventUserSel_create]
-    const EventUserSelCreateMutation = trpc.useMutation(["EventUserSel_create"]);
+    const EventUserSelCreateMutation = trpc.useMutation(["EventUserSel_create"]
+        , { onSuccess: () => eventUserSelRefetch(), }
+    );
 
-    //■ useState
-    const [eventName, setEventName] = useState<string>(etEvent?.eventName as string);
-    const [eventMemo, setEventMemo] = useState<string>(etEvent?.eventMemo as string);
+    //■ state hooks
+    const [eventName, setEventName] = useState<string | null>(etEvent?.eventName as string);
+    const [eventMemo, setEventMemo] = useState<string | null>(etEvent?.eventMemo as string);
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(eventDateArray);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     //■uttil
-    //画面選択eventDates.日付 === etEventUserSels.eventDateは保持し、それ以外のデータは除く
-    const filterEventUserSels = (etEventUserSels: EventUserSel[], eventDates: Date[]) => {
-        return etEventUserSels.filter(sel => {
+    //eventDatesとetEventUserSelsを日付をキーにマージする。その際、eventDateは保持し、それ以外のデータは除く
+    const filterEventUserSels: (etEventUserSels: EventUserSel[], eventDates: Date[]) => EventUserSel[] = (etEventUserSels, eventDates) => {
+        const samedate: EventUserSel[] = etEventUserSels.filter(sel => {
             const selDate = new Date(sel.eventDate).getTime();
             return eventDates.some(date => new Date(date).getTime() === selDate);
+        }).map(sel => {
+            const eventDateJST = new Date(sel.eventDate).toLocaleString('ja-JP', {
+                timeZone: 'Asia/Tokyo',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            return { ...sel, eventDate: new Date(eventDateJST) };
         });
-    }
+
+        // すべてのユーザーIDを取得
+        const allUserIds = Array.from(new Set(etEventUserSels.map(entry => entry.userId)));
+
+        // 既存のイベント日付を取得
+        const existingEventDates = new Set(etEventUserSels.map(entry => new Date(entry.eventDate).getTime()));
+
+        // eventDatesにしかない日付ごとに新しいレコードを作成して追加
+        const newEntries = eventDates
+            .filter(event => !existingEventDates.has(event.getTime()))
+            .flatMap(event => allUserIds.map(userId => ({
+                id: 0,
+                eventId: eventIdtmp,
+                eventDate: event,
+                userId: userId,
+                userSel: "-",
+                createdAt: new Date(),
+            })));
+        //samedate.map(d => console.log("samedate", d))
+        //newEntries.map(d => console.log("newEntries", d))
+        return [...samedate, ...newEntries];
+    };
 
     //■ event
     const clearButton = () => setEventsDates(initialDays);
@@ -79,7 +113,7 @@ const EventUpdateDialog = () => {
 
     // イベント更新ボタン押下
     const eventUpdateButtonClick = useCallback(async () => {
-        if (eventName.length === 0) { setError("イベント名を設定してください。"); return }
+        if (eventName?.length === 0) { setError("イベント名を設定してください。"); return }
         if (eventDates?.length === 0) { setError("日程候補日を設定してください。"); return }
         setIsSubmitting(true);
         try {
@@ -92,7 +126,7 @@ const EventUpdateDialog = () => {
             // ■  Event Update
             // ■
             //console.log("1")
-            await eventUpdate({ eventId: eventid, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo })
+            await eventUpdate({ eventId: eventid, eventName: eventName as string, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo as string })
             // ------------------------------------------------------------------------
             // 日程を変更した場合
             // ・EventeDate：全削除→全追加
@@ -123,21 +157,24 @@ const EventUpdateDialog = () => {
                 }))
             }
             // ■  EventUserSels Create
-            //console.log("5")
+            console.log("5-start")
             const _filterEventUserSels = filterEventUserSels(etEventUserSels, eventDates)
-            //console.log('_filterEventUserSels', _filterEventUserSels)
+            _filterEventUserSels.map(d => console.log("_filterEventUserSels", d))
+            // etEventUserSels.map(d => console.log("etEventUserSels", d))
+            // console.log('eventDates', eventDates)
             if (_filterEventUserSels) {
-                await Promise.all(
-                    _filterEventUserSels.map(async (d: any) => {
-                        return EventUserSelCreateMutation.mutate({
-                            eventId: d.eventId,
-                            eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
-                            userId: d.userId,
-                            userSel: d.userSel
-                        });
-                    })
-                );
+                // await Promise.all(
+                (_filterEventUserSels.map(async (d: any) => {
+                    console.log("EventUserSelCreateMutation.mutate")
+                    return await EventUserSelCreateMutation.mutate({
+                        eventId: d.eventId,
+                        eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
+                        userId: d.userId,
+                        userSel: d.userSel
+                    });
+                }))
             }
+            console.log("5-end")
 
             //ローカルファイルに対象イベント更新
             let eventdates: lEventDate[] = [];
@@ -146,11 +183,11 @@ const EventUpdateDialog = () => {
                     return { eventId: eventid, eventDate: new Date(eventdate) }
                 });
             }
-            console.log("6")
+            // console.log("6")
             const data = lStrageCrud(
                 'UPD',
                 eventIdtmp,
-                { eventId: eventIdtmp, eventName: eventName, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo },
+                { eventId: eventIdtmp, eventName: eventName as string, eventUrl: etEvent?.eventUrl as string, eventMemo: eventMemo as string },
                 eventdates
             )
 
@@ -165,7 +202,8 @@ const EventUpdateDialog = () => {
         } finally {
             setIsSubmitting(false);
         }
-    }, [eventName, eventDates]);
+    }, [eventName, eventMemo, eventDates, etEventUserSels, eteventDates]);
+    // }, [eventName, eventDates]);
 
     //イベント作成ダイアログfooter
     const footer =
@@ -195,7 +233,7 @@ const EventUpdateDialog = () => {
                                 <Badge className='ml-1'>必須</Badge>
                                 <Input
                                     id="eventName"
-                                    value={eventName}
+                                    value={eventName as string}
                                     onChange={(e) => { setEventName(e.target.value); setError(null) }}
                                     defaultValue="イベント名を入力してください"
                                     className="m-1"
@@ -227,7 +265,7 @@ const EventUpdateDialog = () => {
                                 <Textarea
                                     className="w-full p-1 border border-gray-300  min-h-4"
                                     placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
-                                    value={eventMemo}
+                                    value={eventMemo as string}
                                     onChange={(e) => setEventMemo(e.target.value)} />
                             </div>
                         </div>
