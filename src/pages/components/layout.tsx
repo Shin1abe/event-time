@@ -15,7 +15,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <>
       <Head>
         <title>EventTime</title>
-        <meta name="description" content="Visit www.xxxxxx.xx" />
+        <meta name="description" content="Visit https://event-time.vercel.app/" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-col h-screen">

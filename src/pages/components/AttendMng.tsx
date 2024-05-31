@@ -87,16 +87,17 @@ const AttendMng = () => {
                                             <Button variant="secondary" onClick={() => onClickUserUpdate(user.userId)}>{user.userName}</Button>
                                         </TableCell>
                                         {eventUserSel?.filter(e => e.userId === user.userId).map((user, idx) => (
-                                            <TableCell key={idx} className='text-center p-1'>
-                                                {/* {user.userSel} */}
-                                                <FontAwesomeIcon
-                                                    icon={
-                                                        user.userSel === "○" ? faCircle :
-                                                            user.userSel === "◇" ? faDiamond :
-                                                                user.userSel === "×" ? faXmark : faMinus}
-                                                    className={"cursor-pointer  text-slate-600"}
-                                                    style={{ width: '16px', height: '16px' }}
-                                                />
+                                            <TableCell key={idx} className='p-1'>
+                                                <div className="block mb-1">
+                                                    <FontAwesomeIcon
+                                                        icon={
+                                                            user.userSel === "○" ? faCircle :
+                                                                user.userSel === "◇" ? faDiamond :
+                                                                    user.userSel === "×" ? faXmark : faMinus}
+                                                        className={"cursor-pointer  text-slate-600"}
+                                                        style={{ width: '16px', height: '16px', margin: 'auto' }}
+                                                    />
+                                                </div>
                                             </TableCell>
                                         ))}
                                         <TableCell className='w-96 p-1'>{user.userMemo}</TableCell>
