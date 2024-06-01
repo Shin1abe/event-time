@@ -83,12 +83,16 @@ const AttendMng = () => {
                             <TableBody >
                                 {eventUser?.map((user, index) => (
                                     <TableRow key={index} >
-                                        <TableCell className=' p-1'>
-                                            <Button variant="secondary" onClick={() => onClickUserUpdate(user.userId)}>{user.userName}</Button>
+                                        <TableCell className=' p-0'>
+                                            <Button variant="secondary" onClick={() => onClickUserUpdate(user.userId)}
+                                                className=' p-0 ml-4'
+                                            >
+                                                {user.userName}
+                                            </Button>
                                         </TableCell>
                                         {eventUserSel?.filter(e => e.userId === user.userId).map((user, idx) => (
                                             <TableCell key={idx} className='p-1'>
-                                                <div className="block mb-1">
+                                                <div className="block ">
                                                     <FontAwesomeIcon
                                                         icon={
                                                             user.userSel === "○" ? faCircle :
@@ -100,7 +104,7 @@ const AttendMng = () => {
                                                 </div>
                                             </TableCell>
                                         ))}
-                                        <TableCell className='w-96 p-1'>{user.userMemo}</TableCell>
+                                        <TableCell className='w-96 p-0'>{user.userMemo}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
