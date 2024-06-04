@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { Button } from '../../ui/button'
@@ -68,125 +68,118 @@ const AttendCreateDialog = () => {
         return selections[date] === selection ? selectedClass : baseClass;
     };
 
-
     // イベント作成ボタン押下
-    // reactの再レンダリングで相当苦労
     const onClickAtendCreate = useCallback(async () => {
-        if (userName.length === 0) { setError("名前を設定してください"); return }
-        if (eventDate) {
-            if (Object.keys(selections).length < eventDate.length) { setError("日程候補を設定してください"); return }
+        if (!userName) { setError("名前を設定してください"); return; }
+        if (eventDate && Object.keys(selections).length < eventDate.length) {
+            setError("日程候補を設定してください"); return;
         }
-
         setIsSubmitting(true);
-        await EventUserCreateMutation.mutate({
-            eventId: eventIdtmp,
-            userName: userName,
-            userMemo: userMemo,
-        });
-    }, [userName, userMemo, selections]);
+        try {
+            const newUser = await EventUserCreateMutation.mutateAsync({
+                eventId: eventIdtmp,
+                userName,
+                userMemo,
+            });
 
-    // reactの再レンダリングで相当苦労
-    useEffect(() => {
-        if (eventUsers && eventDate && isEeventUserRftch) {
-            eventUsers.forEach(euss => {
-                eventDate.forEach(async (d) => {
-                    await EventUserSelCreateMutation.mutate({
+            if (newUser && eventDate) {
+                await Promise.all(eventDate.map(d =>
+                    EventUserSelCreateMutation.mutateAsync({
                         eventId: eventIdtmp,
                         eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
-                        userId: euss.userId as number,
+                        userId: newUser.userId as number,
                         userSel: selections[new Date(d.eventDate).toISOString()],
-                    });
-                });
-            });
+                    })
+                ));
+            }
+            setIsSubmitting(false);
             router.reload();
+        } catch (error) {
+            setError("エラーが発生しました。再度お試しください。");
+            setIsSubmitting(false);
         }
-        setIsSubmitting(false);
-    }, [isEeventUserRftch, eventUsers, eventDate, selections, eventIdtmp]);
+    }, [userName, eventDate, selections, router, eventIdtmp, EventUserCreateMutation, EventUserSelCreateMutation]);
 
     return (
         // {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
-        <div >
-            <Dialog>
-                <DialogTrigger asChild>
-                    <Button className="fixed-button mb-3" variant="default">出欠を入力する</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>出欠表入力</DialogTitle>
-                    </DialogHeader>
-                    <DialogDescription>
-                        {error && <div className="text-red-600">{error}</div>}
-                        <div className="flex-auto">
-                            <Label htmlFor="userName" className='text-base font-bold' >名前</Label>
-                            <Badge className='ml-1 p-0.5'>必須</Badge>
-                            <Input
-                                type='text'
-                                id="userName"
-                                className="col-span-3 m-1"
-                                onChange={onChangeUserName}
-                                value={userName} />
-                            <br />
-                            <Label htmlFor="username" className='text-base font-bold' >日程候補</Label>
-                            <Badge className='ml-1 p-0.5'>必須</Badge>
-                            <div>
-                                <Table>
-                                    <TableBody>
-                                        {eventDate?.map((data, index) => (
-                                            <TableRow key={index}>
-                                                <TableCell>{formatDateWithDayOfWeek0sup(data.eventDate)}</TableCell>
-                                                <TableCell className='text-center'>
-                                                    <FontAwesomeIcon
-                                                        icon={faCircle}
-                                                        className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
-                                                            'text-slate-200', 'text-slate-600')}`}
-                                                        style={{ width: '16px', height: '16px' }}
-                                                        onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
-                                                    />
-                                                </TableCell>
-                                                <TableCell className='text-center'>
-                                                    <FontAwesomeIcon
-                                                        icon={faDiamond}
-                                                        className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
-                                                            'text-slate-200', 'text-slate-600')}`}
-                                                        style={{ width: '16px', height: '16px' }}
-                                                        onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
-                                                    />
-                                                </TableCell>
-                                                <TableCell className='text-center'>
-                                                    <FontAwesomeIcon
-                                                        icon={faXmark}
-                                                        className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
-                                                            'text-slate-200', 'text-slate-600')}`}
-                                                        style={{ width: '16px', height: '16px' }}
-                                                        onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                            <br />
-                            <Label htmlFor="eventName" className=' font-bold'>コメント</Label>
-                            <textarea
-                                cols={50}
-                                className="w-full m-1"
-                                // placeholder="コメントを記入してください。"
-                                onChange={onChangeUserMemo}
-                                rows={3}
-                                value={userMemo} />
-                        </div>
-                    </DialogDescription>
-                    <DialogFooter>
-                        <Button
-                            onClick={onClickAtendCreate}
-                            disabled={isSubmitting}>
-                            {isSubmitting ? '送信中...' : '出欠を登録する'}
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-        </div>
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button className="fixed-button mb-3" variant="default">出欠を入力する</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>出欠表入力</DialogTitle>
+                </DialogHeader>
+                <DialogDescription>
+                    {error && <div className="text-red-600">{error}</div>}
+                    <div className="flex-auto">
+                        <Label htmlFor="userName" className='text-base font-bold' >名前</Label>
+                        <Badge className='ml-1 p-0.5'>必須</Badge>
+                        <Input
+                            type='text'
+                            id="userName"
+                            className="col-span-3 m-1"
+                            onChange={onChangeUserName}
+                            value={userName} />
+                        <br />
+                        <Label htmlFor="username" className='text-base font-bold' >日程候補</Label>
+                        <Badge className='ml-1 p-0.5'>必須</Badge>
+                        <Table>
+                            <TableBody>
+                                {eventDate?.map((data, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{formatDateWithDayOfWeek0sup(data.eventDate)}</TableCell>
+                                        <TableCell className='text-center'>
+                                            <FontAwesomeIcon
+                                                icon={faCircle}
+                                                className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
+                                                    'text-slate-200', 'text-slate-600')}`}
+                                                style={{ width: '16px', height: '16px' }}
+                                                onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
+                                            />
+                                        </TableCell>
+                                        <TableCell className='text-center'>
+                                            <FontAwesomeIcon
+                                                icon={faDiamond}
+                                                className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
+                                                    'text-slate-200', 'text-slate-600')}`}
+                                                style={{ width: '16px', height: '16px' }}
+                                                onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
+                                            />
+                                        </TableCell>
+                                        <TableCell className='text-center'>
+                                            <FontAwesomeIcon
+                                                icon={faXmark}
+                                                className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
+                                                    'text-slate-200', 'text-slate-600')}`}
+                                                style={{ width: '16px', height: '16px' }}
+                                                onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                        <br />
+                        <Label htmlFor="eventName" className=' font-bold'>コメント</Label>
+                        <textarea
+                            cols={50}
+                            className="w-full m-1"
+                            // placeholder="コメントを記入してください。"
+                            onChange={onChangeUserMemo}
+                            rows={3}
+                            value={userMemo} />
+                    </div>
+                </DialogDescription>
+                <DialogFooter>
+                    <Button
+                        onClick={onClickAtendCreate}
+                        disabled={isSubmitting}>
+                        {isSubmitting ? '送信中...' : '出欠を登録する'}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
 

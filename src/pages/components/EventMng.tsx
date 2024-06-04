@@ -62,8 +62,6 @@ const EventMng = () => {
   return (
     // ■■■■■■■■■イベント作成画面■■■■■■■■■
     <div className="flex-wrap flex-row gap-1 m-2">
-      <h1 className='m-1 text-2xl font-bold'></h1>
-      <hr />
       <h1 className='m-1 text-2xl+ font-bold'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
         {lEvent?.map((eventdata: lEvent, index: number) => (

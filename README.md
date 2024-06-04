@@ -206,14 +206,27 @@ ok 管理者情報のローカル保存
 ok ALERT→TOAST?
 ok 利用者一覧の日付が昇順になっていない。
 ok イベント更新でDB更新不具合
+・ok EventMng Warning → <h1 className='m-1 text-2xl font-bold'></h1>の指定でエラーとなっていて削除
+　　　　at EventMng (webpack-internal:///./src/pages/components/EventMng.tsx:65:72)
+　　　　next-dev.js:53 Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
+　　　　next-dev.js:53 Warning: validateDOMNesting(...): <table> cannot appear as a descendant of <p>.
 TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
 TODO VSCODE npm run start：Access to fetch at 'https://event-time.vercel.app/api/trpc/EventDate_findWhereMany,EventUserSel_findWhereMany,EventUser_findWhereMany,
 TODO 背景色
 TODO ダイアログで×ボタン無効
 TODO イベント更新後、出欠を入力すると、出席状況未設定が他のに引きずられて反映されてしまう
-・-を表示：AttendCreateDialog、AttendMng
-・
------------------------------------
+TODO AttendCreateDialog、AttendUpdateDialog 、EventCreateDialog
+　　　 at AttendCreateDialog (webpack-internal:///./src/pages/components/AttendCreateDialog.tsx:97:72)　
+　　　　next-dev.js:53 Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
+　　　　next-dev.js:53 Warning: validateDOMNesting(...): <table> cannot appear as a descendant of <p>.
+　　　　　→<Table>使った瞬間にNG。
+TODO 　-を表示：AttendCreateDialog、AttendMng
+ok 　　AttendCreateDialog
+　　　　TRPCClientError: Invalid `prisma.eventUserSel.create()` invocation:
+　　　　Unique constraint failed on the fields: (`eventId`,`eventDate`,`userId`)
+
+---
+
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
@@ -227,9 +240,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faMinus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const AttendMng = () => {
-    //■  initial
-    const router = useRouter();
-    const { eventid } = router.query;
+//■ initial
+const router = useRouter();
+const { eventid } = router.query;
 
     //■  useEtContext
     const { isCoordinator, curentEventId, setCurentEventId } = useEtContext()
@@ -470,6 +483,7 @@ const AttendMng = () => {
             </div>
         </div >
     )
+
 }
 
 export default AttendMng
