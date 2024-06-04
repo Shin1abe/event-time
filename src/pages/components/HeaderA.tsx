@@ -34,11 +34,11 @@ const HeaderA = () => {
             >
               スキル一覧
             </a> */}
-            <a href="#contact">
+            {/* <a href="#contact">
               <button className="px-6  py-2 bg-theme font-bold rounded-lg hover:bg-purple-600 transition-all duration-300">
                 お問い合わせ
               </button>
-            </a>
+            </a> */}
           </div>
           {/* <div className="md:hidden">
             <FontAwesomeIcon icon={faBars} className=" h-[20px]" />

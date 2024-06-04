@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
-import { trpc } from "@/utils/trpc";
 import 'react-day-picker/dist/style.css';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
 import { Badge } from '../../ui/badge'
-import { Event, EventDate } from "@prisma/client";
 import { lEvent, lEventDate } from '@/type/EventType';
 import EventCreateDialog from './EventCreateDialog';
 import { formatDateWithDayOfWeek } from '@/utils/utils';
-import * as localforage from 'localforage';
 import { useEtContext } from '../../providers/EtProvider';
 import { lStrageCrud } from '@/utils/LStrageCRUD';
-// import { lStrageCrud } from '@/utils/LStrageCRUD';
 
 const EventMng = () => {
   //■  initial
   const router = useRouter();
-  // const [mode, setMode] = useContext(EventTimeContext)
-  // const etLf = localforage.createInstance(
-  //   { driver: localforage.LOCALSTORAGE, name: 'EventTime', storeName: 'et', version: 1 });
-
 
   //■  useEtContext
   const { setIsCoordinator } = useEtContext()
@@ -29,7 +21,6 @@ const EventMng = () => {
 
 
   //■  trpc
-  //TODO ★ローカルファイル読み込みに変更
   const [lEvent, setlEvent] = useState<lEvent[] | null>(null);
   const [lEventDate, setlEventDate] = useState<lEventDate[] | null>(null);
   useEffect(() => {
@@ -48,8 +39,6 @@ const EventMng = () => {
     };
     fetchEvent();
   }, []);
-  // const { data: lEvent, refetch } = trpc.useQuery(["Event_findMany"]);
-  // const { data: lEventDate, error } = trpc.useQuery(['EventDate_findMany']);
 
   //■  event
   const handleCardClick = (eventId: string) => {
@@ -62,14 +51,14 @@ const EventMng = () => {
   return (
     // ■■■■■■■■■イベント作成画面■■■■■■■■■
     <div className="flex-wrap flex-row gap-1 m-2">
-      <h1 className='m-1 text-2xl+ font-bold'>イベント</h1>
+      <h1 className='m-3 text-2xl+ font-bold'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
         {lEvent?.map((eventdata: lEvent, index: number) => (
           <Card className='m-3 bg-blue-50' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
             <CardHeader>
-              <CardTitle ><Badge className='mb-2'>イベント作成</Badge><p className='m-1'>{eventdata.eventName}</p></CardTitle>
+              <CardTitle ><Badge className='mb-2'>イベント作成</Badge><p className='m-1 mb-2'>{eventdata.eventName}</p></CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent >
               <p className='ml-3'>
                 {lEventDate?.filter((edd: lEventDate) => edd.eventId === eventdata.eventId)
                   .map((edd: lEventDate, index: any) => (
