@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { DayPicker } from 'react-day-picker';
@@ -137,42 +137,37 @@ const EventUpdateDialog = () => {
             //console.log("2")
             if (eteventDates) {
                 await Promise.all(
-                    eteventDates?.map(eventdate => EventDateDeleteMutation.mutate({ id: eventdate.id }))
+                    eteventDates?.map(eventdate => EventDateDeleteMutation.mutateAsync({ id: eventdate.id }))
                 )
-            }
-            // ■  EventDate Create
-            //console.log("3")
-            //console.log('eventDates', eventDates)
-            if (eventDates) {
-                await Promise.all(
-                    eventDates.map(eventdate => eventdateCreateMutation.mutate({ eventId: eventid, eventDate: eventdate.toISOString() }))
-                );
             }
             // ■  EventUserSels Delete
             //console.log("4")
             // console.log("etEventUserSels",etEventUserSels)
             if (etEventUserSels) {
                 await Promise.all(etEventUserSels?.map(async (d) => {
-                    EventUserSelDeleteMutation.mutate({ id: d.id });
+                    EventUserSelDeleteMutation.mutateAsync({ id: d.id });
                 }))
+            }            // ■  EventDate Create
+            //console.log("3")
+            //console.log('eventDates', eventDates)
+            if (eventDates) {
+                await Promise.all(
+                    eventDates.map(eventdate => eventdateCreateMutation.mutateAsync({ eventId: eventid, eventDate: eventdate.toISOString() }))
+                );
             }
             // ■  EventUserSels Create
             console.log("5-start")
             const _filterEventUserSels = filterEventUserSels(etEventUserSels, eventDates)
             _filterEventUserSels.map(d => console.log("_filterEventUserSels", d))
-            // etEventUserSels.map(d => console.log("etEventUserSels", d))
-            // console.log('eventDates', eventDates)
             if (_filterEventUserSels) {
-                // await Promise.all(
-                (_filterEventUserSels.map(async (d: any) => {
-                    console.log("EventUserSelCreateMutation.mutate")
-                    return await EventUserSelCreateMutation.mutate({
+                await Promise.all(_filterEventUserSels.map(d =>
+                    EventUserSelCreateMutation.mutateAsync({
                         eventId: d.eventId,
                         eventDate: d.eventDate ? new Date(d.eventDate).toISOString() : "",
                         userId: d.userId,
                         userSel: d.userSel
-                    });
-                }))
+                    })
+                ));
             }
             console.log("5-end")
 
@@ -203,7 +198,6 @@ const EventUpdateDialog = () => {
             setIsSubmitting(false);
         }
     }, [eventName, eventMemo, eventDates, etEventUserSels, eteventDates]);
-    // }, [eventName, eventDates]);
 
     //イベント作成ダイアログfooter
     const footer =
