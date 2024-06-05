@@ -96,7 +96,7 @@ body {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background-color: grey; /* 必要に応じて背景色を設定 */
+  background-color: rgb(51 65 85); /* 必要に応じて背景色を設定 */
   z-index: 10;
 }
 
