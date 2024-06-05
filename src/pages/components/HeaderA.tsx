@@ -12,7 +12,7 @@ const HeaderA = () => {
   }, []);
   return (
     <div>
-      <header className="py-1  bg-slate-800" onClick={onClickRoot}>
+      <header className="py-1  bg-slate-700" onClick={onClickRoot}>
         {/* <div className="container mx-auto flex justify-between items-center px-8 md:px-14 lg:px-24 w-full"> */}
         <div className="text-lg font-bold text-center">EventTime</div>
         {/* <div className="space-x-12 hidden md:flex items-center"> */}
