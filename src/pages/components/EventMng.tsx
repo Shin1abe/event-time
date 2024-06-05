@@ -54,9 +54,9 @@ const EventMng = () => {
       <h1 className='m-3 text-2xl+ font-bold'>イベント</h1>
       <div className="flex flex-col justify-center gap-2">
         {lEvent?.map((eventdata: lEvent, index: number) => (
-          <Card className='m-3 bg-blue-50' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
+          <Card className='m-3 bg-slate-800' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
             <CardHeader>
-              <CardTitle ><Badge className='mb-2'>イベント作成</Badge><p className='m-1 mb-2'>{eventdata.eventName}</p></CardTitle>
+              <CardTitle ><Badge className='mb-2 text-blue-800'>イベント作成</Badge><p className='m-1 mb-2'>{eventdata.eventName}</p></CardTitle>
             </CardHeader>
             <CardContent >
               <p className='ml-3'>

@@ -14,7 +14,7 @@ import { EtProvider } from "../providers/EtProvider";
 const App: AppType = ({ Component, pageProps }) => {
   return (
     <div>
-      <ThemeProvider attribute="class" defaultTheme="light">
+      <ThemeProvider attribute="class" defaultTheme="dark">
         <RootLayout>
           <EtProvider>
             <Component {...pageProps} />
