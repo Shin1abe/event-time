@@ -121,7 +121,7 @@ const EventCreateDialog = () => {
         <div >
             <Dialog >
                 <DialogTrigger asChild>
-                    <Button className="fixed-button mb-3" >イベント作成</Button>
+                    <Button className="fixed-button mb-3 bg-blue-500 text-blue-200 " >イベント作成</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
@@ -173,6 +173,7 @@ const EventCreateDialog = () => {
                     </DialogDescription>
                     <DialogFooter>
                         <Button
+                            className=' bg-blue-500 text-blue-200'
                             type="submit"
                             onClick={eventCreateButtonClick}
                             disabled={isSubmitting}

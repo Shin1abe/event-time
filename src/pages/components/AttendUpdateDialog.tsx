@@ -168,8 +168,8 @@ const AttendUpdateDialog = () => {
                                                     <FontAwesomeIcon
                                                         icon={faCircle}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
-                                                            'text-slate-200', 'text-slate-600')}`}
-                                                        style={{ width: '16px', height: '16px' }}
+                                                            'text-slate-600', 'text-orange-500')}`}
+                                                        style={{ width: '24px', height: '24px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
                                                     />
                                                 </TableCell>
@@ -177,8 +177,8 @@ const AttendUpdateDialog = () => {
                                                     <FontAwesomeIcon
                                                         icon={faDiamond}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
-                                                            'text-slate-200', 'text-slate-600')}`}
-                                                        style={{ width: '16px', height: '16px' }}
+                                                            'text-slate-600', 'text-orange-500')}`}
+                                                        style={{ width: '24px', height: '24px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
                                                     />
                                                 </TableCell>
@@ -186,8 +186,8 @@ const AttendUpdateDialog = () => {
                                                     <FontAwesomeIcon
                                                         icon={faXmark}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
-                                                            'text-slate-200', 'text-slate-600')}`}
-                                                        style={{ width: '16px', height: '16px' }}
+                                                            'text-slate-600', 'text-orange-500')}`}
+                                                        style={{ width: '24px', height: '24px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
                                                     />
                                                 </TableCell>
@@ -201,7 +201,6 @@ const AttendUpdateDialog = () => {
                             <textarea
                                 cols={50}
                                 className="w-full m-1"
-                                placeholder="是非参加します。"
                                 onChange={onChangeUserMemo}
                                 rows={3}
                                 value={userMemo} />
@@ -211,11 +210,13 @@ const AttendUpdateDialog = () => {
                     <DialogFooter>
                         <div className="flex flex-col space-y-2">
                             <Button
+                                className=' bg-blue-500 text-blue-200'
                                 onClick={onClickAtendUpdate}
                                 disabled={isSubmitting}>
                                 {isSubmitting ? '送信中...' : '出欠を更新する'}
                             </Button>
                             <Button
+                                className='bg-blue-500 text-blue-200'
                                 variant="secondary"
                                 onClick={onClickAtendDelete}
                                 disabled={isSubmitting}>

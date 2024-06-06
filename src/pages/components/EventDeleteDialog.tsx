@@ -96,6 +96,7 @@ const EventDeleteDialog = () => {
                             キャンセル
                         </AlertDialogCancel>
                         <AlertDialogAction
+                            className='bg-blue-500 text-blue-200'
                             onClick={onClickDelete}
                             disabled={isSubmitting} >
                             {isSubmitting ? '送信中...' : '削除'}

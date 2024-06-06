@@ -1,5 +1,20 @@
-##
+##未決
+TODO 出席登録で小スマフォで下のボタンが隠れる
+TODO カレンダーで選択過去は選択できないようにするべき
+TODO 更新画面では最も現在に近い日付を初期で表示すべき
+TODO 全画面にすべき
+TODO AttendCreateDialog、AttendUpdateDialog 、EventCreateDialog
+　　　 at AttendCreateDialog (webpack-internal:///./src/pages/components/AttendCreateDialog.tsx:97:72)　
+　　　　next-dev.js:53 Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
+　　　　next-dev.js:53 Warning: validateDOMNesting(...): <table> cannot appear as a descendant of <p>.
+　　　　　→<Table>使った瞬間にNG。
+TODO 背景色
+TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
 
+##解決
+ok 更新画面でメモにDEFAULTは非表示すべき
+ok 文字の色を薄い青、紫
+ok 出席一覧で日付と●×の位置がずれている
 OK 本番でDB参照できない模様→FJWANだったから
 　　export default withTRPC<ServerRouter>({
 　　config({ ctx }) {
@@ -35,14 +50,6 @@ ok 　　AttendCreateDialog
 ok イベント更新後、出欠を入力すると、出席状況未設定が他のに引きずられて反映されてしまう→削除処理の位置を変更
 ok 　-を表示：AttendCreateDialog、AttendMng
 ng ダイアログで×ボタン無効→無理
-TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
-TODO VSCODE npm run start：Access to fetch at 'https://event-time.vercel.app/api/trpc/EventDate_findWhereMany,EventUserSel_findWhereMany,EventUser_findWhereMany,
-TODO AttendCreateDialog、AttendUpdateDialog 、EventCreateDialog
-　　　 at AttendCreateDialog (webpack-internal:///./src/pages/components/AttendCreateDialog.tsx:97:72)　
-　　　　next-dev.js:53 Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
-　　　　next-dev.js:53 Warning: validateDOMNesting(...): <table> cannot appear as a descendant of <p>.
-　　　　　→<Table>使った瞬間にNG。
-TODO 背景色
 
 ---
 

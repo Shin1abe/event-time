@@ -56,8 +56,9 @@ const HeaderCoordinator = () => {
         <>
             <div className='flex justify-between'>
                 <div >
-                    <Button >
-                        {event?.[0] ? (<Link href="/"><a>戻る</a></Link>) : null}
+                    <Button className='bg-blue-500 text-blue-200'>
+                        {event?.[0] ? (<Link href="/"
+                        ><a>戻る</a></Link>) : null}
                     </Button>
                 </div>
                 <div >
@@ -66,9 +67,9 @@ const HeaderCoordinator = () => {
                         <DropdownMenuContent>
                             <DropdownMenuLabel>イベント管理メニュー</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem><Button onClick={onClickEventChange} >イベント更新</Button></DropdownMenuItem>
-                            <DropdownMenuItem><Button onClick={onClickEventshare} >イベント更新ＵＲＬをシェア</Button></DropdownMenuItem>
-                            <DropdownMenuItem><Button onClick={onClickEventDelete} >イベント削除</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button className='bg-blue-500 text-blue-200' onClick={onClickEventChange} >イベント更新</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button className='bg-blue-500 text-blue-200' onClick={onClickEventshare} >イベント更新ＵＲＬをシェア</Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button className='bg-blue-500 text-blue-200' onClick={onClickEventDelete} >イベント削除</Button></DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

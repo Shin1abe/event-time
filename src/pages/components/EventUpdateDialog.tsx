@@ -258,7 +258,6 @@ const EventUpdateDialog = () => {
                                 <div>イベントの概要など参加者に連絡しておきたいことを記述することができます。</div>
                                 <Textarea
                                     className="w-full p-1 border border-gray-300  min-h-4"
-                                    placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
                                     value={eventMemo as string}
                                     onChange={(e) => setEventMemo(e.target.value)} />
                             </div>
@@ -266,6 +265,7 @@ const EventUpdateDialog = () => {
                     </DialogDescription>
                     <DialogFooter>
                         <Button
+                            className='bg-blue-500 text-blue-200'
                             type="submit"
                             onClick={eventUpdateButtonClick}
                             disabled={isSubmitting}>

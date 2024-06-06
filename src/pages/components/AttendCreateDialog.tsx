@@ -104,7 +104,7 @@ const AttendCreateDialog = () => {
         // {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="fixed-button mb-3" variant="default">出欠を入力する</Button>
+                <Button className="fixed-button mb-3  bg-blue-500 text-blue-200" variant="default">出欠を入力する</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -133,8 +133,8 @@ const AttendCreateDialog = () => {
                                             <FontAwesomeIcon
                                                 icon={faCircle}
                                                 className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
-                                                    'text-slate-200', 'text-slate-600')}`}
-                                                style={{ width: '16px', height: '16px' }}
+                                                    'text-slate-600', 'text-orange-500')}`}
+                                                style={{ width: '24px', height: '24px' }}
                                                 onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
                                             />
                                         </TableCell>
@@ -142,8 +142,8 @@ const AttendCreateDialog = () => {
                                             <FontAwesomeIcon
                                                 icon={faDiamond}
                                                 className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
-                                                    'text-slate-200', 'text-slate-600')}`}
-                                                style={{ width: '16px', height: '16px' }}
+                                                    'text-slate-600', 'text-orange-500')}`}
+                                                style={{ width: '24px', height: '24px' }}
                                                 onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
                                             />
                                         </TableCell>
@@ -151,8 +151,8 @@ const AttendCreateDialog = () => {
                                             <FontAwesomeIcon
                                                 icon={faXmark}
                                                 className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
-                                                    'text-slate-200', 'text-slate-600')}`}
-                                                style={{ width: '16px', height: '16px' }}
+                                                    'text-slate-600', 'text-orange-500')}`}
+                                                style={{ width: '24px', height: '24px' }}
                                                 onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
                                             />
                                         </TableCell>
@@ -173,6 +173,7 @@ const AttendCreateDialog = () => {
                 </DialogDescription>
                 <DialogFooter>
                     <Button
+                        className=' bg-blue-500 text-blue-200'
                         onClick={onClickAtendCreate}
                         disabled={isSubmitting}>
                         {isSubmitting ? '送信中...' : '出欠を登録する'}

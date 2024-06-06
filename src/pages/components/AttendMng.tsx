@@ -91,15 +91,15 @@ const AttendMng = () => {
                                             </Button>
                                         </TableCell>
                                         {eventUserSel?.filter(e => e.userId === user.userId).map((user, idx) => (
-                                            <TableCell key={idx} className='p-1'>
+                                            <TableCell key={idx} className='p-1  text-center'>
                                                 <div className="block ">
                                                     <FontAwesomeIcon
                                                         icon={
                                                             user.userSel === "○" ? faCircle :
                                                                 user.userSel === "◇" ? faDiamond :
                                                                     user.userSel === "×" ? faXmark : faMinus}
-                                                        className={"cursor-pointer  text-slate-600"}
-                                                        style={{ width: '16px', height: '16px', margin: 'auto' }}
+                                                        className={"cursor-pointer  text-orange-500"}
+                                                        style={{ width: '24px', height: '24px', margin: 'auto' }}
                                                     />
                                                 </div>
                                             </TableCell>
@@ -113,7 +113,7 @@ const AttendMng = () => {
                     <div className=' ml-2'>
                         出欠状況を変更する場合は名前を選択してください。
                     </div>
-                    <Button onClick={onClickEventshare}>イベンＵＲＬをシェア</Button>
+                    <Button className=" bg-blue-500 text-blue-200" onClick={onClickEventshare}>イベントＵＲＬをシェア</Button>
                 </div>
             </div>
             {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
