@@ -117,11 +117,11 @@ body {
 
 .fixed-button {
   position: fixed;
-  bottom: 50px;
-  right: 20px;
+  bottom: 40px;
+  left: 10px;
+  width: calc(100% - 20px); /* 左右のマージン分を引いた幅 */
   padding: 10px 20px; /* ボタンの内側の余白を設定 */
   cursor: pointer; /* カーソルをポインターに設定 */
   outline: none; /* ボタンをクリックしたときのアウトラインを消去 */
-  /* 必要に応じてbox-shadowプロパティを使用して影を追加 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 影を追加 */
 }

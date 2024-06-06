@@ -104,7 +104,7 @@ const AttendCreateDialog = () => {
         // {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="fixed-button mb-3  bg-blue-500 text-blue-200" variant="default">出欠を入力する</Button>
+                <Button className="fixed-button w-full bg-blue-500 text-blue-200 text-base font-bold" variant="default">出欠を入力する</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] bg-slate-700">
                 <DialogHeader>
@@ -173,7 +173,7 @@ const AttendCreateDialog = () => {
                 </DialogDescription>
                 <DialogFooter>
                     <Button
-                        className=' bg-blue-500 text-blue-200'
+                        className='w-full bg-blue-500 text-blue-200 text-base font-bold'
                         onClick={onClickAtendCreate}
                         disabled={isSubmitting}>
                         {isSubmitting ? '送信中...' : '出欠を登録する'}

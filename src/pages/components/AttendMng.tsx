@@ -88,11 +88,6 @@ const AttendMng = () => {
                                             <TableCell key={idx} className='p-1  text-center'>
                                                 <div className="block ">
                                                     <FontAwesomeIcon
-                                                        // icon={
-                                                        //     user.userSel === "○" ? faCircle :
-                                                        //         user.userSel === "◇" ? faDiamond :
-                                                        //             user.userSel === "×" ? faXmark : faMinus}
-                                                        // className={"cursor-pointer  text-orange-500"}
                                                         icon={
                                                             user.userSel === "○" ? faCircle :
                                                                 user.userSel === "◇" ? faDiamond :
@@ -117,13 +112,11 @@ const AttendMng = () => {
                     <div className=' ml-2'>
                         出欠変更は名前行をクリックしてください
                     </div>
-                    <Button className=" bg-blue-500 text-blue-200" onClick={onClickEventshare}>イベントＵＲＬをシェア</Button>
+                    <Button className=" bg-blue-500 text-blue-200 text-base font-bold" onClick={onClickEventshare}>イベントＵＲＬをシェア</Button>
                 </div>
             </div>
             {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
-            <div >
-                <AttendCreateDialog />
-            </div>
+            <AttendCreateDialog />
         </div >
     )
 }

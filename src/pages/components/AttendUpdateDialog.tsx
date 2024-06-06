@@ -138,7 +138,7 @@ const AttendUpdateDialog = () => {
         <div >
             <Dialog defaultOpen={true}>
                 <DialogTrigger asChild>
-                    <Button className="fixed-button mb-3" variant="default">出欠を入力する</Button>
+                    <Button className="fixed-button mb-3 text-base font-bold" variant="default">出欠を入力する</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]  bg-slate-700">
                     <DialogHeader>
@@ -208,15 +208,15 @@ const AttendUpdateDialog = () => {
                     </DialogDescription>
 
                     <DialogFooter>
-                        <div className="flex flex-col space-y-2">
+                        <div className="w-full flex flex-col space-y-2">
                             <Button
-                                className=' bg-blue-500 text-blue-200'
+                                className='w-full bg-blue-500 text-blue-200 text-base font-bold'
                                 onClick={onClickAtendUpdate}
                                 disabled={isSubmitting}>
                                 {isSubmitting ? '送信中...' : '出欠を更新する'}
                             </Button>
                             <Button
-                                className='bg-blue-500 text-blue-200'
+                                className='w-full bg-slate-500 text-blue-200 text-base font-bold'
                                 variant="secondary"
                                 onClick={onClickAtendDelete}
                                 disabled={isSubmitting}>

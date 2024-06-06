@@ -213,7 +213,7 @@ const EventUpdateDialog = () => {
         <div >
             <Dialog defaultOpen={true}>
                 <DialogTrigger asChild>
-                    <Button className="fixed-button mb-3">イベント更新</Button>
+                    <Button className="fixed-button mb-3 text-base font-bold" >イベント更新</Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]  bg-slate-700">
                     <DialogHeader>
@@ -265,7 +265,7 @@ const EventUpdateDialog = () => {
                     </DialogDescription>
                     <DialogFooter>
                         <Button
-                            className='bg-blue-500 text-blue-200'
+                            className='bg-blue-500 text-blue-200 text-base font-bold'
                             type="submit"
                             onClick={eventUpdateButtonClick}
                             disabled={isSubmitting}>
