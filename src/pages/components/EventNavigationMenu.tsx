@@ -3,13 +3,13 @@ import React from 'react'
 
 const EventNavigationMenu = () => {
     return (
-        <div>
+        <div className="text-base">
             <NavigationMenu>
                 <NavigationMenuList className="flex">
                     <NavigationMenuItem>
-                        <NavigationMenuTrigger className="text-sm">About EventTime</NavigationMenuTrigger>
+                        <NavigationMenuTrigger >About EventTime</NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <div className='text-sm p-2'>
+                            <div className=' p-2'>
                                 <div className="container mx-auto px-4">
                                     <p>簡単に・匿名でイベント日程調整ができます。</p>
                                     <ul className="list-disc ml-4 mb-3">
