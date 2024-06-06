@@ -82,23 +82,27 @@ const AttendMng = () => {
                             </TableHeader>
                             <TableBody >
                                 {eventUser?.map((user, index) => (
-                                    <TableRow key={index} >
-                                        <TableCell className=' p-0'>
-                                            <Button variant="secondary" onClick={() => onClickUserUpdate(user.userId)}
-                                                className=' p-0 ml-4'
-                                            >
-                                                {user.userName}
-                                            </Button>
-                                        </TableCell>
+                                    <TableRow key={index} onClick={() => onClickUserUpdate(user.userId)}>
+                                        <TableCell className='pl-2 p-0 text-lg font-bold'>{user.userName}</TableCell>
                                         {eventUserSel?.filter(e => e.userId === user.userId).map((user, idx) => (
                                             <TableCell key={idx} className='p-1  text-center'>
                                                 <div className="block ">
                                                     <FontAwesomeIcon
+                                                        // icon={
+                                                        //     user.userSel === "○" ? faCircle :
+                                                        //         user.userSel === "◇" ? faDiamond :
+                                                        //             user.userSel === "×" ? faXmark : faMinus}
+                                                        // className={"cursor-pointer  text-orange-500"}
                                                         icon={
                                                             user.userSel === "○" ? faCircle :
                                                                 user.userSel === "◇" ? faDiamond :
-                                                                    user.userSel === "×" ? faXmark : faMinus}
-                                                        className={"cursor-pointer  text-orange-500"}
+                                                                    user.userSel === "×" ? faXmark : faMinus
+                                                        }
+                                                        className={"cursor-pointer " + (
+                                                            user.userSel === "○" ? "text-orange-500" :
+                                                                user.userSel === "◇" ? "text-gray-300" :
+                                                                    user.userSel === "×" ? "text-yellow-100" : "text-slate-500"
+                                                        )}
                                                         style={{ width: '24px', height: '24px', margin: 'auto' }}
                                                     />
                                                 </div>
@@ -111,7 +115,7 @@ const AttendMng = () => {
                         </Table>
                     </div>
                     <div className=' ml-2'>
-                        出欠状況を変更する場合は名前を選択してください。
+                        出欠変更は名前行をクリックしてください
                     </div>
                     <Button className=" bg-blue-500 text-blue-200" onClick={onClickEventshare}>イベントＵＲＬをシェア</Button>
                 </div>

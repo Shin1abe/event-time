@@ -168,7 +168,7 @@ const AttendUpdateDialog = () => {
                                                     <FontAwesomeIcon
                                                         icon={faCircle}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
-                                                            'text-slate-600', 'text-orange-500')}`}
+                                                            'text-slate-500', 'text-orange-500')}`}
                                                         style={{ width: '24px', height: '24px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
                                                     />
@@ -177,7 +177,7 @@ const AttendUpdateDialog = () => {
                                                     <FontAwesomeIcon
                                                         icon={faDiamond}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
-                                                            'text-slate-600', 'text-orange-500')}`}
+                                                            'text-slate-500', 'text-gray-300')}`}
                                                         style={{ width: '24px', height: '24px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
                                                     />
@@ -186,7 +186,7 @@ const AttendUpdateDialog = () => {
                                                     <FontAwesomeIcon
                                                         icon={faXmark}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
-                                                            'text-slate-600', 'text-orange-500')}`}
+                                                            'text-slate-500', 'text-yellow-100')}`}
                                                         style={{ width: '24px', height: '24px' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
                                                     />
