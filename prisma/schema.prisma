@@ -5,15 +5,15 @@ generator client {
 datasource db {
   //--FJWANからはNG
   //-- verceldbのURL変更ができなかったので直接指定
-  //provider  = "postgresql"
-  //url       = "postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=30&connection_limit=60"
-  //directUrl = "postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&connect_timeout=30&connection_limit=60"
+  provider  = "postgresql"
+  url       = "postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau-pooler.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=30&connection_limit=60"
+  directUrl = "postgres://default:TYRiMa07ynBm@ep-muddy-wave-a1541cau.ap-southeast-1.aws.neon.tech:5432/verceldb?sslmode=require&connect_timeout=30&connection_limit=60"
   //-- directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
   //--  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
 
   //--クライアント環境で処理  
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  //provider = "sqlite"
+  //url      = "file:./dev.db"
 }
 
 model UserExample {
