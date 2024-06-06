@@ -152,7 +152,7 @@ const AttendUpdateDialog = () => {
                             <Input
                                 type='text'
                                 id="userName"
-                                className="col-span-3 m-1"
+                                className="col-span-3 m-1  text-lg text-white"
                                 onChange={onChangeUserName}
                                 value={userName} />
                             <br />
@@ -200,7 +200,7 @@ const AttendUpdateDialog = () => {
                             <Label htmlFor="eventName" className=' font-bold'>コメント</Label>
                             <textarea
                                 cols={50}
-                                className="w-full m-1"
+                                className="w-full m-1  text-lg  text-white"
                                 onChange={onChangeUserMemo}
                                 rows={3}
                                 value={userMemo} />
