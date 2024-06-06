@@ -215,7 +215,7 @@ const EventUpdateDialog = () => {
                 <DialogTrigger asChild>
                     <Button className="fixed-button mb-3">イベント更新</Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[425px]  bg-slate-700">
                     <DialogHeader>
                         <DialogTitle>イベント更新</DialogTitle>
                     </DialogHeader>

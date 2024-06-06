@@ -118,12 +118,12 @@ const EventCreateDialog = () => {
         );
 
     return (
-        <div >
+        <div className=' bg-blue-400'>
             <Dialog >
                 <DialogTrigger asChild>
                     <Button className="fixed-button mb-3 bg-blue-500 text-blue-200 " >イベント作成</Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[425px]  bg-slate-700">
                     <DialogHeader>
                         <DialogTitle>イベント作成</DialogTitle>
                     </DialogHeader>

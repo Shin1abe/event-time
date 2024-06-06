@@ -140,7 +140,7 @@ const AttendUpdateDialog = () => {
                 <DialogTrigger asChild>
                     <Button className="fixed-button mb-3" variant="default">出欠を入力する</Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[425px]  bg-slate-700">
                     <DialogHeader>
                         <DialogTitle>出欠表入力</DialogTitle>
                     </DialogHeader>

@@ -1,8 +1,8 @@
 ##未決
-TODO 出席登録で小スマフォで下のボタンが隠れる
+TODO イベント出席には、合計行があるべき
 TODO カレンダーで選択過去は選択できないようにするべき
 TODO 更新画面では最も現在に近い日付を初期で表示すべき
-TODO 全画面にすべき
+
 TODO AttendCreateDialog、AttendUpdateDialog 、EventCreateDialog
 　　　 at AttendCreateDialog (webpack-internal:///./src/pages/components/AttendCreateDialog.tsx:97:72)　
 　　　　next-dev.js:53 Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
@@ -12,6 +12,8 @@ TODO 背景色
 TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
 
 ##解決
+ok 妥協：出席登録で小スマフォで下のボタンが隠れる
+ok ブラウザ制限で妥協 全画面にすべき　nextjs tailwindcss shaduiで構築している。全画面で常に表示されるためには？
 ok 更新画面でメモにDEFAULTは非表示すべき
 ok 文字の色を薄い青、紫
 ok 出席一覧で日付と●×の位置がずれている

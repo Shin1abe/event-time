@@ -82,7 +82,7 @@ const EventDeleteDialog = () => {
         <div >
             <AlertDialog defaultOpen={true}>
                 {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
-                <AlertDialogContent>
+                <AlertDialogContent className='bg-slate-700'>
                     <AlertDialogHeader>
                         <AlertDialogTitle>対象のイベントを削除します。よろしいですか？</AlertDialogTitle>
                         <AlertDialogDescription>
