@@ -5,7 +5,7 @@ import { Button } from '../../ui/button'
 import { Badge } from '../../ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../../ui/dialog'
 import { Label } from '../../ui/label'
-import { Table, TableBody, TableCell, TableRow } from "@/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/ui/table"
 import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -125,6 +125,14 @@ const AttendCreateDialog = () => {
                         <Label htmlFor="username" className='text-base font-bold' >日程候補</Label>
                         <Badge className='ml-1 p-0.5'>必須</Badge>
                         <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="">候補日</TableHead>
+                                    <TableHead className="p-1  text-center">参加</TableHead>
+                                    <TableHead className="p-1  text-center">検討中</TableHead>
+                                    <TableHead className="p-1  text-center">不参加</TableHead>
+                                </TableRow>
+                            </TableHeader>
                             <TableBody>
                                 {eventDate?.map((data, index) => (
                                     <TableRow key={index}>
