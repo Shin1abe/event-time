@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import 'react-day-picker/dist/style.css';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
-import { Badge } from '../../ui/badge'
 import { lEvent, lEventDate } from '@/type/EventType';
 import EventCreateDialog from './EventCreateDialog';
 import { formatDateWithDayOfWeek } from '@/utils/utils';
 import { useEtContext } from '../../providers/EtProvider';
 import { lStrageCrud } from '@/utils/LStrageCRUD';
+import EventNavigationMenu from './EventNavigationMenu';
 
 const EventMng = () => {
   //■  initial
@@ -51,7 +51,9 @@ const EventMng = () => {
   return (
     // ■■■■■■■■■イベント作成画面■■■■■■■■■
     <div className="flex-wrap flex-row gap-1 m-2">
-      <h1 className='m-3 text-2xl+ font-bold'>イベント</h1>
+      <div className="flex justify-end">
+        <h1 className='m-3 text-2xl font-bold'><EventNavigationMenu /></h1>
+      </div>
       <div className="flex flex-col justify-center gap-2">
         {lEvent?.map((eventdata: lEvent, index: number) => (
           <Card className='m-3 bg-slate-700 text-blue-200' key={index} onClick={() => handleCardClick(eventdata.eventId)}>

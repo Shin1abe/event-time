@@ -172,6 +172,7 @@ const EventCreateDialog = () => {
                         </div>
                     </DialogDescription>
                     <DialogFooter>
+                        <div className=' text-xs'>※作成したイベント情報はご使用Devie(browser)でのみ編集可能</div>
                         <Button
                             className=' bg-blue-500 text-blue-200 text-base font-bold'
                             type="submit"
