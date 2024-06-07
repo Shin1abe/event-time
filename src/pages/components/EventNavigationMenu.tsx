@@ -9,7 +9,7 @@ const EventNavigationMenu = () => {
                     <NavigationMenuItem>
                         <NavigationMenuTrigger className="text-sm">About EventTime</NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <div className='text-sm p-2'>
+                            <div className='text-sm p-2 text-blue-200'>
                                 <div className="container mx-auto px-4">
                                     <p>簡単に・匿名でイベント日程調整ができます。</p>
                                     <ul className="list-disc ml-4 mb-3">
@@ -19,7 +19,7 @@ const EventNavigationMenu = () => {
                                     <h2 className="font-bold">使い方</h2>
                                     <ol className="list-decimal ml-4">
                                         <li>
-                                            <h3 className="font-bold">幹事がイベントを作成</h3>
+                                            <h3 className="font-bold">起案者がイベント作成</h3>
                                             <ul className="list-disc ml-4">
                                                 <li>イベント名を入力</li>
                                                 <li>日程候補日を設定</li>
@@ -36,18 +36,17 @@ const EventNavigationMenu = () => {
                                         </li>
                                         <li>
                                             <h3 className="font-bold">日程調整</h3>
-                                            <p>登録された情報をもとに、最適な日程を調整します。</p>
+                                            <p>登録された情報をもとに、最適な日程を調整。</p>
                                         </li>
                                     </ol>
                                     <h2 className="font-bold">特徴</h2>
                                     <ul className="list-disc ml-4">
-                                        <li>個人情報保護に配慮</li>
-                                        <li>匿名で参加可能</li>
-                                        <li>イベント情報は自動削除</li>
                                         <li>簡単操作で日程調整</li>
+                                        <li>個人情報保護に配慮（匿名で参加可能）</li>
+                                        <li>イベント情報は自動削除</li>
                                     </ul>
                                     <h2 className="font-bold">始め方</h2>
-                                    <p>今すぐイベントを作成して、日程調整を始めましょう！</p>
+                                    <p>イベントを作成して日程調整を始めましょう！</p>
                                 </div>
                             </div>
                         </NavigationMenuContent>
