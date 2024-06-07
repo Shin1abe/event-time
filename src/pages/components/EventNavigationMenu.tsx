@@ -3,11 +3,11 @@ import React from 'react'
 
 const EventNavigationMenu = () => {
     return (
-        <div>
+        <div className="text-base">
             <NavigationMenu>
                 <NavigationMenuList className="flex">
                     <NavigationMenuItem>
-                        <NavigationMenuTrigger className="text-sm">About EventTime</NavigationMenuTrigger>
+                        <NavigationMenuTrigger >About EventTime</NavigationMenuTrigger>
                         <NavigationMenuContent>
                             <div className='text-sm p-2 text-blue-200'>
                                 <div className="container mx-auto px-4">
