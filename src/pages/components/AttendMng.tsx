@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { Button } from '../../ui/button'
@@ -10,6 +10,20 @@ import { useEtContext } from '../../providers/EtProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faDiamond, faMinus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
+type eventUserSel = {
+    id: number;
+    eventId: string;
+    eventDate: Date;
+    userId: number;
+    userSel: string;
+    createdAt: Date;
+}
+type userSelSumType = {
+    userSel: string;
+    date: string;
+    count: number;
+}
+
 const AttendMng = () => {
     //■  initial
     const router = useRouter();
@@ -17,6 +31,7 @@ const AttendMng = () => {
 
     //■  useEtContext
     const { isCoordinator, curentEventId, setCurentEventId } = useEtContext()
+    const [userSelSum, setUserSelSum] = useState<userSelSumType[]>();
 
     // eventidが変わった時にcurentEventIdを更新
     useEffect(() => {
@@ -24,6 +39,38 @@ const AttendMng = () => {
             setCurentEventId(eventid);
         }
     }, [eventid, curentEventId, setCurentEventId]);
+    // userSel毎の合計を計算
+    useEffect(() => {
+        function summarizeByUserSel(data: eventUserSel[] | undefined) {
+            const summaryObject = data?.reduce((acc, { eventDate, userSel }) => {
+                const date = new Date(eventDate); // Ensure eventDate is a Date object
+                const dateStr = date.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+                if (!acc[userSel]) {
+                    acc[userSel] = {};
+                }
+                if (!acc[userSel][dateStr]) {
+                    acc[userSel][dateStr] = 0;
+                }
+                acc[userSel][dateStr]++;
+                return acc;
+            }, {} as Record<string, Record<string, number>>);
+            // Convert the summary object to an array of objects
+            const summaryArray = [];
+            for (const userSel in summaryObject) {
+                for (const dateStr in summaryObject[userSel]) {
+                    summaryArray.push({
+                        userSel,
+                        date: dateStr,
+                        count: summaryObject[userSel][dateStr]
+                    });
+                }
+            }
+            return summaryArray;
+        }
+        const summary = summarizeByUserSel(eventUserSel);
+        setUserSelSum(summary)
+        console.log(summary);
+    }, [])
 
     //■  trcp
     let eventIdtmp = ""
@@ -54,6 +101,7 @@ const AttendMng = () => {
             query: { eventid: eventid, userid: userId },
         });
     }, [router, eventid]);
+
 
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
