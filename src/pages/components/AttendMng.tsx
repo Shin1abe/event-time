@@ -65,6 +65,7 @@ const AttendMng = () => {
                 <div className="flex flex-col justify-center gap-2">
                     <p className=' text-base ml-3'>回答者：{eventUser?.length}名</p>
                     <h1 className='font-bold'>イベントメモ</h1>
+                    <p className=' text-base ml-3'>{event?.[0]?.eventMemo}</p>
                     <div>
                         <Table>
                             {/* <TableCaption>A list of attendees and their availability.</TableCaption> */}
