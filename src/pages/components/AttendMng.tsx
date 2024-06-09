@@ -23,6 +23,7 @@ type userSelSumType = {
     date: string;
     count: number;
 }
+const userSelCategories = ['○', '◇', '×', '-'];
 
 const AttendMng = () => {
     //■  initial
@@ -44,7 +45,10 @@ const AttendMng = () => {
         function summarizeByUserSel(data: eventUserSel[] | undefined) {
             const summaryObject = data?.reduce((acc, { eventDate, userSel }) => {
                 const date = new Date(eventDate); // Ensure eventDate is a Date object
-                const dateStr = date.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+                // Convert the date to JST
+                const jstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000); // Add 9 hours to UTC to get JST
+                const dateStr = jstDate.toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+
                 if (!acc[userSel]) {
                     acc[userSel] = {};
                 }
@@ -54,6 +58,7 @@ const AttendMng = () => {
                 acc[userSel][dateStr]++;
                 return acc;
             }, {} as Record<string, Record<string, number>>);
+
             // Convert the summary object to an array of objects
             const summaryArray = [];
             for (const userSel in summaryObject) {
@@ -67,16 +72,17 @@ const AttendMng = () => {
             }
             return summaryArray;
         }
+
         const summary = summarizeByUserSel(eventUserSel);
-        setUserSelSum(summary)
+        setUserSelSum(summary);
         console.log(summary);
-    }, [])
+    }, []);
 
     //■  trcp
     let eventIdtmp = ""
     if (typeof eventid === "string") { eventIdtmp = eventid }
     const { data: event } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
-    const { data: eventDate } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: eventDates } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
     const { data: eventUser } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
     const { data: eventUserSel } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
 
@@ -103,6 +109,18 @@ const AttendMng = () => {
     }, [router, eventid]);
 
 
+    function formatDate(date) {
+        const d = new Date(date);
+        let month = '' + (d.getMonth() + 1);
+        let day = '' + d.getDate();
+        const year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
             {/* ■■■■■■■■■ヘッド・メニュー■■■■■■■■■ */}
@@ -116,12 +134,11 @@ const AttendMng = () => {
                     <p className=' text-base ml-3'>{event?.[0]?.eventMemo}</p>
                     <div>
                         <Table>
-                            {/* <TableCaption>A list of attendees and their availability.</TableCaption> */}
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-96 ">参加者</TableHead>
+                                    <TableHead className="w-60 ">参加者</TableHead>
                                     {
-                                        eventDate?.map((date, index) => (
+                                        eventDates?.map((date, index) => (
                                             <TableHead key={index} className='text-center'>
                                                 {formatDateWithDayOfWeek0sup(date.eventDate)}
                                             </TableHead>
@@ -162,6 +179,53 @@ const AttendMng = () => {
                         出欠変更は名前行をクリックしてください
                     </div>
                     <Button className=" bg-blue-500 text-blue-200 text-base font-bold" onClick={onClickEventshare}>イベントＵＲＬをシェア</Button>
+                    {/* <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-30">参加状況</TableHead>
+                                {eventDates?.map((date, index) => (
+                                    <TableHead key={index} className='text-center'>
+                                        {formatDateWithDayOfWeek0sup(date.eventDate)}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {userSelCategories.map((category, catIndex) => (
+                                <TableRow key={catIndex}>
+                                    <TableCell className='pl-10 p-0 text-lg font-bold text-left flex items-center space-x-2'>
+                                        <FontAwesomeIcon
+                                            icon={
+                                                category === "○" ? faCircle :
+                                                    category === "◇" ? faDiamond :
+                                                        category === "×" ? faXmark : faMinus
+                                            }
+                                            className={"cursor-pointer " + (
+                                                category === "○" ? "text-orange-500" :
+                                                    category === "◇" ? "text-gray-300" :
+                                                        category === "×" ? "text-yellow-100" : "text-slate-500"
+                                            )}
+                                            style={{ width: '24px', height: '24px' }}
+                                        />
+                                        <div>
+                                            {category === "○" ? "参加" :
+                                                category === "◇" ? "検討中" :
+                                                    category === "×" ? "不参加" : "未入力"}
+                                        </div>
+                                    </TableCell>
+
+                                    {eventDates?.map((ed, edIndex) => {
+                                        const match = userSelSum?.find(e => e.date === formatDate(ed.eventDate) && e.userSel === category);
+                                        return (
+                                            <TableCell key={edIndex} className='p-1 text-center text-lg'>
+                                                <div className="block ">{match ? match.count : 0}</div>
+                                            </TableCell>
+                                        );
+                                    })}
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table> */}
                 </div>
             </div>
             {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}
