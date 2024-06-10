@@ -152,7 +152,7 @@ const AttendUpdateDialog = () => {
                             <Input
                                 type='text'
                                 id="userName"
-                                className="col-span-3 m-1  text-lg text-white"
+                                className="col-span-3 m-1  text-lg text-white bg-balck"
                                 onChange={onChangeUserName}
                                 value={userName} />
                             <br />
@@ -177,7 +177,7 @@ const AttendUpdateDialog = () => {
                                                         icon={faCircle}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
                                                             'text-slate-500', 'text-orange-500')}`}
-                                                        style={{ width: '24px', height: '24px' }}
+                                                        style={{ width: '24px', height: '24px', margin: 'auto' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
                                                     />
                                                 </TableCell>
@@ -186,7 +186,7 @@ const AttendUpdateDialog = () => {
                                                         icon={faDiamond}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
                                                             'text-slate-500', 'text-gray-300')}`}
-                                                        style={{ width: '24px', height: '24px' }}
+                                                        style={{ width: '24px', height: '24px', margin: 'auto' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
                                                     />
                                                 </TableCell>
@@ -195,7 +195,7 @@ const AttendUpdateDialog = () => {
                                                         icon={faXmark}
                                                         className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
                                                             'text-slate-500', 'text-yellow-100')}`}
-                                                        style={{ width: '24px', height: '24px' }}
+                                                        style={{ width: '24px', height: '24px', margin: 'auto' }}
                                                         onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
                                                     />
                                                 </TableCell>
@@ -210,7 +210,7 @@ const AttendUpdateDialog = () => {
                                 cols={50}
                                 className="w-full m-1  text-lg  text-white"
                                 onChange={onChangeUserMemo}
-                                rows={3}
+                                rows={2}
                                 value={userMemo} />
                         </div>
                     </DialogDescription>

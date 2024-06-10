@@ -118,7 +118,7 @@ const AttendCreateDialog = () => {
                         <Input
                             type='text'
                             id="userName"
-                            className="col-span-3 m-1 text-lg  text-white"
+                            className="col-span-3 m-1 text-lg  text-white bg-black"
                             onChange={onChangeUserName}
                             value={userName} />
                         <br />
@@ -142,7 +142,7 @@ const AttendCreateDialog = () => {
                                                 icon={faCircle}
                                                 className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '○',
                                                     'text-slate-500', 'text-orange-500')}`}
-                                                style={{ width: '24px', height: '24px' }}
+                                                style={{ width: '24px', height: '24px', margin: 'auto' }}
                                                 onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '○')}
                                             />
                                         </TableCell>
@@ -151,7 +151,7 @@ const AttendCreateDialog = () => {
                                                 icon={faDiamond}
                                                 className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '◇',
                                                     'text-slate-500', 'text-gray-300')}`}
-                                                style={{ width: '24px', height: '24px' }}
+                                                style={{ width: '24px', height: '24px', margin: 'auto' }}
                                                 onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '◇')}
                                             />
                                         </TableCell>
@@ -160,7 +160,7 @@ const AttendCreateDialog = () => {
                                                 icon={faXmark}
                                                 className={`cursor-pointer ${getClassName(new Date(data.eventDate).toISOString(), '×',
                                                     'text-slate-500', 'text-yellow-100')}`}
-                                                style={{ width: '24px', height: '24px' }}
+                                                style={{ width: '24px', height: '24px', margin: 'auto' }}
                                                 onClick={() => handleSelection(new Date(data.eventDate).toISOString(), '×')}
                                             />
                                         </TableCell>
@@ -175,7 +175,7 @@ const AttendCreateDialog = () => {
                             className="w-full m-1  text-lg  text-white"
                             // placeholder="コメントを記入してください。"
                             onChange={onChangeUserMemo}
-                            rows={3}
+                            rows={2}
                             value={userMemo} />
                     </div>
                 </DialogDescription>

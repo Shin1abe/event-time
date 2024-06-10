@@ -169,9 +169,6 @@ const AttendMng = () => {
                         出欠変更は名前行をクリックしてください
                     </div>
                     <Button className=" bg-blue-500 text-blue-200 text-base font-bold" onClick={onClickEventshare}>イベントＵＲＬをシェア</Button>
-                    <Button className="font-bold" variant="ghost" onClick={onClickAttendStatus}><div className=' text-blue-200  text-base '>
-                        {!isAttendDisp ? "参加状況（表示）" : "参加状況（非表示）"}
-                    </div></Button>
                     {isAttendDisp ? (
                         <Table>
                             <TableHeader>
@@ -223,6 +220,9 @@ const AttendMng = () => {
                             </TableBody>
                         </Table>
                     ) : <></>}
+                    <Button className="font-bold" variant="ghost" onClick={onClickAttendStatus}><div className=' text-blue-200  text-base '>
+                        {!isAttendDisp ? "参加状況（表示）" : "参加状況（非表示）"}
+                    </div></Button>
                 </div>
             </div>
             {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}

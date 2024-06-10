@@ -139,12 +139,12 @@ const EventCreateDialog = () => {
                                     value={eventName}
                                     onChange={(e) => { setEventName(e.target.value); setError(null) }
                                     }
-                                    className="m-1"
+                                    className="m-1 bg-black"
                                 />
                                 <Label htmlFor="username" className=' font-bold' >日程候補</Label>
                                 <Badge className='ml-1'>必須</Badge>
                                 {/* https://react-day-picker.js.org/ */}
-                                <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center border border-gray-300 rounded-md  overflow-auto'>
+                                <div className='preview flex min-h-[250px] w-full justify-center p-0 items-center border border-gray-300 rounded-md  overflow-auto'>
                                     <DayPicker
                                         mode="multiple"
                                         min={0}
@@ -153,12 +153,14 @@ const EventCreateDialog = () => {
                                         onSelect={setEventsDates}
                                         onDayClick={() => setError(null)}
                                         footer={footer}
-                                        className='min-h-12 m-1'
+                                        className='min-h-12 m-1 text-2xl'
+                                        disabled={{ before: new Date() }}
                                     />
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>候補日</Label>
                                 <div className='whitespace-nowrap'>
-                                    <Textarea readOnly className="w-full  p-1 border border-gray-300  min-h-4" value={getCandidate()} />
+                                    <Textarea readOnly className="w-full bg-slate-700 text-slate-50 p-1 border border-gray-300  min-h-4" value={getCandidate()} disabled
+                                    />
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>メモ</Label>
                                 <div>参加者に連絡しておきたいことを記述</div>

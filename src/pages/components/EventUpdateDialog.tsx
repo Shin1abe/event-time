@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import { trpc } from "@/utils/trpc";
 import { DayPicker } from 'react-day-picker';
@@ -61,6 +61,15 @@ const EventUpdateDialog = () => {
     const [eventDates, setEventsDates] = React.useState<Date[] | undefined>(eventDateArray);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [defaultMonth, setDefaultMonth] = useState<Date>(new Date());
+
+    useEffect(() => {
+        if (eventDates) {
+            const mostFutureDate = new Date(Math.max(...eventDates.map(date => new Date(date).getTime())));
+            setDefaultMonth(mostFutureDate);
+            console.log("defaultMonth", defaultMonth)
+        }
+    }, [eventDates]);
 
     //■uttil
     //eventDatesとetEventUserSelsを日付をキーにマージする。その際、eventDateは保持し、それ以外のデータは除く
@@ -230,7 +239,7 @@ const EventUpdateDialog = () => {
                                     value={eventName as string}
                                     onChange={(e) => { setEventName(e.target.value); setError(null) }}
                                     defaultValue="イベント名を入力してください"
-                                    className="m-1"
+                                    className="m-1 bg-black"
                                 />
                                 <br />
                                 <Label htmlFor="username" className='font-bold'>日程候補</Label>
@@ -246,13 +255,15 @@ const EventUpdateDialog = () => {
                                             onSelect={setEventsDates}
                                             onDayClick={() => setError(null)}
                                             footer={footer}
-                                            className='min-h-12 m-1'
+                                            className='min-h-12 m-1 text-2xl'
+                                            disabled={{ before: new Date() }}
+                                            month={defaultMonth}
                                         />
                                     </div>
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>候補日</Label>
                                 <div className='whitespace-nowrap'>
-                                    <Textarea readOnly className="w-full  p-1 border border-gray-300  min-h-4" value={getCandidate()} />
+                                    <Textarea readOnly className="w-full  bg-slate-700 text-slate-50  p-1 border border-gray-300  min-h-4" value={getCandidate()} disabled />
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>メモ</Label>
                                 <div>イベントの概要など参加者に連絡しておきたいことを記述することができます。</div>
