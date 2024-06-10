@@ -9,7 +9,7 @@ const EventNavigationMenu = () => {
                     <NavigationMenuItem>
                         <NavigationMenuTrigger >About EventTime</NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <div className='text-sm p-2 text-blue-100'>
+                            <div className='text-base p-0 text-blue-100'>
                                 <div className="container mx-auto px-4">
                                     <p>簡単に・匿名でイベント日程調整ができます。</p>
                                     <ul className="list-disc ml-4 mb-3">
@@ -36,7 +36,7 @@ const EventNavigationMenu = () => {
                                         </li>
                                         <li>
                                             <h3 className="font-bold ">日程調整</h3>
-                                            <p>登録された情報をもとに、最適な日程を調整。</p>
+                                            <p>登録された情報をもとに、日程を調整。</p>
                                         </li>
                                     </ol>
                                     <h2 className="font-bold  mt-3">始め方</h2>

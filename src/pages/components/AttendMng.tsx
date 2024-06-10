@@ -4,7 +4,7 @@ import { trpc } from "@/utils/trpc";
 import { Button } from '../../ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/ui/table"
 import AttendCreateDialog from './AttendCreateDialog';
-import { formatDateWithDayOfWeek0sup } from '@/utils/utils';
+import { formatDateToString, formatDateWithDayOfWeek0sup } from '@/utils/utils';
 import HeaderCoordinator from './HeaderCoordinator';
 import { useEtContext } from '../../providers/EtProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,9 +30,18 @@ const AttendMng = () => {
     const router = useRouter();
     const { eventid } = router.query;
 
-    //■  useEtContext
+    //■  Context
     const { isCoordinator, curentEventId, setCurentEventId } = useEtContext()
     const [userSelSum, setUserSelSum] = useState<userSelSumType[]>();
+    const [isAttendDisp, setIsAttendDisp] = useState<boolean>(true);
+
+    //■  trcp
+    let eventIdtmp = ""
+    if (typeof eventid === "string") { eventIdtmp = eventid }
+    const { data: event } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: eventDates } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: eventUser } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
+    const { data: eventUserSel } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
 
     // eventidが変わった時にcurentEventIdを更新
     useEffect(() => {
@@ -72,20 +81,12 @@ const AttendMng = () => {
             }
             return summaryArray;
         }
-
         const summary = summarizeByUserSel(eventUserSel);
         setUserSelSum(summary);
-        console.log(summary);
-    }, []);
+        console.log("summary", summary);
+    }, [eventUserSel]);
 
-    //■  trcp
-    let eventIdtmp = ""
-    if (typeof eventid === "string") { eventIdtmp = eventid }
-    const { data: event } = trpc.useQuery(["Event_findWhereMany", { eventId: eventIdtmp }]);
-    const { data: eventDates } = trpc.useQuery(["EventDate_findWhereMany", { eventId: eventIdtmp }]);
-    const { data: eventUser } = trpc.useQuery(["EventUser_findWhereMany", { eventId: eventIdtmp }]);
-    const { data: eventUserSel } = trpc.useQuery(["EventUserSel_findWhereMany", { eventId: eventIdtmp }]);
-
+    // event
     const onClickEventshare = useCallback(() => {
         const url: string = event?.[0]?.eventUrl ?? "";
         void (async () => {
@@ -108,18 +109,7 @@ const AttendMng = () => {
         });
     }, [router, eventid]);
 
-
-    function formatDate(date) {
-        const d = new Date(date);
-        let month = '' + (d.getMonth() + 1);
-        let day = '' + d.getDate();
-        const year = d.getFullYear();
-
-        if (month.length < 2) month = '0' + month;
-        if (day.length < 2) day = '0' + day;
-
-        return [year, month, day].join('-');
-    }
+    const onClickAttendStatus = useCallback(() => { setIsAttendDisp(!isAttendDisp) }, [isAttendDisp])
 
     return (
         <div className="flex-wrap flex-row gap-1 m-2">
@@ -148,8 +138,8 @@ const AttendMng = () => {
                             </TableHeader>
                             <TableBody >
                                 {eventUser?.map((user, index) => (
-                                    <TableRow key={index} onClick={() => onClickUserUpdate(user.userId)}>
-                                        <TableCell className='pl-2 p-0 text-lg font-bold'>{user.userName}</TableCell>
+                                    <TableRow key={index} onClick={() => onClickUserUpdate(user.userId)} >
+                                        <TableCell className='p-0 text-base font-bold whitespace-nowrap'>{user.userName}</TableCell>
                                         {eventUserSel?.filter(e => e.userId === user.userId).map((user, idx) => (
                                             <TableCell key={idx} className='p-1  text-center'>
                                                 <div className="block ">
@@ -179,53 +169,60 @@ const AttendMng = () => {
                         出欠変更は名前行をクリックしてください
                     </div>
                     <Button className=" bg-blue-500 text-blue-200 text-base font-bold" onClick={onClickEventshare}>イベントＵＲＬをシェア</Button>
-                    {/* <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-30">参加状況</TableHead>
-                                {eventDates?.map((date, index) => (
-                                    <TableHead key={index} className='text-center'>
-                                        {formatDateWithDayOfWeek0sup(date.eventDate)}
-                                    </TableHead>
-                                ))}
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {userSelCategories.map((category, catIndex) => (
-                                <TableRow key={catIndex}>
-                                    <TableCell className='pl-10 p-0 text-lg font-bold text-left flex items-center space-x-2'>
-                                        <FontAwesomeIcon
-                                            icon={
-                                                category === "○" ? faCircle :
-                                                    category === "◇" ? faDiamond :
-                                                        category === "×" ? faXmark : faMinus
-                                            }
-                                            className={"cursor-pointer " + (
-                                                category === "○" ? "text-orange-500" :
-                                                    category === "◇" ? "text-gray-300" :
-                                                        category === "×" ? "text-yellow-100" : "text-slate-500"
-                                            )}
-                                            style={{ width: '24px', height: '24px' }}
-                                        />
-                                        <div>
-                                            {category === "○" ? "参加" :
-                                                category === "◇" ? "検討中" :
-                                                    category === "×" ? "不参加" : "未入力"}
-                                        </div>
-                                    </TableCell>
-
-                                    {eventDates?.map((ed, edIndex) => {
-                                        const match = userSelSum?.find(e => e.date === formatDate(ed.eventDate) && e.userSel === category);
-                                        return (
-                                            <TableCell key={edIndex} className='p-1 text-center text-lg'>
-                                                <div className="block ">{match ? match.count : 0}</div>
-                                            </TableCell>
-                                        );
-                                    })}
+                    <Button className="font-bold" variant="ghost" onClick={onClickAttendStatus}><div className=' text-blue-200  text-base '>
+                        {!isAttendDisp ? "参加状況（表示）" : "参加状況（非表示）"}
+                    </div></Button>
+                    {isAttendDisp ? (
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-30 whitespace-nowrap">参加状況</TableHead>
+                                    {eventDates?.map((date, index) => (
+                                        <TableHead key={index} className='text-center'>
+                                            {formatDateWithDayOfWeek0sup(date.eventDate)}
+                                        </TableHead>
+                                    ))}
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table> */}
+                            </TableHeader>
+                            <TableBody>
+                                {userSelCategories.map((category, catIndex) => (
+                                    <TableRow key={catIndex}>
+                                        <TableCell className='p-0 text-sm font-bold whitespace-nowrap flex items-center space-x-2'>
+                                            <FontAwesomeIcon
+                                                icon={
+                                                    category === "○" ? faCircle :
+                                                        category === "◇" ? faDiamond :
+                                                            category === "×" ? faXmark : faMinus
+                                                }
+                                                className={"cursor-pointer " + (
+                                                    category === "○" ? "text-orange-500" :
+                                                        category === "◇" ? "text-gray-300" :
+                                                            category === "×" ? "text-yellow-100" : "text-slate-500"
+                                                )}
+                                                style={{ width: '24px', height: '24px' }}
+                                            />
+                                            <div>
+                                                {category === "○" ? "参加" :
+                                                    category === "◇" ? "検討中" :
+                                                        category === "×" ? "不参加" : "未入力"}
+                                            </div>
+                                        </TableCell>
+
+                                        {eventDates?.map((ed, edIndex) => {
+                                            const match = userSelSum?.find(
+                                                e => e.date === formatDateToString(ed.eventDate) && e.userSel === category
+                                            );
+                                            return (
+                                                <TableCell key={edIndex} className='p-1 text-center text-sm'>
+                                                    <div className="block ">{match ? match.count : 0}</div>
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    ) : <></>}
                 </div>
             </div>
             {/* ■■■■■■■■■出席入力ダイアログ■■■■■■■■■ */}

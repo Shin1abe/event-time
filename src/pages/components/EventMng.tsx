@@ -59,8 +59,7 @@ const EventMng = () => {
           <Card className='m-3 bg-slate-700 text-blue-200' key={index} onClick={() => handleCardClick(eventdata.eventId)}>
             <CardHeader>
               <CardTitle >
-                {/* <Badge className='mb-2 text-blue-800'>イベント作成</Badge> */}
-                <p className='m-1 mb-2'>{eventdata.eventName}</p></CardTitle>
+                <p className='m-1 mb-2 text-lg'>{eventdata.eventName}</p></CardTitle>
             </CardHeader>
             <CardContent >
               <p className='ml-3'>
