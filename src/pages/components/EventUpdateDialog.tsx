@@ -245,7 +245,7 @@ const EventUpdateDialog = () => {
                                 <Label htmlFor="username" className='font-bold'>日程候補</Label>
                                 <Badge className='ml-1'>必須</Badge>
                                 <div>カレンダーで候補日を選択</div>
-                                <div className='preview flex min-h-[250px] w-full justify-center p-1 items-center border border-gray-300 rounded-md  overflow-auto'>
+                                <div className='preview flex  w-full justify-center p-1 items-center border border-gray-300 rounded-md  overflow-auto bg-black'>
                                     <div>
                                         <DayPicker
                                             mode="multiple"
@@ -263,12 +263,12 @@ const EventUpdateDialog = () => {
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>候補日</Label>
                                 <div className='whitespace-nowrap'>
-                                    <Textarea readOnly className="w-full  bg-slate-700 text-slate-50  p-1 border border-gray-300  min-h-4" value={getCandidate()} disabled />
+                                    <Textarea readOnly className="w-full  bg-slate-800 text-slate-50  p-1 border border-gray-300  min-h-4" value={getCandidate()} disabled />
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>メモ</Label>
                                 <div>イベントの概要など参加者に連絡しておきたいことを記述することができます。</div>
                                 <Textarea
-                                    className="w-full p-1 border border-gray-300  min-h-4"
+                                    className="w-full p-1 border border-gray-300  min-h-3 text-white"
                                     value={eventMemo as string}
                                     onChange={(e) => setEventMemo(e.target.value)} />
                             </div>

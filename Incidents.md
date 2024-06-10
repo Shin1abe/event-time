@@ -1,19 +1,15 @@
 ##未決
-TODO イベント出席には、合計行があるべき
 TODO ３か月後は削除機能実装Vercel Cron Jobs
-
-TODO カレンダーで選択過去は選択できないようにするべき
-TODO 更新画面では最も現在に近い日付を初期で表示すべき
-
+TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
 TODO AttendCreateDialog、AttendUpdateDialog 、EventCreateDialog
 　　　 at AttendCreateDialog (webpack-internal:///./src/pages/components/AttendCreateDialog.tsx:97:72)　
 　　　　next-dev.js:53 Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
 　　　　next-dev.js:53 Warning: validateDOMNesting(...): <table> cannot appear as a descendant of <p>.
-　　　　　→<Table>使った瞬間にNG。
-TODO 背景色
-TODO npm run build: Warning: You have opted-out of Automatic Static Optimization due to `getInitialProps` in `pages/_app`. This does not opt-out pages with `getStaticProps`
-
-##解決
+　　　　　→<Table>使った瞬間にNG。##解決
+ok イベント出席には、合計行があるべき
+ok カレンダーで選択過去は選択できないようにするべき
+ok 更新画面では最も現在に近い日付を初期で表示すべき
+ok 背景色
 ok ●、×、▲の色は変化をつけたい
 ok 参加の名前はも少し大きく、選択はできれば行
 ok 妥協：出席登録で小スマフォで下のボタンが隠れる

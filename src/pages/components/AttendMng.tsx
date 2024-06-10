@@ -117,11 +117,11 @@ const AttendMng = () => {
             {isCoordinator ? (<HeaderCoordinator />) : null}
             {/* ■■■■■■■■■出席者一覧■■■■■■■■■ */}
             <div>
-                <h1 className='font-bold'>{event?.[0]?.eventName}</h1>
+                <h1 className='font-bold text-xl'>{event?.[0]?.eventName}</h1>
                 <div className="flex flex-col justify-center gap-2">
                     <p className=' text-base ml-3'>回答者：{eventUser?.length}名</p>
                     <h1 className='font-bold'>イベントメモ</h1>
-                    <p className=' text-base ml-3'>{event?.[0]?.eventMemo}</p>
+                    <p className=' text-lg ml-3'>{event?.[0]?.eventMemo}</p>
                     <div>
                         <Table>
                             <TableHeader>
@@ -220,7 +220,7 @@ const AttendMng = () => {
                             </TableBody>
                         </Table>
                     ) : <></>}
-                    <Button className="font-bold" variant="ghost" onClick={onClickAttendStatus}><div className=' text-blue-200  text-base '>
+                    <Button className="font-bold text-blue-200 tex-sm" variant="ghost" onClick={onClickAttendStatus}><div className=' text-blue-200  text-base '>
                         {!isAttendDisp ? "参加状況（表示）" : "参加状況（非表示）"}
                     </div></Button>
                 </div>

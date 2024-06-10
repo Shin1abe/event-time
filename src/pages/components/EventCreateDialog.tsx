@@ -144,7 +144,7 @@ const EventCreateDialog = () => {
                                 <Label htmlFor="username" className=' font-bold' >日程候補</Label>
                                 <Badge className='ml-1'>必須</Badge>
                                 {/* https://react-day-picker.js.org/ */}
-                                <div className='preview flex min-h-[250px] w-full justify-center p-0 items-center border border-gray-300 rounded-md  overflow-auto'>
+                                <div className='preview flex min-h-[250px] w-full justify-center p-0 items-center border border-gray-300 rounded-md  overflow-auto bg-black'>
                                     <DayPicker
                                         mode="multiple"
                                         min={0}
@@ -159,13 +159,13 @@ const EventCreateDialog = () => {
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>候補日</Label>
                                 <div className='whitespace-nowrap'>
-                                    <Textarea readOnly className="w-full bg-slate-700 text-slate-50 p-1 border border-gray-300  min-h-4" value={getCandidate()} disabled
+                                    <Textarea readOnly className="w-full bg-slate-800 text-white p-1 border border-gray-300 min-h-4 text-base" value={getCandidate()} disabled
                                     />
                                 </div>
                                 <Label htmlFor="eventName" className='font-bold'>メモ</Label>
                                 <div>参加者に連絡しておきたいことを記述</div>
                                 <Textarea
-                                    className="w-full p-1 border border-gray-300  min-h-4"
+                                    className="w-full p-1 border border-gray-300  min-h-3 text-white"
                                     placeholder="例）旅行の日程を調整しましょう。締め切りは〇／〇です。"
                                     value={eventMemo}
                                     onChange={(e) => setEventMemo(e.target.value)}
